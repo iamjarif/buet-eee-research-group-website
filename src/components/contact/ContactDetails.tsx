@@ -71,7 +71,7 @@ export function ContactIdentityBar({ settings }: ContactIdentityBarProps) {
                   <p className="type-overline text-text-tertiary">Email</p>
                   <a
                     href={`mailto:${settings.contactEmail}`}
-                    className={contactLinkClassName}
+                    className={cn(contactLinkClassName, "break-all")}
                   >
                     {settings.contactEmail}
                   </a>

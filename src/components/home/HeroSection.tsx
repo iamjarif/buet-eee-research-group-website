@@ -40,7 +40,7 @@ export function HeroSection({
 
       <Container
         as="div"
-        className="relative flex min-h-[min(860px,90vh)] flex-col justify-center py-20 lg:py-[120px]"
+        className="relative flex min-h-[min(640px,85vh)] flex-col justify-center py-16 sm:min-h-[min(760px,88vh)] sm:py-20 lg:min-h-[min(860px,90vh)] lg:py-[120px]"
       >
         <HeroMotion className="flex max-w-full flex-col gap-[var(--spacing-content-gap)]">
           {eyebrow ? (

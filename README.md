@@ -1,4 +1,4 @@
-# BUET EEE Research Group Website
+# NC Group Website
 
 Official website for **NC Group**, a research group in the **Department of Electrical and Electronic Engineering (EEE)** at the **Bangladesh University of Engineering and Technology (BUET)**.
 

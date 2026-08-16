@@ -23,7 +23,7 @@ export function PrincipalInvestigatorFeature({
   const links = getPersonContactLinks(person, { max: 4 });
 
   return (
-    <article className="group grid gap-10 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-x-20 xl:gap-x-24">
+    <article className="group grid gap-8 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-x-20 xl:gap-x-24">
       <Reveal
         variant="fade"
         className="w-full max-w-[17rem] sm:max-w-[19rem] lg:max-w-none"

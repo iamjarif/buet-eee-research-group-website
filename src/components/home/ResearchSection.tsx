@@ -23,9 +23,9 @@ function ResearchRow({ area, index, isLast = false }: ResearchRowProps) {
 
   return (
     <ResearchRowMotion isLast={isLast}>
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-14">
-        <p className="text-label-sm text-text-tertiary">{formatSectionIndex(index)}</p>
-        <div className="max-w-[700px] space-y-2">
+      <div className="flex min-w-0 flex-col gap-6 lg:flex-row lg:items-center lg:gap-14">
+        <p className="shrink-0 text-label-sm text-text-tertiary">{formatSectionIndex(index)}</p>
+        <div className="min-w-0 max-w-[700px] space-y-2">
           <h3 className="text-heading-lg text-text-primary">
             <Link
               href="/publications"
@@ -42,7 +42,7 @@ function ResearchRow({ area, index, isLast = false }: ResearchRowProps) {
         </div>
       </div>
 
-      <TextLink href="/publications" arrow>
+      <TextLink href="/publications" arrow className="shrink-0 self-start lg:self-auto">
         Explore
       </TextLink>
     </ResearchRowMotion>
@@ -67,7 +67,7 @@ export function ResearchSection({
   return (
     <section
       aria-labelledby="research-heading"
-      className="bg-surface-base py-20 lg:py-[120px]"
+      className="section-padding-y bg-surface-base"
     >
       <Container as="div" className="flex flex-col gap-10 lg:gap-14">
         <Stagger className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">

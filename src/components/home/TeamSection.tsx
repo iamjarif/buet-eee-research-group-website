@@ -29,7 +29,7 @@ export function TeamSection({
   return (
     <section
       aria-labelledby="team-heading"
-      className="bg-surface-subtle py-20 lg:py-[120px]"
+      className="section-padding-y bg-surface-subtle"
     >
       <Container as="div">
         <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
@@ -56,7 +56,7 @@ export function TeamSection({
             </div>
           </Reveal>
 
-          <Stagger className="max-w-[440px] space-y-6">
+          <Stagger className="min-w-0 max-w-[440px] space-y-6">
             <StaggerItem>
               <Eyebrow>{eyebrow}</Eyebrow>
             </StaggerItem>

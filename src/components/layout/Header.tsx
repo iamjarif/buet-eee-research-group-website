@@ -24,10 +24,10 @@ export function Header({ settings }: HeaderProps) {
     <HeaderShell>
       <Container
         as="div"
-        className="flex h-[var(--layout-header-height)] items-center justify-between py-3"
+        className="flex h-[var(--layout-header-height)] items-center justify-between py-2 sm:py-3"
       >
-        <HeaderMotion className="flex w-full items-center justify-between">
-          <HeaderMotionItem>
+        <HeaderMotion className="flex min-w-0 w-full items-center justify-between gap-3">
+          <HeaderMotionItem className="min-w-0 shrink">
             <SiteLogo
               siteName={siteName}
               partnerLogo={settings?.partnerLogo}
@@ -35,41 +35,40 @@ export function Header({ settings }: HeaderProps) {
             />
           </HeaderMotionItem>
 
-          <HeaderMotionItem>
-            <div className="flex items-center gap-6 lg:gap-10">
-              <nav aria-label="Main navigation" className="hidden lg:block">
-                <ul className="flex items-center gap-10">
-                  {navigation.length > 0 ? (
-                    navigation.map((item) => (
-                      <li key={`${item.href}-${item.label}`}>
-                        <NavLink item={item} className="text-body-xs" />
-                      </li>
-                    ))
-                  ) : (
-                    <li>
-                      <span className="text-body-xs text-text-muted">
-                        Navigation pending CMS setup
-                      </span>
+          {/* Controls stay outside motion items so the menu toggle is clickable immediately. */}
+          <div className="relative z-50 flex shrink-0 items-center gap-3 sm:gap-6 lg:gap-8 xl:gap-10">
+            <nav aria-label="Main navigation" className="hidden lg:block">
+              <ul className="flex items-center gap-6 xl:gap-10">
+                {navigation.length > 0 ? (
+                  navigation.map((item) => (
+                    <li key={`${item.href}-${item.label}`}>
+                      <NavLink item={item} className="text-body-xs" />
                     </li>
-                  )}
-                </ul>
-              </nav>
+                  ))
+                ) : (
+                  <li>
+                    <span className="text-body-xs text-text-muted">
+                      Navigation pending CMS setup
+                    </span>
+                  </li>
+                )}
+              </ul>
+            </nav>
 
-              {headerCta.href ? (
-                <LinkButton
-                  href={headerCta.href}
-                  external={headerCta.openInNewTab}
-                  size="sm"
-                  className="hidden px-3.5 py-1.5 lg:inline-flex"
-                >
-                  {headerCta.label}
-                  {!headerCta.label.includes("→") ? " →" : ""}
-                </LinkButton>
-              ) : null}
+            {headerCta.href ? (
+              <LinkButton
+                href={headerCta.href}
+                external={headerCta.openInNewTab}
+                size="sm"
+                className="hidden px-3.5 py-1.5 lg:inline-flex"
+              >
+                {headerCta.label}
+                {!headerCta.label.includes("→") ? " →" : ""}
+              </LinkButton>
+            ) : null}
 
-              <MobileNav navigation={navigation} headerCta={headerCta} />
-            </div>
-          </HeaderMotionItem>
+            <MobileNav navigation={navigation} headerCta={headerCta} />
+          </div>
         </HeaderMotion>
       </Container>
     </HeaderShell>

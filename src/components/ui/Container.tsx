@@ -16,7 +16,7 @@ export function Container({
   return (
     <Component
       className={cn(
-        "mx-auto w-full max-w-[var(--layout-page-width)] px-5 sm:px-8 lg:px-[var(--spacing-container-x)]",
+        "container-px mx-auto w-full max-w-[var(--layout-page-width)]",
         className,
       )}
     >

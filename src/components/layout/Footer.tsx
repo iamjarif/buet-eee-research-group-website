@@ -31,11 +31,11 @@ export function Footer({ settings }: FooterProps) {
     <footer className="mt-auto bg-surface-base">
       <RuleReveal viewport={VIEWPORT_FOOTER} />
 
-      <Container as="div" className="space-y-16 pb-10 pt-[72px]">
+      <Container as="div" className="space-y-10 pb-8 pt-12 sm:space-y-16 sm:pb-10 sm:pt-16 lg:pt-[72px]">
         <Stagger
           stagger={0.08}
           viewport={VIEWPORT_FOOTER}
-          className="grid gap-10 lg:grid-cols-[minmax(0,508px)_1fr_1fr] lg:gap-14"
+          className="grid gap-10 sm:grid-cols-2 sm:gap-12 lg:grid-cols-[minmax(0,508px)_1fr_1fr] lg:gap-14"
         >
           <StaggerItem>
             <div className="space-y-3.5">

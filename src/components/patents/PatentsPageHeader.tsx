@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/Container";
+import { PageHeaderMeta } from "@/components/ui/PageHeaderMeta";
 import { Reveal } from "@/components/motion/Reveal";
 
 type PatentsPageHeaderProps = {
@@ -15,16 +16,10 @@ export function PatentsPageHeader({
   description = "Sixteen granted United States patents and three pending applications — in polarization engineering, complementary GaN devices, RF passives, and AI-assisted device design.",
 }: PatentsPageHeaderProps) {
   return (
-    <header className="bg-surface-base pt-[140px] pb-8">
-      <Container as="div" className="flex flex-col gap-7">
+    <header className="page-header-padding bg-surface-base pb-8">
+      <Container as="div" className="flex flex-col gap-6 sm:gap-7">
         <Reveal immediate variant="fadeUpSubtle">
-          <div className="flex items-center gap-4">
-            <p className="type-overline shrink-0 text-text-secondary">{eyebrow}</p>
-            <span aria-hidden className="h-px flex-1 bg-border-default" />
-            {stats ? (
-              <p className="type-overline shrink-0 text-text-tertiary">{stats}</p>
-            ) : null}
-          </div>
+          <PageHeaderMeta eyebrow={eyebrow} stats={stats} />
         </Reveal>
 
         <Reveal immediate variant="fadeUpSubtle" delay={0.08}>

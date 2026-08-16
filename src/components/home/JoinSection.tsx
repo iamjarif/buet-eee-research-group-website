@@ -32,11 +32,11 @@ export function JoinSection({
   return (
     <section
       aria-labelledby="join-heading"
-      className="bg-surface-inverse py-24 lg:py-32"
+      className="bg-surface-inverse py-16 sm:py-20 lg:py-32"
     >
       <Container as="div">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
-          <Stagger stagger={0.12} className="max-w-[700px] space-y-5">
+          <Stagger stagger={0.12} className="min-w-0 max-w-[700px] space-y-5">
             <StaggerItem>
               <Eyebrow inverse>{eyebrow}</Eyebrow>
             </StaggerItem>

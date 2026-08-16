@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/Container";
+import { PageHeaderMeta } from "@/components/ui/PageHeaderMeta";
 import { Reveal } from "@/components/motion/Reveal";
 
 type PublicationsPageHeaderProps = {
@@ -13,13 +14,10 @@ export function PublicationsPageHeader({
   description = "Peer-reviewed journal articles and conference proceedings in semiconductor device physics, GaN electronics, and device modeling. Search and filter the record below.",
 }: PublicationsPageHeaderProps) {
   return (
-    <header className="border-b border-border-default bg-surface-base pt-[140px] pb-12">
-      <Container as="div" className="flex flex-col gap-7">
+    <header className="page-header-padding border-b border-border-default bg-surface-base pb-10 sm:pb-12">
+      <Container as="div" className="flex flex-col gap-6 sm:gap-7">
         <Reveal immediate variant="fadeUpSubtle">
-          <div className="flex items-center gap-4">
-            <p className="type-overline shrink-0 text-text-secondary">{eyebrow}</p>
-            <span aria-hidden className="h-px flex-1 bg-border-default" />
-          </div>
+          <PageHeaderMeta eyebrow={eyebrow} />
         </Reveal>
 
         <Reveal immediate variant="fadeUpSubtle" delay={0.08}>

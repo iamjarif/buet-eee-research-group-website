@@ -23,7 +23,7 @@ export function HomeLoading() {
       <section className="relative overflow-hidden bg-transparent">
         <Container
           as="div"
-          className="flex min-h-[min(860px,90vh)] flex-col justify-center py-20 lg:py-[120px]"
+          className="flex min-h-[min(640px,85vh)] flex-col justify-center py-16 sm:min-h-[min(760px,88vh)] sm:py-20 lg:min-h-[min(860px,90vh)] lg:py-[120px]"
         >
           <div className="flex max-w-full flex-col gap-8">
             <SkeletonBlock className="h-3 w-[5rem]" />
@@ -51,7 +51,7 @@ export function HomeLoading() {
         </div>
       </HomeSectionSkeleton>
 
-      <HomeSectionSkeleton className="bg-surface-base py-20 lg:py-24">
+      <HomeSectionSkeleton className="section-padding-y bg-surface-base">
         <div className="mb-12 max-w-[28rem] space-y-3">
           <SkeletonBlock className="h-8 w-[14rem]" />
           <SkeletonBlock className="h-4 w-full" />
@@ -67,7 +67,7 @@ export function HomeLoading() {
         </div>
       </HomeSectionSkeleton>
 
-      <HomeSectionSkeleton className="bg-surface-subtle py-20 lg:py-24">
+      <HomeSectionSkeleton className="section-padding-y bg-surface-subtle">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:items-center lg:gap-16">
           <div className="space-y-3">
             <SkeletonBlock className="h-8 w-[12rem]" />

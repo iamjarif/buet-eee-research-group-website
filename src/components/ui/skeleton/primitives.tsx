@@ -40,15 +40,15 @@ export function CatalogPageHeaderSkeleton({
   return (
     <div
       className={cn(
-        "bg-surface-base pt-[140px] pb-10",
+        "page-header-padding bg-surface-base pb-8 sm:pb-10",
         withBorder && "border-b border-border-default pb-12",
         className,
       )}
     >
       <Container as="div" className="flex flex-col gap-7">
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
           <SkeletonBlock className="h-3 w-[4.5rem]" />
-          <span aria-hidden className="h-px flex-1 bg-border-default" />
+          <span aria-hidden className="h-px min-w-[1.5rem] flex-1 basis-12 bg-border-default" />
           <SkeletonBlock className="h-3 w-[3.5rem]" />
         </div>
 
@@ -71,7 +71,7 @@ export function FilterBarSkeleton({ pillCount = 3 }: { pillCount?: number }) {
     <div className="border-t border-border-default bg-surface-subtle py-4">
       <Container as="div">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <SkeletonBlock className="h-9 w-full max-w-[360px]" />
+          <SkeletonBlock className="h-9 w-full sm:max-w-[360px]" />
           <div className="flex flex-wrap items-center gap-2">
             {Array.from({ length: pillCount }).map((_, index) => (
               <SkeletonBlock key={index} className="h-8 w-[5.5rem]" />
@@ -105,7 +105,7 @@ export function IdentityBarSkeleton() {
 
 export function SectionRuleSkeleton() {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
       <SkeletonBlock className="h-3 w-[2.5rem]" />
       <span aria-hidden className="h-px flex-1 bg-border-default" />
       <SkeletonBlock className="h-3 w-[5rem]" />

@@ -46,8 +46,8 @@ type ActivityListItemProps = {
 
 function ActivityListItem({ activity }: ActivityListItemProps) {
   return (
-    <article className="flex gap-6 border-b border-border-subtle py-5">
-      <p className="w-24 shrink-0 text-label-xs uppercase text-text-muted">
+    <article className="flex flex-col gap-2 border-b border-border-subtle py-5 sm:flex-row sm:gap-6">
+      <p className="shrink-0 text-label-xs uppercase text-text-muted sm:w-24">
         {formatActivityDate(activity.date)}
       </p>
       <div className="min-w-0 space-y-1">
@@ -78,7 +78,7 @@ export function ActivitiesSection({
   return (
     <section
       aria-labelledby="activities-heading"
-      className="bg-surface-base py-20 lg:py-[120px]"
+      className="section-padding-y bg-surface-base"
     >
       <Container as="div" className="space-y-10">
         <Stagger className="space-y-10">

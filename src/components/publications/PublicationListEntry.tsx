@@ -18,9 +18,9 @@ export function PublicationListEntry({ publication }: PublicationListEntryProps)
   const authors = formatPublicationAuthors(publication);
 
   return (
-    <article className="flex items-start justify-between gap-6 border-b border-border-default py-7">
-      <div className="flex min-w-0 flex-1 flex-col gap-8 sm:flex-row sm:gap-12">
-        <p className="shrink-0 py-3.5 text-label-xs text-text-tertiary">
+    <article className="flex flex-col gap-4 border-b border-border-default py-6 sm:flex-row sm:items-start sm:justify-between sm:gap-6 sm:py-7">
+      <div className="flex min-w-0 flex-1 flex-col gap-4 sm:flex-row sm:gap-8 lg:gap-12">
+        <p className="shrink-0 text-label-xs text-text-tertiary sm:py-3.5">
           {publication.categoryLabel}
         </p>
 
@@ -56,7 +56,10 @@ export function PublicationListEntry({ publication }: PublicationListEntryProps)
           target="_blank"
           rel="noopener noreferrer"
           aria-label={`Open ${publication.title}`}
-          className={cn("shrink-0 pt-3.5 text-label-xs text-text-tertiary", linkClassName)}
+          className={cn(
+            "shrink-0 self-start text-label-xs text-text-tertiary sm:self-auto sm:pt-3.5",
+            linkClassName,
+          )}
         >
           ↗
         </a>

@@ -48,7 +48,7 @@ export function PublicationsIndex({ publications }: PublicationsIndexProps) {
         <div className="border-b border-border-default bg-surface-subtle py-4">
           <Container as="div">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-              <label className="relative block w-full max-w-[360px]">
+              <label className="relative block w-full sm:max-w-[360px]">
                 <span className="sr-only">Search publications</span>
                 <input
                   type="search"
@@ -91,7 +91,7 @@ export function PublicationsIndex({ publications }: PublicationsIndexProps) {
 
       <section
         aria-label="Publication results"
-        className="bg-surface-base pb-[120px] pt-14"
+        className="bg-surface-base pb-20 pt-10 sm:pb-[120px] sm:pt-14"
       >
         <Container as="div" className="flex flex-col gap-14">
           {yearGroups.length > 0 ? (

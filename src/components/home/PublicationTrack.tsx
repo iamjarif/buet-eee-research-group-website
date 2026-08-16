@@ -285,7 +285,7 @@ export function PublicationTrack({ publications = [] }: PublicationTrackProps) {
         <div
           ref={trackRef}
           className={cn(
-            "flex w-max gap-5 px-5 sm:px-8 lg:px-[var(--spacing-container-x)]",
+            "flex w-max gap-5 container-px",
             shouldAutoScroll && "will-change-transform",
           )}
         >

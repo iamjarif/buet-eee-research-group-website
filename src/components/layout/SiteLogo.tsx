@@ -20,13 +20,13 @@ type SiteLogoProps = {
 };
 
 const GROUP_LOGO_HEIGHT = {
-  header: "h-[44px] sm:h-[48px]",
-  footer: "h-[40px] sm:h-[44px]",
+  header: "h-[36px] sm:h-[44px] lg:h-[48px]",
+  footer: "h-[36px] sm:h-[44px]",
 } as const;
 
 const PARTNER_LOGO_HEIGHT = {
-  header: "h-[40px] sm:h-[46px]",
-  footer: "h-[38px] sm:h-[42px]",
+  header: "h-[32px] sm:h-[40px] lg:h-[46px]",
+  footer: "h-[32px] sm:h-[42px]",
 } as const;
 
 export function SiteLogo({
@@ -40,7 +40,7 @@ export function SiteLogo({
     <Link
       href={href}
       className={cn(
-        "inline-flex items-center gap-3 focus-visible:outline-none",
+        "inline-flex min-w-0 max-w-full items-center gap-2 sm:gap-3 focus-visible:outline-none",
         className,
       )}
       aria-label={`${siteName} home`}
@@ -53,7 +53,7 @@ export function SiteLogo({
           priority={size === "header"}
           unoptimized
           className={cn(
-            "w-auto max-w-none shrink-0 object-contain",
+            "w-auto max-w-[min(52vw,11rem)] shrink-0 object-contain sm:max-w-none",
             GROUP_LOGO_HEIGHT[size],
           )}
         />
@@ -64,7 +64,7 @@ export function SiteLogo({
             aria-hidden
             className={cn(
               "w-px shrink-0 bg-border-strong",
-              size === "header" ? "h-6 sm:h-7" : "h-5 sm:h-6",
+              size === "header" ? "h-5 sm:h-7" : "h-5 sm:h-6",
             )}
           />
           <SanityImage
@@ -72,8 +72,11 @@ export function SiteLogo({
             alt={partnerLogo.alt ?? "Partner institution logo"}
             width={size === "header" ? 180 : 160}
             height={size === "header" ? 46 : 42}
-            className={cn("w-auto object-contain", PARTNER_LOGO_HEIGHT[size])}
-            sizes="180px"
+            className={cn(
+              "w-auto max-w-[min(28vw,5.5rem)] object-contain sm:max-w-[7.5rem] lg:max-w-none",
+              PARTNER_LOGO_HEIGHT[size],
+            )}
+            sizes="(max-width: 640px) 88px, 180px"
           />
         </>
       ) : null}

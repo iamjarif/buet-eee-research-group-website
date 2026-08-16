@@ -26,17 +26,17 @@ export function ResearchAreaSection({
 
   return (
     <section aria-labelledby={headingId} className="py-10 lg:py-14">
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <p className="type-overline shrink-0 text-text-tertiary">
           {formatSectionIndex(index)}
         </p>
-        <span aria-hidden className="h-px flex-1 bg-border-default" />
+        <span aria-hidden className="h-px min-w-[1.5rem] flex-1 basis-12 bg-border-default" />
         {output ? (
           <p className="type-overline shrink-0 text-text-tertiary">{output}</p>
         ) : null}
       </div>
 
-      <div className="mt-8 grid gap-10 lg:mt-10 lg:grid-cols-[minmax(0,28rem)_minmax(0,1fr)] lg:gap-x-16">
+      <div className="mt-6 grid gap-8 sm:mt-8 sm:gap-10 lg:mt-10 lg:grid-cols-[minmax(0,28rem)_minmax(0,1fr)] lg:gap-x-16">
         <div className="flex flex-col items-start gap-5">
           <h2 id={headingId} className="text-display-sm text-text-primary">
             {area.title}
@@ -57,7 +57,7 @@ export function ResearchAreaSection({
             width={1000}
             sizes="(max-width: 640px) 92vw, (max-width: 1024px) 88vw, 34rem"
             priority={priority}
-            className="max-w-[34rem]"
+            className="w-full max-w-[34rem] lg:max-w-none"
           />
 
           <ResearchAreaPublications

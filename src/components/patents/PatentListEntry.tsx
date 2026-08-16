@@ -40,7 +40,7 @@ export function PatentListEntry({ patent, listingNumber }: PatentListEntryProps)
         </h3>
       </div>
 
-      <div className="flex shrink-0 items-center gap-5 sm:pl-0">
+      <div className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-2 sm:shrink-0 sm:pl-0">
         {patent.patentNumber ? (
           <p className="text-caption text-text-tertiary">{patent.patentNumber}</p>
         ) : null}

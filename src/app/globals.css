@@ -46,32 +46,32 @@
   --color-border-strong: var(--border-strong);
   --color-border-subtle: var(--border-subtle);
 
-  /* --- Typography: Display (Tinos) --- */
-  --text-display-xl-size: 4.625rem;
-  --text-display-xl-line: 4.9025rem;
-  --text-display-xl-tracking: -0.115625rem;
+  /* --- Typography: Display (Tinos) — fluid scale preserves desktop sizes --- */
+  --text-display-xl-size: clamp(2.25rem, 4.5vw + 1rem, 4.625rem);
+  --text-display-xl-line: clamp(2.5rem, 4.8vw + 1.1rem, 4.9025rem);
+  --text-display-xl-tracking: clamp(-0.05rem, -0.2vw, -0.115625rem);
 
-  --text-display-lg-size: 3.75rem;
-  --text-display-lg-line: 3.825rem;
-  --text-display-lg-tracking: -0.075rem;
+  --text-display-lg-size: clamp(2rem, 3.5vw + 0.75rem, 3.75rem);
+  --text-display-lg-line: clamp(2.2rem, 3.6vw + 0.85rem, 3.825rem);
+  --text-display-lg-tracking: clamp(-0.04rem, -0.15vw, -0.075rem);
 
-  --text-display-md-size: 2.875rem;
-  --text-display-md-line: 3.22rem;
-  --text-display-md-tracking: -0.0525rem;
+  --text-display-md-size: clamp(1.75rem, 2.5vw + 0.65rem, 2.875rem);
+  --text-display-md-line: clamp(2rem, 2.8vw + 0.75rem, 3.22rem);
+  --text-display-md-tracking: clamp(-0.03rem, -0.1vw, -0.0525rem);
 
-  /* Section titles (46px) */
-  --text-section-title-size: 2.875rem;
-  --text-section-title-line: 3.22rem;
-  --text-section-title-tracking: -0.0525rem;
+  /* Section titles (46px desktop) */
+  --text-section-title-size: clamp(1.75rem, 2.5vw + 0.65rem, 2.875rem);
+  --text-section-title-line: clamp(2rem, 2.8vw + 0.75rem, 3.22rem);
+  --text-section-title-tracking: clamp(-0.03rem, -0.1vw, -0.0525rem);
 
-  --text-display-sm-size: 2.25rem;
-  --text-display-sm-line: 2.8125rem;
+  --text-display-sm-size: clamp(1.5rem, 2vw + 0.5rem, 2.25rem);
+  --text-display-sm-line: clamp(1.85rem, 2.4vw + 0.6rem, 2.8125rem);
   --text-display-sm-tracking: 0;
 
   /* --- Typography: Heading (Tinos) --- */
-  --text-heading-lg-size: 1.875rem;
-  --text-heading-lg-line: 2.15625rem;
-  --text-heading-lg-tracking: -0.028125rem;
+  --text-heading-lg-size: clamp(1.375rem, 1.5vw + 0.75rem, 1.875rem);
+  --text-heading-lg-line: clamp(1.6rem, 1.7vw + 0.85rem, 2.15625rem);
+  --text-heading-lg-tracking: clamp(-0.015rem, -0.05vw, -0.028125rem);
 
   --text-heading-md-size: 1.75rem;
   --text-heading-md-line: 2.0625rem;
@@ -122,8 +122,8 @@
   --text-caption-line: 1.00625rem;
 
   /* --- Typography: Stat (Tinos) --- */
-  --text-stat-xl-size: 3.75rem;
-  --text-stat-xl-line: 3.75rem;
+  --text-stat-xl-size: clamp(2rem, 3.5vw + 0.75rem, 3.75rem);
+  --text-stat-xl-line: clamp(2rem, 3.5vw + 0.75rem, 3.75rem);
 
   /* --- Spacing --- */
   --space-section-y: 7.5rem;
@@ -242,6 +242,7 @@
   line-height: var(--text-display-xl-line);
   letter-spacing: var(--text-display-xl-tracking);
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 .text-display-lg {
@@ -250,6 +251,7 @@
   line-height: var(--text-display-lg-line);
   letter-spacing: var(--text-display-lg-tracking);
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 .text-display-md {
@@ -258,6 +260,7 @@
   line-height: var(--text-display-md-line);
   letter-spacing: var(--text-display-md-tracking);
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 .text-section-title {
@@ -266,6 +269,7 @@
   line-height: var(--text-section-title-line);
   letter-spacing: var(--text-section-title-tracking);
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 .text-display-sm {
@@ -388,6 +392,57 @@
   font-size: var(--text-stat-xl-size);
   line-height: var(--text-stat-xl-line);
   font-weight: 400;
+}
+
+/* =============================================================================
+   Responsive layout utilities
+   ============================================================================= */
+
+.container-px {
+  padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+}
+
+@media (min-width: 640px) {
+  .container-px {
+    padding-left: max(2rem, env(safe-area-inset-left, 0px));
+    padding-right: max(2rem, env(safe-area-inset-right, 0px));
+  }
+}
+
+@media (min-width: 768px) {
+  .container-px {
+    padding-left: max(3rem, env(safe-area-inset-left, 0px));
+    padding-right: max(3rem, env(safe-area-inset-right, 0px));
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-px {
+    padding-left: max(4rem, env(safe-area-inset-left, 0px));
+    padding-right: max(4rem, env(safe-area-inset-right, 0px));
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-px {
+    padding-left: max(
+      var(--space-container-x),
+      env(safe-area-inset-left, 0px)
+    );
+    padding-right: max(
+      var(--space-container-x),
+      env(safe-area-inset-right, 0px)
+    );
+  }
+}
+
+.page-header-padding {
+  padding-top: calc(var(--layout-header-height) + clamp(2rem, 5vw, 4.375rem));
+}
+
+.section-padding-y {
+  padding-block: clamp(4rem, 8vw, 7.5rem);
 }
 
 @media (prefers-reduced-motion: reduce) {

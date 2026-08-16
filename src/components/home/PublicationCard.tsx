@@ -14,7 +14,7 @@ export function PublicationCard({ publication }: PublicationCardProps) {
   const externalUrl = getPublicationExternalUrl(publication);
 
   return (
-    <PublicationCardMotion className="flex w-[280px] shrink-0 flex-col border border-border-default bg-surface-base sm:w-[340px]">
+    <PublicationCardMotion className="flex w-[min(280px,calc(100vw-2.5rem))] shrink-0 flex-col border border-border-default bg-surface-base sm:w-[min(340px,calc(100vw-4rem))]">
       {publication.image ? (
         <PublicationImageMotion className="h-24 w-full">
           <SanityImage
