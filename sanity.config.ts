@@ -10,7 +10,7 @@ import { structure as structureResolver } from "./sanity/structure";
 
 export default defineConfig({
   name: "sdream",
-  title: "S-DREAM CMS",
+  title: "NC Group CMS",
   projectId,
   dataset,
   basePath: "/studio",

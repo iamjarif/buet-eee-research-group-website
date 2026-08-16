@@ -49,6 +49,8 @@ export const personSummaryFields = /* groq */ `
   name,
   "slug": slug.current,
   position,
+  group,
+  currentAffiliation,
   photograph {
     ${imageFields}
   },
@@ -74,6 +76,8 @@ export const publicationSummaryFields = /* groq */ `
   title,
   "slug": slug.current,
   journalOrConference,
+  publicationType,
+  categoryLabel,
   year,
   doi,
   externalUrl,
@@ -85,6 +89,7 @@ export const publicationSummaryFields = /* groq */ `
   authors[]->{
     ${personSummaryFields}
   },
+  authorLine,
   researchAreas[]->{
     _id,
     title,
@@ -92,18 +97,24 @@ export const publicationSummaryFields = /* groq */ `
   }
 `;
 
-export const contributionSummaryFields = /* groq */ `
+export const patentSummaryFields = /* groq */ `
   _id,
-  value,
-  label,
-  description,
-  link {
-    ${linkFields}
+  title,
+  "slug": slug.current,
+  patentNumber,
+  status,
+  year,
+  externalUrl,
+  displayOrder,
+  inventorLine,
+  inventors[]->{
+    ${personSummaryFields}
   },
-  icon {
-    ${imageFields}
-  },
-  displayOrder
+  researchAreas[]->{
+    _id,
+    title,
+    "slug": slug.current
+  }
 `;
 
 export const activitySummaryFields = /* groq */ `

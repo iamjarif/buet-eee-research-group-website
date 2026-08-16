@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { Footer } from "@/components/layout/Footer";
+import { FooterShell } from "@/components/layout/FooterShell";
 import { Header } from "@/components/layout/Header";
 import { SkipLink } from "@/components/ui/SkipLink";
 import type { SiteSettings } from "../../../sanity/types";
@@ -18,7 +19,9 @@ export function MainLayout({ children, settings }: MainLayoutProps) {
       <main id="main-content" className="flex-1 pt-[var(--layout-header-height)]">
         {children}
       </main>
-      <Footer settings={settings} />
+      <FooterShell>
+        <Footer settings={settings} />
+      </FooterShell>
     </>
   );
 }

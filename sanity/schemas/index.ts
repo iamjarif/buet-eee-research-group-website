@@ -1,6 +1,6 @@
 import activity from "./documents/activity";
-import contribution from "./documents/contribution";
 import homepage from "./documents/homepage";
+import patent from "./documents/patent";
 import person from "./documents/person";
 import publication from "./documents/publication";
 import researchArea from "./documents/researchArea";
@@ -26,7 +26,7 @@ export const schemaTypes = [
   homepage,
   researchArea,
   publication,
+  patent,
   person,
-  contribution,
   activity,
 ];

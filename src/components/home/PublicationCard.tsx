@@ -1,10 +1,9 @@
-import Link from "next/link";
-
 import {
   PublicationCardMotion,
   PublicationImageMotion,
 } from "@/components/motion/PublicationCardMotion";
 import { SanityImage } from "@/components/ui/SanityImage";
+import { getPublicationExternalUrl } from "@/lib/publications";
 import type { PublicationSummary } from "../../../sanity/types";
 
 type PublicationCardProps = {
@@ -12,6 +11,8 @@ type PublicationCardProps = {
 };
 
 export function PublicationCard({ publication }: PublicationCardProps) {
+  const externalUrl = getPublicationExternalUrl(publication);
+
   return (
     <PublicationCardMotion className="flex w-[280px] shrink-0 flex-col border border-border-default bg-surface-base sm:w-[340px]">
       {publication.image ? (
@@ -31,12 +32,18 @@ export function PublicationCard({ publication }: PublicationCardProps) {
 
       <div className="flex flex-col gap-3.5 px-[18px] pb-[17px] pt-[15px]">
         <h3 className="font-serif text-[length:var(--text-label-md-size)] leading-[var(--text-label-md-line)] text-text-primary">
-          <Link
-            href={`/publications/${publication.slug}`}
-            className="transition-colors duration-300 ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
-          >
-            {publication.title}
-          </Link>
+          {externalUrl ? (
+            <a
+              href={externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transition-colors duration-300 ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
+            >
+              {publication.title}
+            </a>
+          ) : (
+            publication.title
+          )}
         </h3>
 
         <div className="flex items-start justify-between gap-3 text-caption">

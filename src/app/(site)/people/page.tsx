@@ -1,14 +1,14 @@
-import Link from "next/link";
-
-import { PageShell } from "@/components/layout/PageShell";
+import { PeoplePageHeader } from "@/components/people/PeoplePageHeader";
+import { PeopleRoster } from "@/components/people/PeopleRoster";
 import { getPeople, getSiteSettings } from "@/lib/cms";
 import { buildMetadata } from "@/lib/metadata";
+import { countCurrentMembers, formatPeopleStats, groupPeople } from "@/lib/people";
 
 export async function generateMetadata() {
   const settings = await getSiteSettings();
   return buildMetadata({
     title: "People",
-    description: "Faculty, researchers, and students at S-DREAM, BUET.",
+    description: "Faculty, researchers, and students at NC Group, BUET.",
     siteSettings: settings,
     path: "/people",
   });
@@ -16,21 +16,13 @@ export async function generateMetadata() {
 
 export default async function PeoplePage() {
   const people = await getPeople();
+  const grouped = groupPeople(people);
+  const hasMembers = countCurrentMembers(grouped) + grouped.alumni.length > 0;
 
   return (
-    <PageShell title="People" description="Meet the S-DREAM research team.">
-      {people.length > 0 ? (
-        <ul className="space-y-2">
-          {people.map((person) => (
-            <li key={person._id}>
-              <Link href={`/people/${person.slug}`} className="underline">
-                {person.name}
-              </Link>
-              <span className="text-sm text-muted"> — {person.position}</span>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </PageShell>
+    <div className="-mt-[var(--layout-header-height)] bg-gradient-to-b from-surface-gradient-start from-0% to-surface-base to-[13.613%]">
+      <PeoplePageHeader stats={hasMembers ? formatPeopleStats(grouped) : undefined} />
+      <PeopleRoster grouped={grouped} />
+    </div>
   );
 }

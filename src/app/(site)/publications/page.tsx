@@ -1,15 +1,14 @@
-import Link from "next/link";
-
-import { PageShell } from "@/components/layout/PageShell";
+import { PublicationsIndex } from "@/components/publications/PublicationsIndex";
+import { PublicationsPageHeader } from "@/components/publications/PublicationsPageHeader";
 import { getPublications, getSiteSettings } from "@/lib/cms";
 import { buildMetadata } from "@/lib/metadata";
-import { formatAuthorNames } from "@/lib/utils";
 
 export async function generateMetadata() {
   const settings = await getSiteSettings();
   return buildMetadata({
     title: "Publications",
-    description: "Research publications from S-DREAM, BUET.",
+    description:
+      "Peer-reviewed journal articles and conference proceedings from NC Group, BUET.",
     siteSettings: settings,
     path: "/publications",
   });
@@ -19,28 +18,9 @@ export default async function PublicationsPage() {
   const publications = await getPublications();
 
   return (
-    <PageShell
-      title="Publications"
-      description="Peer-reviewed research output from S-DREAM."
-    >
-      {publications.length > 0 ? (
-        <ul className="space-y-4">
-          {publications.map((publication) => (
-            <li key={publication._id}>
-              <Link
-                href={`/publications/${publication.slug}`}
-                className="font-medium underline"
-              >
-                {publication.title}
-              </Link>
-              <p className="text-sm text-muted">
-                {formatAuthorNames(publication.authors)} ·{" "}
-                {publication.journalOrConference} · {publication.year}
-              </p>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </PageShell>
+    <div className="-mt-[var(--layout-header-height)] bg-gradient-to-b from-surface-gradient-start from-0% to-surface-base to-[13.613%]">
+      <PublicationsPageHeader />
+      <PublicationsIndex publications={publications} />
+    </div>
   );
 }

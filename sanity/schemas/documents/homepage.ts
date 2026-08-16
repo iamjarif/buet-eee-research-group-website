@@ -9,7 +9,6 @@ export const homepage = defineType({
     { name: "publications", title: "Featured Publications" },
     { name: "research", title: "Research" },
     { name: "team", title: "Team" },
-    { name: "contributions", title: "Contributions" },
     { name: "activities", title: "Activities" },
     { name: "joinUs", title: "Join Us" },
     { name: "seo", title: "SEO" },
@@ -129,28 +128,6 @@ export const homepage = defineType({
       of: [{ type: "reference", to: [{ type: "person" }] }],
       description:
         "Optional featured members for other uses. The homepage team section uses the team photo above.",
-    }),
-
-    // Contributions
-    defineField({
-      name: "contributionsSectionHeading",
-      title: "Section Heading",
-      type: "string",
-      group: "contributions",
-    }),
-    defineField({
-      name: "contributionsSectionDescription",
-      title: "Section Description",
-      type: "text",
-      rows: 3,
-      group: "contributions",
-    }),
-    defineField({
-      name: "featuredContributions",
-      title: "Featured Contributions",
-      type: "array",
-      group: "contributions",
-      of: [{ type: "reference", to: [{ type: "contribution" }] }],
     }),
 
     // Activities

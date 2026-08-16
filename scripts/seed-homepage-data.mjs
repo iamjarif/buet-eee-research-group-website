@@ -1,5 +1,5 @@
 /**
- * S-DREAM homepage seed data (Figma node 39:2).
+ * NC Group homepage seed data (Figma node 39:2).
  * Pure data — no Sanity mutations. Used by seed-homepage-content.mjs.
  */
 
@@ -17,9 +17,12 @@ export const SEED_DOCUMENT_IDS = [
   "publication-thermal-transport-limits-lateral-gan-power",
   "publication-field-plate-optimization-high-voltage-gan-hemts",
   "publication-tcad-study-dynamic-on-resistance-gan-diodes",
-  "contribution-publications",
-  "contribution-patents-innovations",
-  "contribution-recognition",
+  "patent-gan-hemts-field-plate-architecture",
+  "patent-vertical-gan-power-diode-termination",
+  "patent-semiconductor-device-vertically-stacked-gan-complementary-fets",
+  "patent-compound-semiconductor-device-high-power-high-frequency",
+  "patent-polarization-direction-changeable-semiconductor-device",
+  "patent-high-electron-mobility-transistors-low-on-resistance",
   "activity-vertical-gan-power-diodes-edl",
   "activity-rf-reliability-device-physics-workshop",
   "activity-welcomes-graduate-researchers",
@@ -28,14 +31,14 @@ export const SEED_DOCUMENT_IDS = [
 
 /** Max 160 chars — matches sanity/schemas/objects/seo.ts validation. */
 const SEO_META_DESCRIPTION =
-  "S-DREAM explores wide-bandgap semiconductor technology through device physics, modeling, and simulation — focused on GaN RF and power devices.";
+  "NC Group explores wide-bandgap semiconductor technology through device physics, modeling, and simulation — focused on GaN RF and power devices.";
 
 export const SEED_IMAGE_ASSETS = [
   {
     key: "teamPhoto",
     relativePath: "assets/team-photo.png",
     filename: "s-dream-team-photo.png",
-    alt: "S-DREAM research group team photo",
+    alt: "NC Group research group team photo",
   },
   {
     key: "partnerLogo",
@@ -168,6 +171,10 @@ export function buildPublications() {
         current: "physics-based-reliability-modeling-gan-rf-devices",
       },
       journalOrConference: "IEEE J. Electron Devices Soc.",
+      publicationType: "journal",
+      categoryLabel: "J1",
+      authorLine: "N. Chowdhury, A. Rahman, S. Karim",
+      externalUrl: "https://doi.org/10.1109/JEDS.2023.3300001",
       year: 2023,
       isFeatured: true,
       displayOrder: 0,
@@ -179,6 +186,10 @@ export function buildPublications() {
       title: "Buffer-Induced Trapping in AlGaN/GaN HEMTs",
       slug: { _type: "slug", current: "buffer-induced-trapping-algan-gan-hemts" },
       journalOrConference: "IEEE Trans. Electron Devices",
+      publicationType: "journal",
+      categoryLabel: "J2",
+      authorLine: "N. Chowdhury, M. Hasan, T. Ahmed",
+      externalUrl: "https://doi.org/10.1109/TED.2023.3300002",
       year: 2023,
       isFeatured: true,
       displayOrder: 1,
@@ -193,6 +204,10 @@ export function buildPublications() {
         current: "compact-modeling-vertical-gan-power-diodes",
       },
       journalOrConference: "IEEE J. Electron Devices Soc.",
+      publicationType: "journal",
+      categoryLabel: "J3",
+      authorLine: "N. Chowdhury, R. Islam, K. Das",
+      externalUrl: "https://doi.org/10.1109/JEDS.2022.3300003",
       year: 2022,
       isFeatured: true,
       displayOrder: 2,
@@ -207,6 +222,10 @@ export function buildPublications() {
         current: "thermal-transport-limits-lateral-gan-power-transistors",
       },
       journalOrConference: "Journal of Applied Physics",
+      publicationType: "journal",
+      categoryLabel: "J4",
+      authorLine: "N. Chowdhury, F. Khan, P. Saha",
+      externalUrl: "https://doi.org/10.1063/5.3300004",
       year: 2024,
       isFeatured: true,
       displayOrder: 3,
@@ -221,6 +240,10 @@ export function buildPublications() {
         current: "field-plate-optimization-high-voltage-gan-hemts",
       },
       journalOrConference: "IEEE Electron Device Letters",
+      publicationType: "journal",
+      categoryLabel: "J5",
+      authorLine: "N. Chowdhury, S. Karim, A. Rahman",
+      externalUrl: "https://doi.org/10.1109/LED.2023.3300005",
       year: 2023,
       isFeatured: true,
       displayOrder: 4,
@@ -235,6 +258,10 @@ export function buildPublications() {
         current: "tcad-study-dynamic-on-resistance-gan-diodes",
       },
       journalOrConference: "Semiconductor Science and Technology",
+      publicationType: "journal",
+      categoryLabel: "J6",
+      authorLine: "N. Chowdhury, M. Hasan, R. Islam",
+      externalUrl: "https://doi.org/10.1088/1361-6641/3300006",
       year: 2022,
       isFeatured: true,
       displayOrder: 5,
@@ -243,47 +270,99 @@ export function buildPublications() {
   ];
 }
 
-export function buildContributions() {
+export function buildPatents() {
   return [
     {
-      _id: "contribution-publications",
-      _type: "contribution",
-      label: "Publications",
-      value: "12+",
-      description:
-        "Peer-reviewed journal and conference papers on GaN devices and modeling.",
-      link: {
-        _type: "link",
-        label: "Browse Publications →",
-        href: "/publications",
+      _id: "patent-gan-hemts-field-plate-architecture",
+      _type: "patent",
+      title: "Semiconductor device with vertically stacked GaN complementary FETs",
+      slug: {
+        _type: "slug",
+        current: "semiconductor-device-vertically-stacked-gan-complementary-fets",
       },
+      patentNumber: "US12501699B1",
+      status: "granted",
+      year: 2025,
+      externalUrl: "https://patents.google.com/patent/US12501699B1",
       displayOrder: 0,
+      researchAreas: [ref("researchArea-gan-rf-devices")],
     },
     {
-      _id: "contribution-patents-innovations",
-      _type: "contribution",
-      label: "Patents & Innovations",
-      value: "16",
-      description: "Patents on device architecture for RF and power GaN.",
-      link: {
-        _type: "link",
-        label: "View Patents →",
-        href: "/publications",
+      _id: "patent-vertical-gan-power-diode-termination",
+      _type: "patent",
+      title: "Compound semiconductor device for high power and high frequency operation",
+      slug: {
+        _type: "slug",
+        current: "compound-semiconductor-device-high-power-high-frequency",
       },
+      patentNumber: "US20250294864A1",
+      status: "granted",
+      year: 2025,
+      externalUrl: "https://patents.google.com/patent/US20250294864A1",
       displayOrder: 1,
+      researchAreas: [ref("researchArea-gan-power-devices")],
     },
     {
-      _id: "contribution-recognition",
-      _type: "contribution",
-      label: "Recognition",
-      value: "Best Paper recognition at a device physics workshop",
-      description: "2023",
-      link: {
-        _type: "link",
-        label: "All awards →",
-        href: "/activities",
+      _id: "patent-semiconductor-device-vertically-stacked-gan-complementary-fets",
+      _type: "patent",
+      title: "High electron mobility transistors with low specific on-resistance",
+      slug: {
+        _type: "slug",
+        current: "high-electron-mobility-transistors-low-specific-on-resistance-granted",
       },
+      patentNumber: "US20250203907A1",
+      status: "granted",
+      year: 2025,
+      externalUrl: "https://patents.google.com/patent/US20250203907A1",
       displayOrder: 2,
+      researchAreas: [ref("researchArea-gan-power-devices")],
+    },
+    {
+      _id: "patent-compound-semiconductor-device-high-power-high-frequency",
+      _type: "patent",
+      title: "Artificial intelligence assisted design and fabrication of semiconductor devices",
+      slug: {
+        _type: "slug",
+        current: "artificial-intelligence-assisted-design-fabrication-semiconductor-devices",
+      },
+      patentNumber: "US20250307491A1",
+      status: "granted",
+      year: 2025,
+      externalUrl: "https://patents.google.com/patent/US20250307491A1",
+      displayOrder: 3,
+      researchAreas: [ref("researchArea-tcad-advanced-simulation")],
+    },
+    {
+      _id: "patent-polarization-direction-changeable-semiconductor-device",
+      _type: "patent",
+      title: "Semiconductor Device with a Changeable Polarization Direction",
+      slug: {
+        _type: "slug",
+        current: "semiconductor-device-changeable-polarization-direction",
+      },
+      patentNumber: "US PATENT APP. 18/052,776",
+      status: "pending",
+      year: 2025,
+      inventorLine: "Koon Hoo Teo, Nadim Chowdhury",
+      externalUrl: "https://patents.google.com/",
+      displayOrder: 0,
+      researchAreas: [ref("researchArea-gan-rf-devices")],
+    },
+    {
+      _id: "patent-high-electron-mobility-transistors-low-on-resistance",
+      _type: "patent",
+      title: "High Electron Mobility Transistors with Low Specific On-Resistance",
+      slug: {
+        _type: "slug",
+        current: "high-electron-mobility-transistors-low-specific-on-resistance",
+      },
+      patentNumber: "US PATENT APP. 18/537,865",
+      status: "pending",
+      year: 2025,
+      inventorLine: "Koon Hoo Teo, Nadim Chowdhury",
+      externalUrl: "https://patents.google.com/",
+      displayOrder: 1,
+      researchAreas: [ref("researchArea-gan-power-devices")],
     },
   ];
 }
@@ -312,7 +391,7 @@ export function buildActivities() {
     {
       _id: "activity-rf-reliability-device-physics-workshop",
       _type: "activity",
-      title: "S-DREAM presents work on RF reliability at a device physics workshop.",
+      title: "NC Group presents work on RF reliability at a device physics workshop.",
       slug: {
         _type: "slug",
         current: "rf-reliability-device-physics-workshop",
@@ -350,7 +429,7 @@ export function buildSiteSettings(partnerLogoAssetId) {
   return {
     _id: "siteSettings",
     _type: "siteSettings",
-    siteName: "S-DREAM",
+    siteName: "NC Group",
     siteDescription:
       "A university research group at BUET advancing wide-bandgap semiconductor device research.",
     ...(partnerLogoAssetId
@@ -359,7 +438,8 @@ export function buildSiteSettings(partnerLogoAssetId) {
     mainNavigation: [
       navItem("Research", "/research", "main"),
       navItem("People", "/people", "main"),
-      navItem("Contributions", "/", "main"),
+      navItem("Publications", "/publications", "main"),
+      navItem("Patents", "/patents", "main"),
       navItem("News", "/activities", "main"),
       navItem("Contact", "/contact", "main"),
     ],
@@ -367,14 +447,29 @@ export function buildSiteSettings(partnerLogoAssetId) {
     footerNavigation: [
       navItem("Research", "/research", "footer"),
       navItem("People", "/people", "footer"),
-      navItem("Contributions", "/", "footer"),
+      navItem("Publications", "/publications", "footer"),
+      navItem("Patents", "/patents", "footer"),
       navItem("News", "/activities", "footer"),
       navItem("Contact", "/contact", "footer"),
     ],
-    copyrightText: "© 2026 S-DREAM Research Group",
+    copyrightText: "© 2026 NC Group",
+    contactEmail: "nadim@eee.buet.ac.bd",
+    contactPhone: "+8801730725252",
+    contactPageDescription:
+      "For research inquiries, collaborations, and academic correspondence, reach NC Group by email, phone, or the form below.",
+    contactPrimaryName: "Dr. Nadim Chowdhury",
+    contactPrimaryTitle: "Assistant Professor",
+    contactAffiliation:
+      "Department of Electrical and Electronic Engineering (EEE)\nBangladesh University of Engineering and Technology (BUET)\nDhaka-1205, Bangladesh",
+    contactOfficeAddress:
+      "Room no: ECE 130\nElectrical and Computer Engineering Building",
+    contactMailingAddress: "",
+    contactLocationLabel: "BUET · Dhaka, Bangladesh",
+    contactMapEmbedUrl:
+      "https://maps.google.com/maps?q=Bangladesh+University+of+Engineering+and+Technology+Dhaka&t=&z=15&ie=UTF8&iwloc=&output=embed",
     defaultSeo: {
       _type: "seo",
-      metaTitle: "S-DREAM — Semiconductor Device Research & Advanced Modeling",
+      metaTitle: "NC Group — Wide-bandgap semiconductor device research at BUET",
       metaDescription: SEO_META_DESCRIPTION,
     },
   };
@@ -389,23 +484,32 @@ export const SITE_SETTINGS_SEED_FIELDS = [
   "headerCta",
   "footerNavigation",
   "copyrightText",
+  "contactEmail",
+  "contactPhone",
+  "contactPageDescription",
+  "contactPrimaryName",
+  "contactPrimaryTitle",
+  "contactAffiliation",
+  "contactOfficeAddress",
+  "contactMailingAddress",
+  "contactLocationLabel",
+  "contactMapEmbedUrl",
   "defaultSeo",
 ];
 
 export function buildHomepage({
   researchAreas,
   publications,
-  contributions,
   activities,
   teamPhotoAssetId,
 }) {
   return {
     _id: "homepage",
     _type: "homepage",
-    heroEyebrow: "A RESEARCH GROUP",
-    heroHeading: "Semiconductor Device Research\n& Advanced Modeling",
+    heroEyebrow: "NC GROUP",
+    heroHeading: "Wide-bandgap Semiconductor\nDevice Research",
     heroDescription:
-      "S-DREAM explores wide-bandgap semiconductor technology through device physics, modeling, simulation, and engineering — with a focus on Gallium Nitride devices for RF and power applications.",
+      "NC Group explores wide-bandgap semiconductor technology through device physics, modeling, simulation, and engineering — with a focus on Gallium Nitride devices for RF and power applications.",
     heroButtons: [
       link("Meet the Team", "/people"),
       link("Explore Research →", "/research"),
@@ -413,7 +517,7 @@ export function buildHomepage({
     featuredPublications: publications.map((doc) => ref(doc._id)),
     researchSectionHeading: "The physics of wide-bandgap devices, examined closely.",
     researchSectionDescription:
-      "S-DREAM brings together device physics, modeling, simulation, and engineering to understand and advance next-generation semiconductor devices.",
+      "NC Group brings together device physics, modeling, simulation, and engineering to understand and advance next-generation semiconductor devices.",
     featuredResearchAreas: researchAreas.map((doc) => ref(doc._id)),
     teamSectionHeading: "The people behind the research.",
     teamSectionDescription:
@@ -422,8 +526,6 @@ export function buildHomepage({
       ? { teamImage: imageField(teamPhotoAssetId, SEED_IMAGE_ASSETS[0].alt) }
       : {}),
     teamSectionLink: link("Meet the whole team →", "/people"),
-    contributionsSectionHeading: "What the group has produced.",
-    featuredContributions: contributions.map((doc) => ref(doc._id)),
     activitiesSectionHeading: "Recent activity.",
     featuredActivities: activities.map((doc) => ref(doc._id)),
     joinUsHeading: "Curious about\nsemiconductor devices?",
@@ -436,7 +538,7 @@ export function buildHomepage({
     joinUsButton: link("Get in touch →", "/contact"),
     seo: {
       _type: "seo",
-      metaTitle: "S-DREAM — Semiconductor Device Research & Advanced Modeling",
+      metaTitle: "NC Group — Wide-bandgap semiconductor device research at BUET",
       metaDescription: SEO_META_DESCRIPTION,
     },
   };
@@ -445,13 +547,13 @@ export function buildHomepage({
 export function buildAllSeedDocuments(imageAssetIds = {}) {
   const researchAreas = buildResearchAreas();
   const publications = buildPublications();
-  const contributions = buildContributions();
+  const patents = buildPatents();
   const activities = buildActivities();
 
   const collectionDocuments = [
     ...researchAreas,
     ...publications,
-    ...contributions,
+    ...patents,
     ...activities,
   ];
 
@@ -459,7 +561,6 @@ export function buildAllSeedDocuments(imageAssetIds = {}) {
   const homepage = buildHomepage({
     researchAreas,
     publications,
-    contributions,
     activities,
     teamPhotoAssetId: imageAssetIds.teamPhoto,
   });
@@ -471,7 +572,7 @@ export function buildAllSeedDocuments(imageAssetIds = {}) {
     summary: {
       researchAreas: researchAreas.length,
       publications: publications.length,
-      contributions: contributions.length,
+      patents: patents.length,
       activities: activities.length,
       singletons: 2,
       totalDocuments: collectionDocuments.length + 2,

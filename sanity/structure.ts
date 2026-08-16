@@ -41,12 +41,12 @@ export const structure: StructureResolver = (S) =>
             .defaultOrdering([{ field: "displayOrder", direction: "asc" }]),
         ),
       S.listItem()
-        .title("Contributions")
-        .id("contributions")
+        .title("Patents")
+        .id("patents")
         .child(
-          S.documentTypeList("contribution")
-            .title("Contributions")
-            .defaultOrdering([{ field: "displayOrder", direction: "asc" }]),
+          S.documentTypeList("patent")
+            .title("Patents")
+            .defaultOrdering([{ field: "year", direction: "desc" }]),
         ),
       S.listItem()
         .title("Activities")

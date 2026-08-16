@@ -1,5 +1,5 @@
 /**
- * Safe, idempotent S-DREAM homepage seed for Sanity.
+ * Safe, idempotent NC Group homepage seed for Sanity.
  *
  * Uses targeted createOrReplace / patch mutations only.
  * Does NOT use dataset import. Does NOT delete any documents.
@@ -109,7 +109,7 @@ function printPreview({ projectId, dataset, existingDocs, seedPlan, imagePlan })
   }
 
   console.log("══════════════════════════════════════════════════════════════");
-  console.log(" S-DREAM Homepage Seed — Preview");
+  console.log(" NC Group Homepage Seed — Preview");
   console.log("══════════════════════════════════════════════════════════════");
   console.log(`Project:   ${projectId}`);
   console.log(`Dataset:   ${dataset}`);
@@ -169,7 +169,7 @@ function printPreview({ projectId, dataset, existingDocs, seedPlan, imagePlan })
 
   console.log("Collection documents:");
   console.log(
-    "  • researchArea, publication, contribution, activity — createOrReplace by seed ID",
+    "  • researchArea, publication, patent, activity — createOrReplace by seed ID",
   );
   console.log("");
 

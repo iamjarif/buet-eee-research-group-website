@@ -26,6 +26,15 @@ export function formatAuthorNames(
   return authors.map((author) => author.name).join(", ");
 }
 
+/** Author display line for publications (CMS authorLine or linked people). */
+export function formatPublicationAuthors(publication: {
+  authorLine?: string;
+  authors?: Array<{ name: string }>;
+}): string {
+  if (publication.authorLine?.trim()) return publication.authorLine.trim();
+  return formatAuthorNames(publication.authors);
+}
+
 /** Build a DOI URL from a DOI string. */
 export function getDoiUrl(doi: string | undefined): string | undefined {
   if (!doi) return undefined;

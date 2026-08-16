@@ -48,26 +48,43 @@ export type SiteSettings = {
   contactEmail?: string;
   contactPhone?: string;
   contactAddress?: string;
+  contactPageDescription?: string;
+  contactPrimaryName?: string;
+  contactPrimaryTitle?: string;
+  contactAffiliation?: string;
+  contactOfficeAddress?: string;
+  contactMailingAddress?: string;
+  contactLocationLabel?: string;
+  contactMapEmbedUrl?: string;
   socialLinks?: SocialLink[];
   copyrightText?: string;
   defaultSeo?: SeoFields;
 };
+
+/** Roster group values defined by the `group` field on the person schema. */
+export type PersonGroup = "pi" | "phd" | "msc" | "undergrad" | "alumni";
 
 export type PersonSummary = {
   _id: string;
   name: string;
   slug: string;
   position: string;
+  group?: PersonGroup;
+  currentAffiliation?: string;
   photograph?: SanityImage;
   isActive?: boolean;
   displayOrder?: number;
 };
 
-export type Person = PersonSummary & {
+/** Person fields returned by the People page roster query. */
+export type PersonRosterEntry = PersonSummary & {
   biography?: PortableTextBlock[];
   researchInterests?: string[];
   email?: string;
   externalProfileLinks?: Link[];
+};
+
+export type Person = PersonRosterEntry & {
   researchAreas?: Array<{ _id: string; title: string; slug: string }>;
   seo?: SeoFields;
 };
@@ -83,6 +100,11 @@ export type ResearchAreaSummary = {
   isPublished?: boolean;
 };
 
+export type ResearchAreaEntry = ResearchAreaSummary & {
+  publicationCount?: number;
+  selectedPublications?: PublicationSummary[];
+};
+
 export type ResearchArea = ResearchAreaSummary & {
   seo?: SeoFields;
   relatedPublications?: PublicationSummary[];
@@ -94,6 +116,8 @@ export type PublicationSummary = {
   title: string;
   slug: string;
   journalOrConference: string;
+  publicationType?: "journal" | "conference";
+  categoryLabel: string;
   year: number;
   doi?: string;
   externalUrl?: string;
@@ -101,6 +125,7 @@ export type PublicationSummary = {
   displayOrder?: number;
   image?: SanityImage;
   authors?: PersonSummary[];
+  authorLine?: string;
   researchAreas?: Array<{ _id: string; title: string; slug: string }>;
 };
 
@@ -109,14 +134,23 @@ export type Publication = PublicationSummary & {
   seo?: SeoFields;
 };
 
-export type Contribution = {
+export type PatentSummary = {
   _id: string;
-  value: string;
-  label: string;
-  description?: string;
-  link?: Link;
-  icon?: SanityImage;
+  title: string;
+  slug: string;
+  patentNumber?: string;
+  status: string;
+  year: number;
+  externalUrl?: string;
   displayOrder?: number;
+  inventorLine?: string;
+  inventors?: PersonSummary[];
+  researchAreas?: Array<{ _id: string; title: string; slug: string }>;
+};
+
+export type Patent = PatentSummary & {
+  description?: PortableTextBlock[];
+  seo?: SeoFields;
 };
 
 export type ActivitySummary = {
@@ -152,9 +186,6 @@ export type Homepage = {
   teamImage?: SanityImage;
   teamSectionLink?: Link;
   featuredTeam?: PersonSummary[];
-  contributionsSectionHeading?: string;
-  contributionsSectionDescription?: string;
-  featuredContributions?: Contribution[];
   activitiesSectionHeading?: string;
   activitiesSectionDescription?: string;
   featuredActivities?: ActivitySummary[];
@@ -167,6 +198,7 @@ export type Homepage = {
 export type SitemapSlugs = {
   researchAreas: Array<{ slug: string }>;
   publications: Array<{ slug: string }>;
+  patents: Array<{ slug: string }>;
   people: Array<{ slug: string }>;
   activities: Array<{ slug: string }>;
 };

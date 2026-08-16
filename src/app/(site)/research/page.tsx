@@ -1,14 +1,15 @@
-import Link from "next/link";
-
-import { PageShell } from "@/components/layout/PageShell";
+import { ResearchAreas } from "@/components/research/ResearchAreas";
+import { ResearchPageHeader } from "@/components/research/ResearchPageHeader";
 import { getResearchAreas, getSiteSettings } from "@/lib/cms";
 import { buildMetadata } from "@/lib/metadata";
+import { formatResearchStats } from "@/lib/research";
 
 export async function generateMetadata() {
   const settings = await getSiteSettings();
   return buildMetadata({
-    title: "Research Areas",
-    description: "Research areas at S-DREAM, BUET.",
+    title: "Research",
+    description:
+      "Wide-bandgap semiconductor device research at NC Group, BUET: GaN RF and power devices, device physics, compact modeling, and TCAD simulation.",
     siteSettings: settings,
     path: "/research",
   });
@@ -18,21 +19,9 @@ export default async function ResearchPage() {
   const areas = await getResearchAreas();
 
   return (
-    <PageShell
-      title="Research Areas"
-      description="Wide-bandgap semiconductor device research at S-DREAM."
-    >
-      {areas.length > 0 ? (
-        <ul className="space-y-2">
-          {areas.map((area) => (
-            <li key={area._id}>
-              <Link href={`/research/${area.slug}`} className="underline">
-                {area.title}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </PageShell>
+    <div className="-mt-[var(--layout-header-height)] bg-gradient-to-b from-surface-gradient-start from-0% to-surface-base to-[13.613%]">
+      <ResearchPageHeader stats={formatResearchStats(areas.length) || undefined} />
+      <ResearchAreas areas={areas} />
+    </div>
   );
 }

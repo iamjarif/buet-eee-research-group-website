@@ -3,7 +3,7 @@
 import { motion, useReducedMotion, type HTMLMotionProps } from "motion/react";
 import type { ReactNode } from "react";
 
-import { VIEWPORT } from "@/lib/motion/constants";
+import { VIEWPORT, type ViewportConfig } from "@/lib/motion/constants";
 import { fadeIn, fadeUp, fadeUpSubtle } from "@/lib/motion/variants";
 
 type RevealVariant = "fade" | "fadeUp" | "fadeUpSubtle";
@@ -12,7 +12,7 @@ type RevealProps = Omit<HTMLMotionProps<"div">, "children"> & {
   children: ReactNode;
   variant?: RevealVariant;
   delay?: number;
-  viewport?: typeof VIEWPORT;
+  viewport?: ViewportConfig;
   once?: boolean;
   /** When true, animates on mount instead of in-viewport */
   immediate?: boolean;

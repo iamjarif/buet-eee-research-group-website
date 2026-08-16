@@ -2,10 +2,12 @@ import { sanityFetch } from "../../sanity/lib/client";
 import {
   activityBySlugQuery,
   allActivitiesQuery,
+  allPatentsQuery,
   allPeopleQuery,
   allPublicationsQuery,
   allResearchAreasQuery,
   homepageQuery,
+  patentBySlugQuery,
   personBySlugQuery,
   publicationBySlugQuery,
   researchAreaBySlugQuery,
@@ -16,12 +18,14 @@ import type {
   Activity,
   ActivitySummary,
   Homepage,
+  Patent,
+  PatentSummary,
   Person,
-  PersonSummary,
+  PersonRosterEntry,
   Publication,
   PublicationSummary,
   ResearchArea,
-  ResearchAreaSummary,
+  ResearchAreaEntry,
   SiteSettings,
   SitemapSlugs,
 } from "../../sanity/types";
@@ -32,6 +36,7 @@ const CMS_TAGS = {
   homepage: "homepage",
   researchAreas: "researchAreas",
   publications: "publications",
+  patents: "patents",
   people: "people",
   activities: "activities",
 } as const;
@@ -64,11 +69,11 @@ export async function getHomepage(): Promise<Homepage | null> {
   );
 }
 
-export async function getResearchAreas(): Promise<ResearchAreaSummary[]> {
+export async function getResearchAreas(): Promise<ResearchAreaEntry[]> {
   return (
     (await safeCmsFetch(
       () =>
-        sanityFetch<ResearchAreaSummary[]>({
+        sanityFetch<ResearchAreaEntry[]>({
           query: allResearchAreasQuery,
           tags: [CMS_TAGS.researchAreas],
         }),
@@ -116,11 +121,36 @@ export async function getPublicationBySlug(slug: string): Promise<Publication | 
   );
 }
 
-export async function getPeople(): Promise<PersonSummary[]> {
+export async function getPatents(): Promise<PatentSummary[]> {
   return (
     (await safeCmsFetch(
       () =>
-        sanityFetch<PersonSummary[]>({
+        sanityFetch<PatentSummary[]>({
+          query: allPatentsQuery,
+          tags: [CMS_TAGS.patents],
+        }),
+      { label: "getPatents", fallback: [] },
+    )) ?? []
+  );
+}
+
+export async function getPatentBySlug(slug: string): Promise<Patent | null> {
+  return safeCmsFetch(
+    () =>
+      sanityFetch<Patent | null>({
+        query: patentBySlugQuery,
+        params: { slug },
+        tags: [CMS_TAGS.patents, `patent:${slug}`],
+      }),
+    { label: `getPatentBySlug(${slug})` },
+  );
+}
+
+export async function getPeople(): Promise<PersonRosterEntry[]> {
+  return (
+    (await safeCmsFetch(
+      () =>
+        sanityFetch<PersonRosterEntry[]>({
           query: allPeopleQuery,
           tags: [CMS_TAGS.people],
         }),
@@ -175,6 +205,7 @@ export async function getSitemapSlugs(): Promise<SitemapSlugs> {
           tags: [
             CMS_TAGS.researchAreas,
             CMS_TAGS.publications,
+            CMS_TAGS.patents,
             CMS_TAGS.people,
             CMS_TAGS.activities,
           ],
@@ -184,6 +215,7 @@ export async function getSitemapSlugs(): Promise<SitemapSlugs> {
         fallback: {
           researchAreas: [],
           publications: [],
+          patents: [],
           people: [],
           activities: [],
         },
@@ -191,6 +223,7 @@ export async function getSitemapSlugs(): Promise<SitemapSlugs> {
     )) ?? {
       researchAreas: [],
       publications: [],
+      patents: [],
       people: [],
       activities: [],
     }

@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useReducedMotion } from "motion/react";
 
+import { isNavItemActive } from "@/lib/navigation";
 import { hoverEaseClass } from "@/lib/motion/transitions";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "../../../sanity/types";
@@ -20,19 +22,29 @@ const underlineClass = cn(
 );
 
 export function NavLink({ item, className, onNavigate }: NavLinkProps) {
+  const pathname = usePathname();
   const reduced = useReducedMotion();
+  const isActive = isNavItemActive(pathname, item.href);
   const isExternal = item.href.startsWith("http") || item.openInNewTab;
   const classes = cn(
-    "group relative text-sm font-medium text-foreground transition-[color,opacity] duration-300",
+    "group relative font-medium transition-[color,opacity] duration-300",
     hoverEaseClass,
-    "hover:text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground",
+    isActive
+      ? "text-text-primary"
+      : "text-text-secondary hover:text-text-primary",
+    "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
     className,
   );
 
   const content = (
     <>
       {item.label}
-      {!reduced ? <span aria-hidden className={underlineClass} /> : null}
+      {!reduced ? (
+        <span
+          aria-hidden
+          className={cn(underlineClass, isActive && "scale-x-100")}
+        />
+      ) : null}
     </>
   );
 
@@ -51,7 +63,12 @@ export function NavLink({ item, className, onNavigate }: NavLinkProps) {
   }
 
   return (
-    <Link href={item.href} className={classes} onClick={onNavigate}>
+    <Link
+      href={item.href}
+      className={classes}
+      aria-current={isActive ? "page" : undefined}
+      onClick={onNavigate}
+    >
       {content}
     </Link>
   );

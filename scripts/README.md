@@ -1,6 +1,13 @@
-# S-DREAM Homepage Seed
+# NC Group Seeds
 
-Safe, idempotent seed for the S-DREAM homepage CMS content (source: Figma node `39:2`).
+Two safe, idempotent seeds:
+
+- **Homepage** (`seed-homepage-content.mjs`) — homepage CMS content, source: Figma node `39:2`
+- **People** (`seed-people.mjs`) — the `person` roster, source: the group's live team page
+
+Both share the same safety model and preview/apply workflow described below.
+
+## Homepage seed
 
 ## Safety model
 
@@ -37,7 +44,7 @@ SANITY_API_WRITE_TOKEN=your-editor-token-here
 
 The read token (`SANITY_API_READ_TOKEN`) is sufficient for dry-run preview only.
 
-## Seed document IDs (19 total)
+## Seed document IDs (18 total)
 
 ### Singletons (2)
 
@@ -60,11 +67,10 @@ The read token (`SANITY_API_READ_TOKEN`) is sufficient for dry-run preview only.
 - `publication-field-plate-optimization-high-voltage-gan-hemts`
 - `publication-tcad-study-dynamic-on-resistance-gan-diodes`
 
-### Contributions (3)
+### Patents (2)
 
-- `contribution-publications`
-- `contribution-patents-innovations`
-- `contribution-recognition`
+- `patent-gan-hemts-field-plate-architecture`
+- `patent-vertical-gan-power-diode-termination`
 
 ### Activities (4)
 
@@ -73,9 +79,9 @@ The read token (`SANITY_API_READ_TOKEN`) is sufficient for dry-run preview only.
 - `activity-welcomes-graduate-researchers`
 - `activity-open-compact-model-library`
 
-### Not seeded
+### Not seeded by the homepage seed
 
-- **Person records** — Figma homepage shows a group photo only; no individual names to avoid inventing researchers
+- **Person records** — seeded separately, see the People seed below
 - **Publication authors / DOI** — not shown in Figma
 
 ## Image assets
@@ -89,5 +95,43 @@ Local Figma exports (uploaded on `--apply` unless already present):
 
 These Figma values are seed/demo until replaced with verified data:
 
-- Contribution stats: `12+`, `16`
-- Recognition award text
+- Patent titles and numbers
+
+## People seed
+
+Transcribes the group's live team page — <https://sdreambuet2024.wixsite.com/s-dreambuet/team> — into
+19 `person` documents (`scripts/seed-people-data.mjs`).
+
+```bash
+# Preview (read-only)
+npm run seed:people
+
+# Apply
+npm run seed:people:apply
+
+# Re-download and re-upload every portrait
+npm run seed:people:apply -- --force-images
+```
+
+Seed IDs follow `person-<slug>`, e.g. `person-nadim-chowdhury`. Portraits are downloaded
+from the live site at original resolution and uploaded to the Sanity asset pipeline;
+a person who already has a photograph keeps it unless `--force-images` is passed.
+
+Roster groups written to the `group` field:
+
+| Group | Count |
+|-------|-------|
+| `pi` | 1 |
+| `phd` | 1 |
+| `msc` | 10 |
+| `undergrad` | 4 |
+| `alumni` | 3 |
+
+### Left empty on purpose
+
+- `researchInterests` — the live page lists none; fill in Studio to surface the PI's
+  "Research interests" line and the keyword line on doctoral rows
+- `biography` — only the PI has one on the live page
+- `externalProfileLinks` — only the PI (Google Scholar, CV) and Toiyob Hossain
+  (website, LinkedIn) have real links; the other social icons on the live page are
+  unlinked placeholders

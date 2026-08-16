@@ -1,0 +1,73 @@
+import { ResearchAreaPublications } from "@/components/research/ResearchAreaPublications";
+import { MediaFrame } from "@/components/ui/MediaFrame";
+import { PortableTextContent } from "@/components/ui/PortableTextContent";
+import { TextLink } from "@/components/ui/TextLink";
+import { formatSectionIndex } from "@/lib/format";
+import { formatExternalHost, formatResearchOutput } from "@/lib/research";
+import type { ResearchAreaEntry } from "../../../sanity/types";
+
+type ResearchAreaSectionProps = {
+  area: ResearchAreaEntry;
+  index: number;
+  priority?: boolean;
+};
+
+/**
+ * Each area reads as a chapter: a numbered rule carrying its published output,
+ * then the title paired with its own account of the work.
+ */
+export function ResearchAreaSection({
+  area,
+  index,
+  priority = false,
+}: ResearchAreaSectionProps) {
+  const headingId = `research-area-${area.slug}`;
+  const output = formatResearchOutput(area);
+
+  return (
+    <section aria-labelledby={headingId} className="py-10 lg:py-14">
+      <div className="flex items-center gap-4">
+        <p className="type-overline shrink-0 text-text-tertiary">
+          {formatSectionIndex(index)}
+        </p>
+        <span aria-hidden className="h-px flex-1 bg-border-default" />
+        {output ? (
+          <p className="type-overline shrink-0 text-text-tertiary">{output}</p>
+        ) : null}
+      </div>
+
+      <div className="mt-8 grid gap-10 lg:mt-10 lg:grid-cols-[minmax(0,28rem)_minmax(0,1fr)] lg:gap-x-16">
+        <div className="flex flex-col items-start gap-5">
+          <h2 id={headingId} className="text-display-sm text-text-primary">
+            {area.title}
+          </h2>
+
+          <PortableTextContent value={area.description} className="max-w-[28rem]" />
+
+          {area.externalLink ? (
+            <TextLink href={area.externalLink} external arrow>
+              {formatExternalHost(area.externalLink)}
+            </TextLink>
+          ) : null}
+        </div>
+
+        <div className="flex flex-col gap-8">
+          <MediaFrame
+            image={area.image}
+            width={1000}
+            sizes="(max-width: 640px) 92vw, (max-width: 1024px) 88vw, 34rem"
+            priority={priority}
+            className="max-w-[34rem]"
+          />
+
+          <ResearchAreaPublications
+            publications={area.selectedPublications ?? []}
+            totalCount={area.publicationCount ?? 0}
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default ResearchAreaSection;

@@ -42,10 +42,7 @@ export function Header({ settings }: HeaderProps) {
                   {navigation.length > 0 ? (
                     navigation.map((item) => (
                       <li key={`${item.href}-${item.label}`}>
-                        <NavLink
-                          item={item}
-                          className="text-body-xs text-text-secondary hover:text-text-primary"
-                        />
+                        <NavLink item={item} className="text-body-xs" />
                       </li>
                     ))
                   ) : (

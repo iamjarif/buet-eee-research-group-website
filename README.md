@@ -1,8 +1,8 @@
 # BUET EEE Research Group Website
 
-Official website for **S-DREAM** (Semiconductor Device Research & Advanced Modeling), a research group in the **Department of Electrical and Electronic Engineering (EEE)** at the **Bangladesh University of Engineering and Technology (BUET)**.
+Official website for **NC Group**, a research group in the **Department of Electrical and Electronic Engineering (EEE)** at the **Bangladesh University of Engineering and Technology (BUET)**.
 
-S-DREAM focuses on wide-bandgap semiconductor device research, particularly Gallium Nitride (GaN) RF and power devices.
+NC Group focuses on wide-bandgap semiconductor device research, particularly Gallium Nitride (GaN) RF and power devices.
 
 Built with Next.js and Sanity CMS, this repository contains the full site codebase — content model, pages, components, and deployment configuration.
 
@@ -111,7 +111,7 @@ Never commit `.env.local` or secrets.
 | `researchArea` | Collection | Research areas with ordering and publish status |
 | `publication` | Collection | Publications with author references |
 | `person` | Collection | Team members with research area references |
-| `contribution` | Collection | Impact/statistic highlights |
+| `patent` | Collection | Patents and innovations |
 | `activity` | Collection | News, events, and activities |
 
 ### CMS relationships
@@ -119,7 +119,7 @@ Never commit `.env.local` or secrets.
 - **Publication → Person** (authors via references)
 - **Publication → Research Area** (optional references)
 - **Person → Research Area** (many-to-many via references)
-- **Homepage →** references selected publications, research areas, people, contributions, and activities
+- **Homepage →** references selected publications, research areas, people, and activities
 
 Master content lives in collections. The homepage selects featured items via references — content is never duplicated.
 
@@ -242,15 +242,15 @@ Full preview UI is not implemented in this foundation phase, but the architectur
 | Data relationships | CMS (references) |
 | Business logic | Code |
 
-## About S-DREAM
+## About NC Group
 
 | | |
 |---|---|
-| **Group** | S-DREAM — Semiconductor Device Research & Advanced Modeling |
+| **Group** | NC Group |
 | **Department** | Electrical and Electronic Engineering (EEE) |
 | **Institution** | Bangladesh University of Engineering and Technology (BUET) |
 | **Focus** | Wide-bandgap semiconductors, GaN RF and power devices |
 
 ## License
 
-Private — S-DREAM, Department of EEE, BUET.
+Private — NC Group, Department of EEE, BUET.

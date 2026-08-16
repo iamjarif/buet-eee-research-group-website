@@ -1,14 +1,15 @@
-import Link from "next/link";
-
-import { PageShell } from "@/components/layout/PageShell";
+import { ActivitiesIndex } from "@/components/activities/ActivitiesIndex";
+import { ActivitiesPageHeader } from "@/components/activities/ActivitiesPageHeader";
+import { formatActivityArchiveStat } from "@/lib/activities";
 import { getActivities, getSiteSettings } from "@/lib/cms";
 import { buildMetadata } from "@/lib/metadata";
 
 export async function generateMetadata() {
   const settings = await getSiteSettings();
   return buildMetadata({
-    title: "Activities",
-    description: "News, events, and recent activities from S-DREAM.",
+    title: "News",
+    description:
+      "Publications, conference participation, talks, and student achievements from NC Group, BUET.",
     siteSettings: settings,
     path: "/activities",
   });
@@ -16,21 +17,12 @@ export async function generateMetadata() {
 
 export default async function ActivitiesPage() {
   const activities = await getActivities();
+  const stats = formatActivityArchiveStat(activities);
 
   return (
-    <PageShell title="Activities" description="Recent news and events from S-DREAM.">
-      {activities.length > 0 ? (
-        <ul className="space-y-2">
-          {activities.map((activity) => (
-            <li key={activity._id}>
-              <Link href={`/activities/${activity.slug}`} className="underline">
-                {activity.title}
-              </Link>
-              <span className="text-sm text-muted"> — {activity.date}</span>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </PageShell>
+    <div className="-mt-[var(--layout-header-height)] bg-gradient-to-b from-surface-gradient-start from-0% to-surface-base to-[13.613%]">
+      <ActivitiesPageHeader stats={stats || undefined} />
+      <ActivitiesIndex activities={activities} />
+    </div>
   );
 }

@@ -20,7 +20,6 @@ type ResearchRowProps = {
 
 function ResearchRow({ area, index, isLast = false }: ResearchRowProps) {
   const description = portableTextToPlainText(area.description);
-  const href = area.externalLink ?? `/research/${area.slug}`;
 
   return (
     <ResearchRowMotion isLast={isLast}>
@@ -29,11 +28,8 @@ function ResearchRow({ area, index, isLast = false }: ResearchRowProps) {
         <div className="max-w-[700px] space-y-2">
           <h3 className="text-heading-lg text-text-primary">
             <Link
-              href={href}
+              href="/publications"
               className="group/link inline-flex transition-[color,opacity] duration-300 ease-[cubic-bezier(0.33,1,0.68,1)] hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
-              {...(area.externalLink
-                ? { target: "_blank", rel: "noopener noreferrer" }
-                : {})}
             >
               <ResearchTitleMotion>{area.title}</ResearchTitleMotion>
             </Link>
@@ -46,7 +42,7 @@ function ResearchRow({ area, index, isLast = false }: ResearchRowProps) {
         </div>
       </div>
 
-      <TextLink href={href} external={Boolean(area.externalLink)} arrow>
+      <TextLink href="/publications" arrow>
         Explore
       </TextLink>
     </ResearchRowMotion>

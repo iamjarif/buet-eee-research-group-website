@@ -1,6 +1,6 @@
-# S-DREAM Website — Architecture
+# NC Group Website — Architecture
 
-This document describes the technical architecture and key decisions for the S-DREAM website foundation.
+This document describes the technical architecture and key decisions for the NC Group website foundation.
 
 ## Overview
 
@@ -113,7 +113,7 @@ Dynamic document collections (no fixed count):
 - `researchArea`
 - `publication`
 - `person`
-- `contribution`
+- `patent`
 - `activity`
 
 ### References (not embedding)
@@ -124,7 +124,7 @@ The homepage references collection documents rather than embedding them:
 homepage.featuredPublications[] → publication
 homepage.featuredResearchAreas[] → researchArea
 homepage.featuredTeam[]         → person
-homepage.featuredContributions[] → contribution
+homepage.featuredPublications[] → publication
 homepage.featuredActivities[]   → activity
 ```
 
@@ -134,7 +134,7 @@ This ensures a person's name change in one place updates everywhere.
 
 Collections use explicit `displayOrder` number fields. Studio lists default-sort by:
 
-- Research areas, people, contributions: `displayOrder asc`
+- Research areas, people, patents: `displayOrder asc`
 - Publications: `year desc`
 - Activities: `date desc`
 

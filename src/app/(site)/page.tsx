@@ -1,12 +1,12 @@
 import Link from "next/link";
 
 import { ActivitiesSection } from "@/components/home/ActivitiesSection";
-import { ContributionsSection } from "@/components/home/ContributionsSection";
 import { HeroSection } from "@/components/home/HeroSection";
 import { JoinSection } from "@/components/home/JoinSection";
 import { PublicationTrack } from "@/components/home/PublicationTrack";
 import { ResearchSection } from "@/components/home/ResearchSection";
 import { TeamSection } from "@/components/home/TeamSection";
+import { Reveal } from "@/components/motion/Reveal";
 import { Container } from "@/components/ui/Container";
 import { getActivities, getHomepage, getSiteSettings } from "@/lib/cms";
 import { buildMetadata } from "@/lib/metadata";
@@ -30,19 +30,23 @@ export default async function HomePage() {
   if (!isSanityConfigured) {
     return (
       <Container as="section" className="py-16">
-        <h1 className="text-heading-lg">S-DREAM Website Foundation</h1>
-        <p className="mt-4 max-w-2xl text-body-md text-text-muted">
-          The application architecture is ready. Configure Sanity environment variables
-          in{" "}
-          <code className="rounded bg-border-default px-1 py-0.5 text-body-sm">
-            .env.local
-          </code>{" "}
-          and add content in Sanity Studio at{" "}
-          <Link href="/studio" className="underline">
-            /studio
-          </Link>
-          .
-        </p>
+        <Reveal immediate variant="fadeUpSubtle">
+          <h1 className="text-heading-lg">NC Group Website Foundation</h1>
+        </Reveal>
+        <Reveal immediate variant="fadeUpSubtle" delay={0.08}>
+          <p className="mt-4 max-w-2xl text-body-md text-text-muted">
+            The application architecture is ready. Configure Sanity environment variables
+            in{" "}
+            <code className="rounded bg-border-default px-1 py-0.5 text-body-sm">
+              .env.local
+            </code>{" "}
+            and add content in Sanity Studio at{" "}
+            <Link href="/studio" className="underline">
+              /studio
+            </Link>
+            .
+          </p>
+        </Reveal>
       </Container>
     );
   }
@@ -50,16 +54,20 @@ export default async function HomePage() {
   if (!homepage) {
     return (
       <Container as="section" className="py-16">
-        <h1 className="text-heading-lg">S-DREAM Website Foundation</h1>
-        <p className="mt-4 max-w-2xl text-body-md text-text-muted">
-          Sanity is connected, but the Homepage document has not been created yet. Open{" "}
-          <Link href="/studio" className="underline">
-            Sanity Studio
-          </Link>{" "}
-          and create the <strong>Homepage</strong> singleton from the sidebar. Do the
-          same for <strong>Site Settings</strong> to enable navigation and footer
-          content.
-        </p>
+        <Reveal immediate variant="fadeUpSubtle">
+          <h1 className="text-heading-lg">NC Group Website Foundation</h1>
+        </Reveal>
+        <Reveal immediate variant="fadeUpSubtle" delay={0.08}>
+          <p className="mt-4 max-w-2xl text-body-md text-text-muted">
+            Sanity is connected, but the Homepage document has not been created yet. Open{" "}
+            <Link href="/studio" className="underline">
+              Sanity Studio
+            </Link>{" "}
+            and create the <strong>Homepage</strong> singleton from the sidebar. Do the
+            same for <strong>Site Settings</strong> to enable navigation and footer
+            content.
+          </p>
+        </Reveal>
       </Container>
     );
   }
@@ -91,11 +99,6 @@ export default async function HomePage() {
         description={homepage.teamSectionDescription}
         image={homepage.teamImage}
         link={homepage.teamSectionLink}
-      />
-
-      <ContributionsSection
-        heading={homepage.contributionsSectionHeading}
-        contributions={homepage.featuredContributions}
       />
 
       <ActivitiesSection

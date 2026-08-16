@@ -1,8 +1,8 @@
 import {
   activitySummaryFields,
-  contributionSummaryFields,
   linkFields,
   navItemFields,
+  patentSummaryFields,
   personSummaryFields,
   publicationSummaryFields,
   researchAreaSummaryFields,
@@ -47,6 +47,14 @@ export const siteSettingsQuery = /* groq */ `
     contactEmail,
     contactPhone,
     contactAddress,
+    contactPageDescription,
+    contactPrimaryName,
+    contactPrimaryTitle,
+    contactAffiliation,
+    contactOfficeAddress,
+    contactMailingAddress,
+    contactLocationLabel,
+    contactMapEmbedUrl,
     socialLinks[] {
       ${socialLinkFields}
     },
@@ -97,11 +105,6 @@ export const homepageQuery = /* groq */ `
     featuredTeam[]->{
       ${personSummaryFields}
     },
-    contributionsSectionHeading,
-    contributionsSectionDescription,
-    featuredContributions[]->{
-      ${contributionSummaryFields}
-    },
     activitiesSectionHeading,
     activitiesSectionDescription,
     featuredActivities[]->{
@@ -123,6 +126,11 @@ export const homepageQuery = /* groq */ `
 export const allResearchAreasQuery = /* groq */ `
   *[_type == "researchArea" && isPublished == true] | order(displayOrder asc) {
     ${researchAreaSummaryFields},
+    "publicationCount": count(*[_type == "publication" && references(^._id)]),
+    "selectedPublications": *[_type == "publication" && references(^._id)]
+      | order(year desc, displayOrder asc)[0...3] {
+      ${publicationSummaryFields}
+    },
     seo { ${seoFields} }
   }
 `;
@@ -154,11 +162,29 @@ export const publicationBySlugQuery = /* groq */ `
   }
 `;
 
+export const allPatentsQuery = /* groq */ `
+  *[_type == "patent"] | order(year desc, displayOrder asc) {
+    ${patentSummaryFields}
+  }
+`;
+
+export const patentBySlugQuery = /* groq */ `
+  *[_type == "patent" && slug.current == $slug][0] {
+    ${patentSummaryFields},
+    description,
+    seo { ${seoFields} }
+  }
+`;
+
 export const allPeopleQuery = /* groq */ `
-  *[_type == "person" && isActive == true] | order(displayOrder asc) {
+  *[_type == "person" && isActive == true] | order(displayOrder asc, name asc) {
     ${personSummaryFields},
+    biography,
     researchInterests,
-    email
+    email,
+    externalProfileLinks[] {
+      ${linkFields}
+    }
   }
 `;
 
@@ -199,6 +225,7 @@ export const sitemapSlugsQuery = /* groq */ `
   {
     "researchAreas": *[_type == "researchArea" && isPublished == true]{ "slug": slug.current },
     "publications": *[_type == "publication"]{ "slug": slug.current },
+    "patents": *[_type == "patent"]{ "slug": slug.current },
     "people": *[_type == "person" && isActive == true]{ "slug": slug.current },
     "activities": *[_type == "activity" && isPublished == true]{ "slug": slug.current }
   }

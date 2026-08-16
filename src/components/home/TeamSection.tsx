@@ -38,7 +38,7 @@ export function TeamSection({
               {image ? (
                 <SanityImage
                   image={image}
-                  alt={image.alt ?? "S-DREAM research team"}
+                  alt={image.alt ?? "NC Group research team"}
                   width={1120}
                   fit="max"
                   fill

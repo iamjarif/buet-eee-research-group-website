@@ -1,5 +1,5 @@
 /**
- * Design tokens extracted from the S-DREAM Website UI Figma file.
+ * Design tokens extracted from the NC Group Website UI Figma file.
  * Source: https://www.figma.com/design/XEgPsX6sQKIDlKFVzIAeog/S-DREAM-Website-UI
  *
  * CSS custom properties are defined in `src/app/globals.css`.

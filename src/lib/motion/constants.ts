@@ -4,10 +4,23 @@ export const VIEWPORT = {
   margin: "0px 0px -8% 0px" as const,
 };
 
+export type ViewportConfig = {
+  once?: boolean;
+  amount?: number;
+  margin?: string;
+};
+
 export const VIEWPORT_SUBTLE = {
   once: true,
   amount: 0.15,
   margin: "0px 0px -5% 0px" as const,
+};
+
+/** Footer should not animate until it is meaningfully on screen. */
+export const VIEWPORT_FOOTER = {
+  once: true,
+  amount: 0.25,
+  margin: "0px 0px -20% 0px" as const,
 };
 
 export const DURATION = {

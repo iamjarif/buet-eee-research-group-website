@@ -1,8 +1,16 @@
 import { NavLink } from "@/components/navigation/NavLink";
 import { SiteLogo } from "@/components/layout/SiteLogo";
+import { Reveal } from "@/components/motion/Reveal";
+import { RuleReveal } from "@/components/motion/RuleReveal";
 import { Container } from "@/components/ui/Container";
 import { TextLink } from "@/components/ui/TextLink";
-import { Stagger, StaggerItem } from "@/components/motion/Stagger";
+import {
+  Stagger,
+  StaggerItem,
+  StaggerList,
+  StaggerListItem,
+} from "@/components/motion/Stagger";
+import { VIEWPORT_FOOTER } from "@/lib/motion/constants";
 import { siteConfig } from "@/config/site";
 import type { SiteSettings } from "../../../sanity/types";
 
@@ -13,18 +21,20 @@ type FooterProps = {
 export function Footer({ settings }: FooterProps) {
   const siteName = settings?.siteName ?? siteConfig.name;
   const copyright =
-    settings?.copyrightText ??
-    `© ${new Date().getFullYear()} ${siteName} Research Group`;
+    settings?.copyrightText ?? `© ${new Date().getFullYear()} ${siteName}`;
   const connectLink = settings?.headerCta ?? {
-    label: "Join S-DREAM",
+    label: "Join Us →",
     href: "/contact",
   };
 
   return (
-    <footer className="mt-auto border-t border-border-default bg-surface-base">
+    <footer className="mt-auto bg-surface-base">
+      <RuleReveal viewport={VIEWPORT_FOOTER} />
+
       <Container as="div" className="space-y-16 pb-10 pt-[72px]">
         <Stagger
           stagger={0.08}
+          viewport={VIEWPORT_FOOTER}
           className="grid gap-10 lg:grid-cols-[minmax(0,508px)_1fr_1fr] lg:gap-14"
         >
           <StaggerItem>
@@ -47,16 +57,16 @@ export function Footer({ settings }: FooterProps) {
             <StaggerItem>
               <nav aria-label="Footer navigation">
                 <p className="type-overline mb-5 text-text-tertiary">EXPLORE</p>
-                <ul className="space-y-3">
+                <StaggerList className="space-y-3" stagger={0.05}>
                   {settings.footerNavigation.map((item) => (
-                    <li key={`${item.href}-${item.label}`}>
+                    <StaggerListItem key={`${item.href}-${item.label}`}>
                       <NavLink
                         item={item}
                         className="text-label-xs text-text-secondary hover:text-text-primary"
                       />
-                    </li>
+                    </StaggerListItem>
                   ))}
-                </ul>
+                </StaggerList>
               </nav>
             </StaggerItem>
           ) : null}
@@ -72,9 +82,9 @@ export function Footer({ settings }: FooterProps) {
 
               {settings?.socialLinks?.length ? (
                 <nav aria-label="Social links" className="mt-5">
-                  <ul className="space-y-3">
+                  <StaggerList className="space-y-3" stagger={0.05}>
                     {settings.socialLinks.map((link) => (
-                      <li key={link.url}>
+                      <StaggerListItem key={link.url}>
                         <a
                           href={link.url}
                           className="text-label-xs text-text-secondary transition-colors hover:text-text-primary hover:opacity-80"
@@ -83,18 +93,24 @@ export function Footer({ settings }: FooterProps) {
                         >
                           {link.label ?? link.platform}
                         </a>
-                      </li>
+                      </StaggerListItem>
                     ))}
-                  </ul>
+                  </StaggerList>
                 </nav>
               ) : null}
             </div>
           </StaggerItem>
         </Stagger>
 
-        <div className="flex flex-col gap-3 border-t border-border-default pt-7 text-caption text-text-tertiary sm:flex-row sm:items-center sm:justify-between">
-          <p>{siteConfig.organization}</p>
-          <p>{copyright}</p>
+        <div>
+          <RuleReveal viewport={VIEWPORT_FOOTER} />
+
+          <Reveal variant="fadeUpSubtle" delay={0.08} viewport={VIEWPORT_FOOTER}>
+            <div className="flex flex-col gap-3 pt-7 text-caption text-text-tertiary sm:flex-row sm:items-center sm:justify-between">
+              <p>{siteConfig.organization}</p>
+              <p>{copyright}</p>
+            </div>
+          </Reveal>
         </div>
       </Container>
     </footer>

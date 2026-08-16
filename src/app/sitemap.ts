@@ -22,6 +22,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/patents`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/people`,
       lastModified: new Date(),
       changeFrequency: "monthly",
@@ -47,12 +53,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.7,
-    })),
-    ...slugs.publications.map(({ slug }) => ({
-      url: `${baseUrl}/publications/${slug}`,
-      lastModified: new Date(),
-      changeFrequency: "yearly" as const,
-      priority: 0.6,
     })),
     ...slugs.people.map(({ slug }) => ({
       url: `${baseUrl}/people/${slug}`,

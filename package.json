@@ -13,7 +13,9 @@
     "typecheck": "tsc --noEmit",
     "validate": "npm run typecheck && npm run lint && npm run format:check && npm run build",
     "seed:homepage": "node --env-file=.env.local scripts/seed-homepage-content.mjs",
-    "seed:homepage:apply": "node --env-file=.env.local scripts/seed-homepage-content.mjs --apply"
+    "seed:homepage:apply": "node --env-file=.env.local scripts/seed-homepage-content.mjs --apply",
+    "seed:people": "node --env-file=.env.local scripts/seed-people.mjs",
+    "seed:people:apply": "node --env-file=.env.local scripts/seed-people.mjs --apply"
   },
   "dependencies": {
     "@portabletext/react": "^7.0.1",

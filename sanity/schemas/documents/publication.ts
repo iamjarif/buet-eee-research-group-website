@@ -28,8 +28,13 @@ export const publication = defineType({
       of: [{ type: "reference", to: [{ type: "person" }] }],
       description:
         "Link to team member profiles. Names update automatically when changed.",
-      validation: (rule) =>
-        rule.min(1).warning("At least one author reference is recommended."),
+    }),
+    defineField({
+      name: "authorLine",
+      title: "Author Line",
+      type: "string",
+      description:
+        "Author names shown on listings (e.g. “T. Hossain, AKM A. Alam, N. Chowdhury”). Used when team author links are not set.",
     }),
     defineField({
       name: "journalOrConference",
@@ -37,6 +42,34 @@ export const publication = defineType({
       type: "string",
       validation: (rule) =>
         rule.required().error("Journal or conference name is required."),
+    }),
+    defineField({
+      name: "publicationType",
+      title: "Publication Type",
+      type: "string",
+      options: {
+        list: [
+          { title: "Journal", value: "journal" },
+          { title: "Conference", value: "conference" },
+        ],
+        layout: "radio",
+      },
+      description: "Used for filtering on the publications index page.",
+    }),
+    defineField({
+      name: "categoryLabel",
+      title: "Category Label",
+      type: "string",
+      description:
+        "Serial label shown on the publications index (e.g. J1, J2 for journals; C1, C2 for conferences).",
+      validation: (rule) =>
+        rule
+          .required()
+          .regex(/^[JC]\d+$/, {
+            name: "categoryLabel",
+            invert: false,
+          })
+          .error("Use a label like J1, J2, C1, or C2."),
     }),
     defineField({
       name: "year",
@@ -59,7 +92,11 @@ export const publication = defineType({
       name: "externalUrl",
       title: "External URL",
       type: "url",
-      description: "Link to the paper on a publisher or repository website.",
+      description: "Link opened when a publication is clicked (publisher, DOI, or repository).",
+      validation: (rule) =>
+        rule.uri({ allowRelative: false, scheme: ["http", "https"] }).warning(
+          "An external URL is recommended so publications open off-site.",
+        ),
     }),
     defineField({
       name: "description",
@@ -114,12 +151,13 @@ export const publication = defineType({
   preview: {
     select: {
       title: "title",
+      categoryLabel: "categoryLabel",
       year: "year",
       journal: "journalOrConference",
     },
-    prepare: ({ title, year, journal }) => ({
+    prepare: ({ title, categoryLabel, year, journal }) => ({
       title,
-      subtitle: [journal, year].filter(Boolean).join(" · "),
+      subtitle: [categoryLabel, journal, year].filter(Boolean).join(" · "),
     }),
   },
 });

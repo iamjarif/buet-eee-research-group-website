@@ -1,5 +1,18 @@
 import { defineField, defineType } from "sanity";
 
+/** Roster groups used to organise the People page. */
+export const PERSON_GROUP_OPTIONS = [
+  { title: "Principal Investigator", value: "pi" },
+  { title: "Doctoral Researcher (PhD)", value: "phd" },
+  { title: "Master's Researcher (M.Sc.)", value: "msc" },
+  { title: "Undergraduate Researcher", value: "undergrad" },
+  { title: "Alumni", value: "alumni" },
+] as const;
+
+const GROUP_TITLES: Record<string, string> = Object.fromEntries(
+  PERSON_GROUP_OPTIONS.map(({ value, title }) => [value, title]),
+);
+
 export const person = defineType({
   name: "person",
   title: "Person",
@@ -27,6 +40,25 @@ export const person = defineType({
       type: "string",
       description: "e.g. Professor, PhD Researcher, MSc Student",
       validation: (rule) => rule.required().error("Position is required."),
+    }),
+    defineField({
+      name: "group",
+      title: "Roster Group",
+      type: "string",
+      description:
+        "Determines which section of the People page this person appears in.",
+      options: {
+        list: PERSON_GROUP_OPTIONS.map(({ title, value }) => ({ title, value })),
+      },
+      initialValue: "msc",
+      validation: (rule) => rule.required().error("Roster group is required."),
+    }),
+    defineField({
+      name: "currentAffiliation",
+      title: "Current Position (Alumni)",
+      type: "string",
+      description:
+        "Where an alumnus is now, e.g. “PhD Student, IIT Bombay”. Only shown for the Alumni group.",
     }),
     defineField({
       name: "photograph",
@@ -98,7 +130,21 @@ export const person = defineType({
     },
   ],
   preview: {
-    select: { title: "name", subtitle: "position", media: "photograph" },
+    select: {
+      title: "name",
+      position: "position",
+      group: "group",
+      media: "photograph",
+    },
+    prepare({ title, position, group, media }) {
+      const groupTitle = typeof group === "string" ? GROUP_TITLES[group] : undefined;
+
+      return {
+        title,
+        subtitle: [groupTitle, position].filter(Boolean).join(" — "),
+        media,
+      };
+    },
   },
 });
 

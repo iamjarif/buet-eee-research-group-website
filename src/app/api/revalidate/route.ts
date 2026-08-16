@@ -9,8 +9,8 @@ const REVALIDATE_MAP: Record<string, string[]> = {
   homepage: [CMS_TAGS.homepage],
   researchArea: [CMS_TAGS.researchAreas],
   publication: [CMS_TAGS.publications],
+  patent: [CMS_TAGS.patents],
   person: [CMS_TAGS.people],
-  contribution: [CMS_TAGS.homepage],
   activity: [CMS_TAGS.activities],
 };
 
