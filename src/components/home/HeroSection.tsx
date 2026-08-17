@@ -59,7 +59,7 @@ export function HeroSection({
 
           {description ? (
             <HeroMotionItem>
-              <p className="max-w-[620px] text-body-lg text-text-secondary">
+              <p className="max-w-[620px] text-body-xs text-text-secondary sm:text-body-lg">
                 {description}
               </p>
             </HeroMotionItem>
