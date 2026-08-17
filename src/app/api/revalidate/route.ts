@@ -1,18 +1,7 @@
-import { revalidatePath, revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { revalidateSecret } from "../../../../sanity/env";
-import { CMS_TAGS } from "@/lib/cms";
-
-const REVALIDATE_MAP: Record<string, string[]> = {
-  siteSettings: [CMS_TAGS.siteSettings],
-  homepage: [CMS_TAGS.homepage],
-  researchArea: [CMS_TAGS.researchAreas],
-  publication: [CMS_TAGS.publications],
-  patent: [CMS_TAGS.patents],
-  person: [CMS_TAGS.people],
-  activity: [CMS_TAGS.activities],
-};
+import { revalidateCmsContent } from "@/lib/revalidate-cms";
 
 export async function POST(request: NextRequest) {
   const secret = request.nextUrl.searchParams.get("secret");
@@ -24,26 +13,15 @@ export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as {
       _type?: string;
-      slug?: { current?: string };
+      slug?: string | { current?: string };
     };
 
-    const tags = body._type ? REVALIDATE_MAP[body._type] : undefined;
+    const result = revalidateCmsContent({
+      _type: body._type,
+      slug: body.slug,
+    });
 
-    if (tags) {
-      for (const tag of tags) {
-        revalidateTag(tag, "max");
-      }
-
-      if (body.slug?.current && body._type) {
-        revalidateTag(`${body._type}:${body.slug.current}`, "max");
-      }
-    } else {
-      Object.values(CMS_TAGS).forEach((tag) => revalidateTag(tag, "max"));
-    }
-
-    revalidatePath("/");
-
-    return NextResponse.json({ revalidated: true, now: Date.now() });
+    return NextResponse.json(result);
   } catch (error) {
     console.error("Revalidation error:", error);
     return NextResponse.json({ message: "Error revalidating" }, { status: 500 });

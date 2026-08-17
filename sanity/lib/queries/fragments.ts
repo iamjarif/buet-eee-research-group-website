@@ -83,6 +83,7 @@ export const publicationSummaryFields = /* groq */ `
   externalUrl,
   isFeatured,
   displayOrder,
+  description,
   image {
     ${imageFields}
   },

@@ -123,6 +123,7 @@ export type PublicationSummary = {
   externalUrl?: string;
   isFeatured?: boolean;
   displayOrder?: number;
+  description?: PortableTextBlock[];
   image?: SanityImage;
   authorLine?: string;
   researchAreas?: Array<{ _id: string; title: string; slug: string }>;

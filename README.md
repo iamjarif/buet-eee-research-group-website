@@ -194,13 +194,28 @@ Analytics and Speed Insights are wired in `src/components/analytics/SiteAnalytic
 
 ### Content revalidation webhook
 
-Configure a Sanity webhook to POST to:
+Instant updates when content is published in Sanity:
+
+1. Set `SANITY_REVALIDATE_SECRET` on Vercel (same value as local).
+2. Register the webhook (replace with your production domain):
+
+```bash
+npm run setup:webhook -- --url https://your-production-domain.com
+```
+
+Or configure manually in [sanity.io/manage](https://www.sanity.io/manage) → API → Webhooks:
 
 ```
 https://your-domain.com/api/revalidate?secret=YOUR_SANITY_REVALIDATE_SECRET
 ```
 
-Send the document payload in the request body. The route revalidates cache tags based on `_type`.
+- **Method:** POST
+- **Dataset:** `production`
+- **Trigger:** Create, Update, Delete
+- **Filter:** `_type in ["siteSettings","homepage","researchArea","publication","patent","person","activity"]`
+- **Projection:** `{ _type, "slug": slug.current }`
+
+The `/api/sync/publications` cron also revalidates the site when new publication drafts are imported.
 
 ## Preview / Draft Workflow
 

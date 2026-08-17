@@ -156,12 +156,17 @@ Collections use explicit `displayOrder` number fields. Studio lists default-sort
 
 ### On-demand revalidation
 
-`POST /api/revalidate?secret=...` accepts Sanity webhook payloads and:
+`POST /api/revalidate?secret=...` accepts Sanity webhook payloads. Shared logic lives in `src/lib/revalidate-cms.ts` and is also called after OpenAlex sync when new publication drafts are created.
 
 1. Validates `SANITY_REVALIDATE_SECRET`
-2. Revalidates tags based on document `_type`
-3. Revalidates slug-specific tags when available
-4. Revalidates `/` path
+2. Revalidates cache tags based on document `_type` (and slug when present)
+3. Revalidates main static routes (`/`, `/publications`, etc.)
+
+Register the webhook:
+
+```bash
+npm run setup:webhook -- --url https://your-production-domain.com
+```
 
 ### Tag mapping
 

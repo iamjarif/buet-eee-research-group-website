@@ -17,6 +17,7 @@
     "seed:homepage:apply": "node --env-file=.env.local scripts/seed-homepage-content.mjs --apply",
     "seed:people": "node --env-file=.env.local scripts/seed-people.mjs",
     "seed:people:apply": "node --env-file=.env.local scripts/seed-people.mjs --apply",
+    "setup:webhook": "node --env-file=.env.local scripts/setup-sanity-revalidate-webhook.mjs",
     "feature:publications": "node --env-file=.env.local scripts/feature-all-publications.mjs",
     "feature:publications:apply": "node --env-file=.env.local scripts/feature-all-publications.mjs --apply"
   },

@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { getWriteClient } from "../../../../../sanity/lib/client";
 import { writeToken } from "../../../../../sanity/env";
+import { revalidateCmsContent } from "@/lib/revalidate-cms";
 import { cleanOpenAlexText, normalizeTitle } from "@/lib/openalex-text";
 import {
   collectOpenAlexTopicNames,
@@ -522,6 +523,11 @@ async function handleSync(request: NextRequest, authPath: "cron" | "manual") {
     const sanityClient = getWriteClient();
     const sinceDate = sinceOverride ?? (await getStoredLastSyncDate(sanityClient));
     const result = await syncPublications(sanityClient, sinceDate);
+
+    if (result.created > 0) {
+      revalidateCmsContent({ _type: "publication" });
+    }
+
     console.info(
       `[sync/publications] Completed sync via ${authPath} auth`,
       { created: result.created, fetched: result.fetched, since: result.since },
