@@ -188,6 +188,9 @@ npm run validate     # typecheck + lint + format + build
 1. Set all environment variables on your hosting platform (Vercel recommended).
 2. Set `NEXT_PUBLIC_SITE_URL` to your production domain.
 3. Deploy via `npm run build && npm start` or platform-native deployment.
+4. In the Vercel project dashboard, open **Analytics** and enable **Web Analytics** for the deployment.
+
+Analytics is wired in `src/app/layout.tsx` via `@vercel/analytics`. Page views for `/studio` and `/api` routes are excluded.
 
 ### Content revalidation webhook
 
