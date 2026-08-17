@@ -10,17 +10,17 @@ function PublicationRowSkeleton() {
   return (
     <div
       aria-hidden
-      className="flex items-start justify-between gap-6 border-b border-border-default py-7"
+      className="grid items-start gap-8 border-b border-border-default py-7 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-x-12 xl:gap-x-16"
     >
-      <div className="flex min-w-0 flex-1 flex-col gap-8 sm:flex-row sm:gap-12">
-        <SkeletonBlock className="h-3 w-[4.5rem] shrink-0" />
-        <div className="min-w-0 flex-1 space-y-2.5">
+      <div className="flex flex-col gap-5">
+        <SkeletonBlock className="h-3 w-[4.5rem]" />
+        <div className="space-y-2.5">
           <SkeletonBlock className="h-7 max-w-[36rem] w-full" />
           <SkeletonBlock className="h-4 max-w-[24rem] w-full" />
           <SkeletonBlock className="h-4 max-w-[18rem] w-full" />
         </div>
       </div>
-      <SkeletonBlock className="hidden h-4 w-[3rem] shrink-0 sm:block" />
+      <SkeletonBlock className="aspect-[4/3] w-full max-w-[26rem] lg:col-start-2 lg:max-w-none" />
     </div>
   );
 }

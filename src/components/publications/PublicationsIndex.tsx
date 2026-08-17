@@ -42,6 +42,11 @@ export function PublicationsIndex({ publications }: PublicationsIndexProps) {
     [visiblePublications],
   );
 
+  const withFigureColumn = visiblePublications.some((publication) =>
+    Boolean(publication.image?.asset),
+  );
+  const firstEntryId = visiblePublications[0]?._id;
+
   return (
     <>
       <Reveal immediate variant="fadeUpSubtle">
@@ -113,7 +118,11 @@ export function PublicationsIndex({ publications }: PublicationsIndexProps) {
                     key={publication._id}
                     className={index === 0 ? "border-t border-border-default" : undefined}
                   >
-                    <PublicationListEntry publication={publication} />
+                    <PublicationListEntry
+                      publication={publication}
+                      withFigureColumn={withFigureColumn}
+                      priority={publication._id === firstEntryId}
+                    />
                   </StaggerItem>
                 ))}
               </Stagger>

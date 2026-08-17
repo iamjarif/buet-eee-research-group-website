@@ -7,6 +7,12 @@ import type { PublicationSummary } from "../../../sanity/types";
 
 type PublicationListEntryProps = {
   publication: PublicationSummary;
+  /**
+   * Reserves the image column for the whole list so figures align on a single
+   * edge. Omitted when no entry in view has an image.
+   */
+  withFigureColumn?: boolean;
+  priority?: boolean;
 };
 
 const linkClassName = cn(
@@ -15,93 +21,107 @@ const linkClassName = cn(
   "hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
 );
 
-export function PublicationListEntry({ publication }: PublicationListEntryProps) {
+export function PublicationListEntry({
+  publication,
+  withFigureColumn = false,
+  priority = false,
+}: PublicationListEntryProps) {
   const externalUrl = getPublicationExternalUrl(publication);
   const authors = formatPublicationAuthors(publication);
   const hasImage = Boolean(publication.image?.asset);
   const imageUrl = publication.image?.asset?.url;
   const hasDescription = Boolean(publication.description?.length);
 
+  const figure = hasImage ? (
+    imageUrl ? (
+      <a
+        href={imageUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`View image for ${publication.title}`}
+        className={cn(
+          "block max-w-[26rem] transition-opacity duration-300 lg:col-start-2 lg:max-w-none",
+          hoverEaseClass,
+          "hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
+        )}
+      >
+        <MediaFrame
+          image={publication.image}
+          width={800}
+          sizes="(max-width: 640px) 92vw, (max-width: 1024px) 26rem, 22rem"
+          priority={priority}
+          className="w-full"
+        />
+      </a>
+    ) : (
+      <MediaFrame
+        image={publication.image}
+        width={800}
+        sizes="(max-width: 640px) 92vw, (max-width: 1024px) 26rem, 22rem"
+        priority={priority}
+        className="max-w-[26rem] lg:col-start-2 lg:max-w-none"
+      />
+    )
+  ) : null;
+
   return (
-    <article className="flex flex-col gap-4 border-b border-border-default py-6 sm:gap-5 sm:py-7">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
-        <div className="flex min-w-0 flex-1 flex-col gap-4 sm:flex-row sm:gap-8 lg:gap-12">
-          <p className="shrink-0 text-label-xs text-text-tertiary sm:py-3.5">
-            {publication.categoryLabel}
-          </p>
+    <article
+      className={cn(
+        "grid items-start gap-5 border-b border-border-default py-6 sm:gap-8 sm:py-7 lg:gap-x-12 lg:py-10 xl:gap-x-16",
+        withFigureColumn && "lg:grid-cols-[minmax(0,1fr)_22rem]",
+      )}
+    >
+      <div className="flex min-w-0 flex-col gap-3 sm:gap-5">
+        <p className="text-label-xs text-text-tertiary">{publication.categoryLabel}</p>
 
-          <div className="min-w-0 flex-1 space-y-3">
-            <div className="space-y-2">
-              <h3 className="text-heading-lg text-text-primary">
-                {externalUrl ? (
-                  <a
-                    href={externalUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={linkClassName}
-                  >
-                    {publication.title}
-                  </a>
-                ) : (
-                  publication.title
-                )}
-              </h3>
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0 flex-1 space-y-2">
+            <h3 className="text-heading-lg text-text-primary">
+              {externalUrl ? (
+                <a
+                  href={externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={linkClassName}
+                >
+                  {publication.title}
+                </a>
+              ) : (
+                publication.title
+              )}
+            </h3>
 
-              {authors ? (
-                <p className="text-body-sm text-text-secondary">{authors}</p>
-              ) : null}
-
-              <p className="text-caption uppercase text-text-tertiary">
-                {publication.journalOrConference}
-              </p>
-            </div>
-
-            {hasDescription ? (
-              <PortableTextContent
-                value={publication.description}
-                className="max-w-[38rem] space-y-3 [&_p]:text-body-sm"
-              />
+            {authors ? (
+              <p className="text-body-sm text-text-secondary">{authors}</p>
             ) : null}
+
+            <p className="text-caption uppercase text-text-tertiary">
+              {publication.journalOrConference}
+            </p>
           </div>
+
+          {externalUrl ? (
+            <a
+              href={externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Open ${publication.title}`}
+              className={cn("shrink-0 text-label-xs text-text-tertiary", linkClassName)}
+            >
+              ↗
+            </a>
+          ) : null}
         </div>
 
-        {externalUrl ? (
-          <a
-            href={externalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Open ${publication.title}`}
-            className={cn(
-              "shrink-0 self-start text-label-xs text-text-tertiary sm:pt-3.5",
-              linkClassName,
-            )}
-          >
-            ↗
-          </a>
+        {hasDescription ? (
+          <PortableTextContent
+            value={publication.description}
+            className="max-w-[38rem] space-y-3 [&_p]:text-body-sm"
+          />
         ) : null}
       </div>
 
-      {hasImage && imageUrl ? (
-        <a
-          href={imageUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`View image for ${publication.title}`}
-          className={cn(
-            "block w-full transition-opacity duration-300",
-            hoverEaseClass,
-            "hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
-          )}
-        >
-          <MediaFrame
-            image={publication.image}
-            width={1400}
-            sizes="(max-width: 640px) 92vw, (max-width: 1280px) 88vw, 70rem"
-            className="w-full"
-            minAspectRatio={1.4}
-          />
-        </a>
-      ) : null}
+      {figure}
     </article>
   );
 }
