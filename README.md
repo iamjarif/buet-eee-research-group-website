@@ -189,8 +189,9 @@ npm run validate     # typecheck + lint + format + build
 2. Set `NEXT_PUBLIC_SITE_URL` to your production domain.
 3. Deploy via `npm run build && npm start` or platform-native deployment.
 4. In the Vercel project dashboard, open **Analytics** and enable **Web Analytics** for the deployment.
+5. In the same dashboard, open **Speed Insights** and enable it for the deployment.
 
-Analytics is wired in `src/app/layout.tsx` via `@vercel/analytics`. Page views for `/studio` and `/api` routes are excluded.
+Analytics and Speed Insights are wired in `src/components/analytics/SiteAnalytics.tsx` via `@vercel/analytics` and `@vercel/speed-insights`. Page views and vitals for `/studio` and `/api` routes are excluded.
 
 ### Content revalidation webhook
 
