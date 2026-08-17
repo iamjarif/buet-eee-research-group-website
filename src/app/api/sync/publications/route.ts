@@ -93,7 +93,7 @@ type PublicationDraft = {
     _type: "reference";
     _ref: string;
   }>;
-  isFeatured: false;
+  isFeatured: true;
   displayOrder: number;
 };
 
@@ -381,7 +381,7 @@ function mapToSanityDraft(
     researchAreas: [],
     ...(openAlexTopics.length ? { openAlexTopics } : {}),
     ...(suggestedIds.length ? { suggestedResearchAreas: toSuggestedResearchAreaRefs(suggestedIds) } : {}),
-    isFeatured: false,
+    isFeatured: true,
     displayOrder: 0,
   };
 }
@@ -412,7 +412,7 @@ async function sendNotification(drafts: PublicationDraft[]) {
       from: fromEmail,
       to: [toEmail],
       subject: `[NC Group] ${drafts.length} new publication draft(s) from OpenAlex`,
-      text: `The publication sync created ${drafts.length} Sanity draft(s) for editor review (authors and research areas still need to be linked):\n\n${titles}`,
+      text: `The publication sync created ${drafts.length} Sanity draft(s) for editor review (research areas may still need to be linked):\n\n${titles}`,
     }),
   });
 

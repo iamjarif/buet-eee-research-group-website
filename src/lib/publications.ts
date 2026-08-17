@@ -41,16 +41,11 @@ export function filterPublications(
 
     if (!normalizedQuery) return true;
 
-    const authorNames =
-      publication.authorLine ??
-      publication.authors?.map((author) => author.name).join(" ") ??
-      "";
-
     const haystack = [
       publication.title,
       publication.categoryLabel,
       publication.journalOrConference,
-      authorNames,
+      publication.authorLine ?? "",
       String(publication.year),
     ]
       .join(" ")

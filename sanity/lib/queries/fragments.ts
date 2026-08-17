@@ -86,9 +86,6 @@ export const publicationSummaryFields = /* groq */ `
   image {
     ${imageFields}
   },
-  authors[]->{
-    ${personSummaryFields}
-  },
   authorLine,
   researchAreas[]->{
     _id,

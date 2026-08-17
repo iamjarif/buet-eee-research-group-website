@@ -22,19 +22,11 @@ export const publication = defineType({
       validation: (rule) => rule.required().error("Slug is required."),
     }),
     defineField({
-      name: "authors",
-      title: "Authors",
-      type: "array",
-      of: [{ type: "reference", to: [{ type: "person" }] }],
-      description:
-        "Link to team member profiles. Names update automatically when changed.",
-    }),
-    defineField({
       name: "authorLine",
       title: "Author Line",
       type: "string",
       description:
-        "Author names shown on listings (e.g. “T. Hossain, AKM A. Alam, N. Chowdhury”). Used when team author links are not set.",
+        "Author names shown on listings (e.g. “T. Hossain, AKM A. Alam, N. Chowdhury”). Filled automatically by OpenAlex sync.",
     }),
     defineField({
       name: "journalOrConference",
@@ -130,7 +122,7 @@ export const publication = defineType({
       title: "Featured",
       type: "boolean",
       description: "Featured publications can be surfaced on the homepage or listings.",
-      initialValue: false,
+      initialValue: true,
     }),
     defineField({
       name: "image",

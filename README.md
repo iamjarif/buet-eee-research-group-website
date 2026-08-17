@@ -109,14 +109,13 @@ Never commit `.env.local` or secrets.
 | `siteSettings` | Singleton | Global site config, nav, footer, SEO defaults |
 | `homepage` | Singleton | Homepage sections + featured content references |
 | `researchArea` | Collection | Research areas with ordering and publish status |
-| `publication` | Collection | Publications with author references |
+| `publication` | Collection | Publications with author line and metadata |
 | `person` | Collection | Team members with research area references |
 | `patent` | Collection | Patents and innovations |
 | `activity` | Collection | News, events, and activities |
 
 ### CMS relationships
 
-- **Publication → Person** (authors via references)
 - **Publication → Research Area** (optional references)
 - **Person → Research Area** (many-to-many via references)
 - **Homepage →** references selected publications, research areas, people, and activities

@@ -16,7 +16,9 @@
     "seed:homepage": "node --env-file=.env.local scripts/seed-homepage-content.mjs",
     "seed:homepage:apply": "node --env-file=.env.local scripts/seed-homepage-content.mjs --apply",
     "seed:people": "node --env-file=.env.local scripts/seed-people.mjs",
-    "seed:people:apply": "node --env-file=.env.local scripts/seed-people.mjs --apply"
+    "seed:people:apply": "node --env-file=.env.local scripts/seed-people.mjs --apply",
+    "feature:publications": "node --env-file=.env.local scripts/feature-all-publications.mjs",
+    "feature:publications:apply": "node --env-file=.env.local scripts/feature-all-publications.mjs --apply"
   },
   "dependencies": {
     "@portabletext/react": "^7.0.1",

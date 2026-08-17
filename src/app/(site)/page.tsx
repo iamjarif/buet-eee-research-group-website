@@ -8,7 +8,7 @@ import { ResearchSection } from "@/components/home/ResearchSection";
 import { TeamSection } from "@/components/home/TeamSection";
 import { Reveal } from "@/components/motion/Reveal";
 import { Container } from "@/components/ui/Container";
-import { getActivities, getHomepage, getSiteSettings } from "@/lib/cms";
+import { getActivities, getHomepage, getPublications, getSiteSettings } from "@/lib/cms";
 import { buildMetadata } from "@/lib/metadata";
 import { isSanityConfigured } from "../../../sanity/env";
 
@@ -77,6 +77,11 @@ export default async function HomePage() {
       ? homepage.featuredActivities
       : (await getActivities()).slice(0, 4);
 
+  const featuredPublications =
+    homepage.featuredPublications?.length && homepage.featuredPublications.length > 0
+      ? homepage.featuredPublications
+      : (await getPublications()).slice(0, 6);
+
   return (
     <>
       <HeroSection
@@ -86,7 +91,7 @@ export default async function HomePage() {
         buttons={homepage.heroButtons}
       />
 
-      <PublicationTrack publications={homepage.featuredPublications} />
+      <PublicationTrack publications={featuredPublications} />
 
       <ResearchSection
         heading={homepage.researchSectionHeading}

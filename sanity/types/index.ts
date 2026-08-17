@@ -124,7 +124,6 @@ export type PublicationSummary = {
   isFeatured?: boolean;
   displayOrder?: number;
   image?: SanityImage;
-  authors?: PersonSummary[];
   authorLine?: string;
   researchAreas?: Array<{ _id: string; title: string; slug: string }>;
 };

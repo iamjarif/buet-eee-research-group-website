@@ -38,13 +38,11 @@ export function formatAuthorNames(
   return authors.map((author) => author.name).join(", ");
 }
 
-/** Author display line for publications (CMS authorLine or linked people). */
+/** Author display line for publications. */
 export function formatPublicationAuthors(publication: {
   authorLine?: string;
-  authors?: Array<{ name: string }>;
 }): string {
-  if (publication.authorLine?.trim()) return publication.authorLine.trim();
-  return formatAuthorNames(publication.authors);
+  return publication.authorLine?.trim() ?? "";
 }
 
 /** Build a DOI URL from a DOI string. */
