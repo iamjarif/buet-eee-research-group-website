@@ -21,8 +21,8 @@ export function PersonTile({ person }: PersonTileProps) {
         sizes="(max-width: 640px) 44vw, (max-width: 1024px) 30vw, 16rem"
       />
 
-      <div className="mt-5 space-y-1.5">
-        <h3 className="font-serif text-[1.125rem] leading-[1.6rem] text-text-primary">
+      <div className="mt-3 space-y-1 sm:mt-5 sm:space-y-1.5">
+        <h3 className="text-heading-sm text-text-primary sm:text-[1.125rem] sm:leading-[1.6rem]">
           {person.name}
         </h3>
         <p className="text-body-sm text-text-secondary">{subtitle}</p>

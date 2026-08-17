@@ -23,25 +23,29 @@ export function PrincipalInvestigatorFeature({
   const links = getPersonContactLinks(person, { max: 4 });
 
   return (
-    <article className="group grid gap-8 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-x-20 xl:gap-x-24">
+    <article className="group grid gap-6 sm:gap-8 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] lg:gap-x-20 xl:gap-x-24">
       <Reveal
         variant="fade"
-        className="w-full max-w-[17rem] sm:max-w-[19rem] lg:max-w-none"
+        className="w-full max-w-[13.5rem] sm:max-w-[19rem] lg:max-w-none"
       >
         <PersonPortrait
           name={person.name}
           image={person.photograph}
           width={760}
           priority={priority}
-          sizes="(max-width: 640px) 68vw, (max-width: 1024px) 19rem, 22rem"
+          sizes="(max-width: 640px) 54vw, (max-width: 1024px) 19rem, 22rem"
         />
       </Reveal>
 
-      <Stagger className="space-y-7" stagger={0.07}>
+      <Stagger className="min-w-0 space-y-5 sm:space-y-7" stagger={0.07}>
         <StaggerItem>
           <p className="type-overline text-text-secondary">{PERSON_GROUPS.pi.title}</p>
-          <h2 className="mt-4 text-display-md text-text-primary">{person.name}</h2>
-          <p className="mt-3 text-body-md text-text-secondary">{person.position}</p>
+          <h2 className="mt-3 text-display-sm text-text-primary sm:mt-4 sm:text-display-md">
+            {person.name}
+          </h2>
+          <p className="mt-2 text-body-sm text-text-secondary sm:mt-3 sm:text-body-md">
+            {person.position}
+          </p>
         </StaggerItem>
 
         {person.biography?.length ? (
@@ -61,7 +65,7 @@ export function PrincipalInvestigatorFeature({
 
         {links.length > 0 ? (
           <StaggerItem>
-            <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            <div className="flex flex-wrap items-center gap-x-5 gap-y-2 sm:gap-x-8 sm:gap-y-3">
               {links.map((link) => (
                 <TextLink
                   key={`${link.label}-${link.href}`}

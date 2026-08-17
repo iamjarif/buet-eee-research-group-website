@@ -12,10 +12,8 @@ export function PatentApplicationCard({ patent }: PatentApplicationCardProps) {
   const inventors = formatPatentInventors(patent);
 
   return (
-    <article className="flex flex-col justify-between gap-6 border border-border-strong bg-surface-base p-5 sm:min-h-[217px] sm:p-7">
-      <h3 className="font-serif text-[1.25rem] leading-[1.75rem] text-text-primary">
-        {patent.title}
-      </h3>
+    <article className="flex flex-col justify-between gap-5 border border-border-strong bg-surface-base p-4 sm:min-h-[217px] sm:gap-6 sm:p-7">
+      <h3 className="text-heading-md text-text-primary">{patent.title}</h3>
 
       <div className="space-y-2">
         {inventors ? (

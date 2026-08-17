@@ -73,12 +73,12 @@
   --text-heading-lg-line: clamp(1.6rem, 1.7vw + 0.85rem, 2.15625rem);
   --text-heading-lg-tracking: clamp(-0.015rem, -0.05vw, -0.028125rem);
 
-  --text-heading-md-size: 1.75rem;
-  --text-heading-md-line: 2.0625rem;
+  --text-heading-md-size: clamp(1.25rem, 1.4vw + 0.85rem, 1.75rem);
+  --text-heading-md-line: clamp(1.5rem, 1.6vw + 1rem, 2.0625rem);
   --text-heading-md-tracking: 0;
 
   --text-heading-sm-size: 1.125rem;
-  --text-heading-sm-line: 2.0625rem;
+  --text-heading-sm-line: clamp(1.4rem, 1.2vw + 1.05rem, 2.0625rem);
   --text-heading-sm-tracking: 0;
 
   /* --- Typography: Body (Geist) --- */
@@ -278,6 +278,7 @@
   line-height: var(--text-display-sm-line);
   letter-spacing: var(--text-display-sm-tracking);
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 .text-heading-lg {
@@ -286,6 +287,7 @@
   line-height: var(--text-heading-lg-line);
   letter-spacing: var(--text-heading-lg-tracking);
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 .text-heading-md {
@@ -294,6 +296,7 @@
   line-height: var(--text-heading-md-line);
   letter-spacing: var(--text-heading-md-tracking);
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 .text-heading-sm {
@@ -302,6 +305,7 @@
   line-height: var(--text-heading-sm-line);
   letter-spacing: var(--text-heading-sm-tracking);
   font-weight: 400;
+  overflow-wrap: anywhere;
 }
 
 .text-body-lg {

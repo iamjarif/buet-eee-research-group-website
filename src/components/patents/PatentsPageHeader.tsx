@@ -17,7 +17,7 @@ export function PatentsPageHeader({
 }: PatentsPageHeaderProps) {
   return (
     <header className="page-header-padding bg-surface-base pb-8">
-      <Container as="div" className="flex flex-col gap-6 sm:gap-7">
+      <Container as="div" className="flex flex-col gap-4 sm:gap-7">
         <Reveal immediate variant="fadeUpSubtle">
           <PageHeaderMeta eyebrow={eyebrow} stats={stats} />
         </Reveal>

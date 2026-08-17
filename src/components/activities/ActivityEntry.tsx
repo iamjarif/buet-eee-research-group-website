@@ -23,11 +23,11 @@ export function ActivityEntry({
   return (
     <article
       className={cn(
-        "grid items-start gap-8 border-b border-border-default py-10 lg:gap-x-12 lg:py-14 xl:gap-x-16",
+        "grid items-start gap-5 border-b border-border-default py-7 sm:gap-8 sm:py-10 lg:gap-x-12 lg:py-14 xl:gap-x-16",
         withFigureColumn && "lg:grid-cols-[minmax(0,1fr)_22rem]",
       )}
     >
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3 sm:gap-5">
         <ActivityMeta activity={activity} />
 
         <h3 className="max-w-[45rem] text-heading-md text-text-primary">

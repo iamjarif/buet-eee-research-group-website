@@ -1,5 +1,4 @@
 import { PeopleGroupHeading } from "@/components/people/PeopleGroupHeading";
-import { PersonListRow } from "@/components/people/PersonListRow";
 import { PersonTile } from "@/components/people/PersonTile";
 import { PrincipalInvestigatorFeature } from "@/components/people/PrincipalInvestigatorFeature";
 import { Reveal } from "@/components/motion/Reveal";
@@ -17,55 +16,34 @@ type PeopleRosterProps = {
   grouped: GroupedPeople;
 };
 
-/** Small cohorts read better as rows; larger ones as a portrait grid. */
-const GROUP_LAYOUTS: Record<"phd" | "msc" | "undergrad" | "alumni", "rows" | "grid"> =
-  {
-    phd: "rows",
-    msc: "grid",
-    undergrad: "grid",
-    alumni: "grid",
-  };
-
 function RosterSection({
   group,
   people,
-  layout,
 }: {
   group: PersonGroup;
   people: PersonRosterEntry[];
-  layout: "rows" | "grid";
 }) {
   const headingId = `people-${group}`;
 
   return (
-    <section aria-labelledby={headingId} className="bg-surface-base py-14 lg:py-16">
-      <Container as="div" className="space-y-10 lg:space-y-12">
+    <section aria-labelledby={headingId} className="bg-surface-base py-10 sm:py-14 lg:py-16">
+      <Container as="div" className="space-y-6 sm:space-y-10 lg:space-y-12">
         <PeopleGroupHeading
           id={headingId}
           title={PERSON_GROUPS[group].title}
           count={formatGroupCount(group, people.length)}
         />
 
-        {layout === "rows" ? (
-          <Stagger stagger={0.06}>
-            {people.map((person) => (
-              <StaggerItem key={person._id}>
-                <PersonListRow person={person} />
-              </StaggerItem>
-            ))}
-          </Stagger>
-        ) : (
-          <Stagger
-            className="grid gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-y-14"
-            stagger={0.05}
-          >
-            {people.map((person) => (
-              <StaggerItem key={person._id}>
-                <PersonTile person={person} />
-              </StaggerItem>
-            ))}
-          </Stagger>
-        )}
+        <Stagger
+          className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-8 sm:gap-y-12 md:grid-cols-3 lg:grid-cols-4 lg:gap-y-14"
+          stagger={0.05}
+        >
+          {people.map((person) => (
+            <StaggerItem key={person._id} className="min-w-0">
+              <PersonTile person={person} />
+            </StaggerItem>
+          ))}
+        </Stagger>
       </Container>
     </section>
   );
@@ -89,13 +67,13 @@ export function PeopleRoster({ grouped }: PeopleRosterProps) {
   }
 
   return (
-    <>
+    <div className="pb-16 sm:pb-[120px]">
       {grouped.pi.length > 0 ? (
         <section
           aria-label={PERSON_GROUPS.pi.title}
-          className="bg-surface-base pt-14 pb-14 lg:pt-16 lg:pb-16"
+          className="bg-surface-base pt-8 pb-10 sm:pt-14 sm:pb-14 lg:pt-16 lg:pb-16"
         >
-          <Container as="div" className="space-y-20 lg:space-y-24">
+          <Container as="div" className="space-y-12 sm:space-y-20 lg:space-y-24">
             {grouped.pi.map((person, index) => (
               <PrincipalInvestigatorFeature
                 key={person._id}
@@ -113,11 +91,10 @@ export function PeopleRoster({ grouped }: PeopleRosterProps) {
             key={group}
             group={group}
             people={grouped[group]}
-            layout={GROUP_LAYOUTS[group]}
           />
         ) : null,
       )}
-    </>
+    </div>
   );
 }
 

@@ -18,9 +18,9 @@ export function PatentListEntry({ patent, listingNumber }: PatentListEntryProps)
   const externalUrl = getPatentExternalUrl(patent);
 
   return (
-    <article className="flex flex-col gap-4 border-b border-border-default py-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
-      <div className="flex min-w-0 flex-1 items-start gap-8 sm:items-center">
-        <p className="w-6 shrink-0 text-label-xs text-text-tertiary">
+    <article className="flex flex-col gap-3 border-b border-border-default py-5 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:py-6">
+      <div className="flex min-w-0 flex-1 items-start gap-3 sm:items-center sm:gap-8">
+        <p className="w-6 shrink-0 pt-0.5 text-label-xs text-text-tertiary sm:pt-0">
           {listingNumber}
         </p>
 

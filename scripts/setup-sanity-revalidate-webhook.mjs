@@ -8,7 +8,6 @@
  * Requires in .env.local:
  *   NEXT_PUBLIC_SANITY_PROJECT_ID
  *   NEXT_PUBLIC_SANITY_DATASET
- *   NEXT_PUBLIC_SANITY_API_VERSION
  *   SANITY_REVALIDATE_SECRET
  *   SANITY_API_WRITE_TOKEN (Editor or Deploy token with webhook permissions)
  */
@@ -21,7 +20,8 @@ const siteUrlArg = urlFlagIndex >= 0 ? args[urlFlagIndex + 1] : undefined;
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID?.trim();
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET?.trim() || "production";
-const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION?.trim() || "2026-08-13";
+/** Hooks live on the project API (v2021-10-04), not the Content Lake query version. */
+const hooksApiVersion = "2021-10-04";
 const revalidateSecret = process.env.SANITY_REVALIDATE_SECRET?.trim();
 const token = process.env.SANITY_API_WRITE_TOKEN?.trim();
 
@@ -50,26 +50,22 @@ if (!siteUrl || siteUrl.includes("localhost")) {
 const webhookUrl = `${siteUrl}/api/revalidate?secret=${encodeURIComponent(revalidateSecret)}`;
 
 const webhookBody = {
+  type: "document",
   name: WEBHOOK_NAME,
   url: webhookUrl,
   dataset,
+  apiVersion: "v2021-10-04",
   httpMethod: "POST",
-  on: ["create", "update", "delete"],
-  filter: `_type in [
-    "siteSettings",
-    "homepage",
-    "researchArea",
-    "publication",
-    "patent",
-    "person",
-    "activity"
-  ]`,
-  projection: `{ _type, "slug": slug.current }`,
+  rule: {
+    on: ["create", "update", "delete"],
+    filter: `_type in ["siteSettings","homepage","researchArea","publication","patent","person","activity"]`,
+    projection: `{ _type, "slug": slug.current }`,
+  },
   description:
     "Instantly revalidate the Next.js site on Vercel when CMS content is published.",
 };
 
-const base = `https://${projectId}.api.sanity.io/${apiVersion}/hooks/projects/${projectId}`;
+const base = `https://${projectId}.api.sanity.io/v${hooksApiVersion}/hooks/projects/${projectId}`;
 
 async function sanityRequest(path, options = {}) {
   const response = await fetch(`${base}${path}`, {

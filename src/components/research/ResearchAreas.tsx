@@ -13,7 +13,7 @@ export function ResearchAreas({ areas }: ResearchAreasProps) {
       <Container as="div">
         {areas.length > 0 ? (
           areas.map((area, index) => (
-            <Reveal key={area._id} variant="fadeUpSubtle">
+            <Reveal key={area._id} variant="fadeUpSubtle" viewport={{ once: true, amount: 0 }}>
               <ResearchAreaSection
                 area={area}
                 index={index + 1}

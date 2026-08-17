@@ -1,19 +1,24 @@
+/**
+ * Intersection threshold must stay at 0. A ratio like 0.2 is relative to the
+ * *element*, so a tall roster or research chapter can never reach 20% visible
+ * inside a phone viewport and stays stuck at opacity 0.
+ */
 export const VIEWPORT = {
   once: true,
-  amount: 0.2,
-  margin: "0px 0px -8% 0px" as const,
+  amount: 0,
+  margin: "0px 0px -40px 0px" as const,
 };
 
 export type ViewportConfig = {
   once?: boolean;
-  amount?: number;
+  amount?: number | "some" | "all";
   margin?: string;
 };
 
 export const VIEWPORT_SUBTLE = {
   once: true,
-  amount: 0.15,
-  margin: "0px 0px -5% 0px" as const,
+  amount: 0,
+  margin: "0px 0px -24px 0px" as const,
 };
 
 /** Footer should not animate until it is meaningfully on screen. */
