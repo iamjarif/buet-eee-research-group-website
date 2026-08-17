@@ -3,6 +3,7 @@ import type { StructureResolver } from "sanity/structure";
 const SINGLETONS = [
   { type: "siteSettings", title: "Site Settings", id: "siteSettings" },
   { type: "homepage", title: "Homepage", id: "homepage" },
+  { type: "syncState", title: "Publications Sync", id: "sync-state-publications" },
 ] as const;
 
 export const structure: StructureResolver = (S) =>

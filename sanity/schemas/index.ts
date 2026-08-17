@@ -5,6 +5,7 @@ import person from "./documents/person";
 import publication from "./documents/publication";
 import researchArea from "./documents/researchArea";
 import siteSettings from "./documents/siteSettings";
+import syncState from "./documents/syncState";
 import imageWithAlt from "./objects/imageWithAlt";
 import link from "./objects/link";
 import navItem from "./objects/navItem";
@@ -24,6 +25,7 @@ export const schemaTypes = [
   // Documents
   siteSettings,
   homepage,
+  syncState,
   researchArea,
   publication,
   patent,

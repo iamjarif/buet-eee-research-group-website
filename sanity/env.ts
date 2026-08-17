@@ -28,6 +28,9 @@ export const apiVersion =
 /** Server-only read token for draft/preview fetches. Never expose to the client. */
 export const readToken = process.env.SANITY_API_READ_TOKEN?.trim();
 
+/** Server-only write token for mutations (sync routes, seed scripts). Never expose to the client. */
+export const writeToken = process.env.SANITY_API_WRITE_TOKEN?.trim();
+
 /** Webhook secret for on-demand revalidation. */
 export const revalidateSecret = process.env.SANITY_REVALIDATE_SECRET?.trim();
 

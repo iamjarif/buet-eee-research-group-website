@@ -110,6 +110,22 @@ export const publication = defineType({
       of: [{ type: "reference", to: [{ type: "researchArea" }] }],
     }),
     defineField({
+      name: "openAlexTopics",
+      title: "OpenAlex Topics (sync)",
+      type: "array",
+      of: [{ type: "string" }],
+      description:
+        "Topics reported by OpenAlex for this work. Not shown on the website. For editor review only.",
+    }),
+    defineField({
+      name: "suggestedResearchAreas",
+      title: "Suggested Research Areas (sync)",
+      type: "array",
+      of: [{ type: "reference", to: [{ type: "researchArea" }] }],
+      description:
+        "Proposed matches from publication sync. Not used on the website. Copy into Research Areas to confirm.",
+    }),
+    defineField({
       name: "isFeatured",
       title: "Featured",
       type: "boolean",

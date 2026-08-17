@@ -96,20 +96,26 @@ export function PublicationsIndex({ publications }: PublicationsIndexProps) {
         <Container as="div" className="flex flex-col gap-14">
           {yearGroups.length > 0 ? (
             yearGroups.map(({ year, publications: groupedPublications }) => (
-              <Stagger key={year} className="flex flex-col gap-6" stagger={0.06}>
+              <Stagger
+                key={`${year}-${typeFilter}-${query}`}
+                immediate
+                className="flex flex-col gap-6"
+                stagger={0.06}
+              >
                 <StaggerItem>
                   <h2 className="font-serif text-heading-lg italic tracking-[-0.028125rem] text-text-secondary">
                     {year}
                   </h2>
                 </StaggerItem>
 
-                <div className="border-t border-border-default">
-                  {groupedPublications.map((publication) => (
-                    <StaggerItem key={publication._id}>
-                      <PublicationListEntry publication={publication} />
-                    </StaggerItem>
-                  ))}
-                </div>
+                {groupedPublications.map((publication, index) => (
+                  <StaggerItem
+                    key={publication._id}
+                    className={index === 0 ? "border-t border-border-default" : undefined}
+                  >
+                    <PublicationListEntry publication={publication} />
+                  </StaggerItem>
+                ))}
               </Stagger>
             ))
           ) : (

@@ -18,6 +18,18 @@ export function isValidSlug(slug: string | undefined | null): slug is string {
   return typeof slug === "string" && slug.length > 0;
 }
 
+/** URL-safe slug from a title. Matches Sanity publication slug maxLength of 120. */
+export function slugify(value: string, maxLength = 120): string {
+  return value
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, maxLength)
+    .replace(/-+$/g, "");
+}
+
 /** Safely format an array of author names. */
 export function formatAuthorNames(
   authors: Array<{ name: string }> | undefined,
