@@ -40,27 +40,19 @@ export function CatalogPageHeaderSkeleton({
   return (
     <div
       className={cn(
-        "page-header-padding bg-surface-base pb-8 sm:pb-10",
-        withBorder && "border-b border-border-default pb-12",
+        "page-header-padding bg-surface-inverse",
+        withBorder && "border-b border-white/10",
         className,
       )}
     >
       <Container as="div" className="flex flex-col gap-7">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-          <SkeletonBlock className="h-3 w-[4.5rem]" />
-          <span aria-hidden className="h-px min-w-[1.5rem] flex-1 basis-12 bg-border-default" />
-          <SkeletonBlock className="h-3 w-[3.5rem]" />
+          <SkeletonBlock className="h-3 w-[4.5rem] bg-white/10" />
+          <span aria-hidden className="h-px min-w-[1.5rem] flex-1 basis-12 bg-white/15" />
+          <SkeletonBlock className="h-3 w-[3.5rem] bg-white/10" />
         </div>
 
-        <div className="space-y-3.5">
-          <SkeletonBlock className="h-[3.25rem] max-w-[34rem] w-full" />
-          <SkeletonBlock className="h-[3.25rem] max-w-[22rem] w-full" />
-        </div>
-
-        <div className="space-y-2.5">
-          <SkeletonBlock className="h-4 max-w-[28rem] w-full" />
-          <SkeletonBlock className="h-4 max-w-[24rem] w-full" />
-        </div>
+        <SkeletonBlock className="h-[3.25rem] max-w-[34rem] w-full bg-white/10" />
       </Container>
     </div>
   );

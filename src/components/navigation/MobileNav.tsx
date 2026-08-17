@@ -71,7 +71,7 @@ export function MobileNav({ navigation, headerCta, className }: MobileNavProps) 
                 <StaggerListItem key={`${item.href}-${item.label}`}>
                   <NavLink
                     item={item}
-                    className="text-body-md"
+                    className="text-body-md font-semibold"
                     onNavigate={() => setOpen(false)}
                   />
                 </StaggerListItem>
@@ -84,6 +84,7 @@ export function MobileNav({ navigation, headerCta, className }: MobileNavProps) 
                   <LinkButton
                     href={headerCta.href}
                     external={headerCta.openInNewTab}
+                    className="font-semibold"
                     onClick={() => setOpen(false)}
                   >
                     {headerCta.label}

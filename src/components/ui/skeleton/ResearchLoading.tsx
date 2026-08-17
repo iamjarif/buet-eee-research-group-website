@@ -8,7 +8,7 @@ import {
 
 function ResearchAreaSkeleton() {
   return (
-    <div aria-hidden className="py-10 lg:py-14">
+    <div aria-hidden>
       <SectionRuleSkeleton />
 
       <div className="mt-8 grid gap-10 lg:mt-10 lg:grid-cols-[minmax(0,28rem)_minmax(0,1fr)] lg:gap-x-16">
@@ -46,8 +46,8 @@ export function ResearchLoading() {
     <LoadingRoot>
       <CatalogPageHeaderSkeleton />
 
-      <div className="bg-surface-base pb-[120px]">
-        <Container as="div">
+      <div className="bg-surface-base page-content-padding">
+        <Container as="div" className="space-y-10 lg:space-y-14">
           {[0, 1].map((index) => (
             <ResearchAreaSkeleton key={index} />
           ))}

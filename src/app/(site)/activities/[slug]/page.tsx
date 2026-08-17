@@ -37,10 +37,6 @@ export default async function ActivityPage({ params }: PageProps) {
   if (!activity) notFound();
 
   return (
-    <PageShell title={activity.title}>
-      <p className="text-sm text-muted">
-        Activity detail content will be implemented in the next development phase.
-      </p>
-    </PageShell>
+    <PageShell title={activity.title} />
   );
 }

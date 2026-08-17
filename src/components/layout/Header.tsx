@@ -4,7 +4,6 @@ import { MobileNav } from "@/components/navigation/MobileNav";
 import { NavLink } from "@/components/navigation/NavLink";
 import { SiteLogo } from "@/components/layout/SiteLogo";
 import { LinkButton } from "@/components/ui/Button";
-import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/config/site";
 import type { SiteSettings } from "../../../sanity/types";
 
@@ -22,17 +21,10 @@ export function Header({ settings }: HeaderProps) {
 
   return (
     <HeaderShell>
-      <Container
-        as="div"
-        className="flex h-[var(--layout-header-height)] items-center justify-between py-2 sm:py-3"
-      >
+      <div className="container-px flex h-[var(--layout-header-height)] w-full items-center justify-between py-2 sm:py-3">
         <HeaderMotion className="flex min-w-0 w-full items-center justify-between gap-3">
           <HeaderMotionItem className="min-w-0 shrink">
-            <SiteLogo
-              siteName={siteName}
-              partnerLogo={settings?.partnerLogo}
-              size="header"
-            />
+            <SiteLogo siteName={siteName} size="header" />
           </HeaderMotionItem>
 
           {/* Controls stay outside motion items so the menu toggle is clickable immediately. */}
@@ -42,12 +34,12 @@ export function Header({ settings }: HeaderProps) {
                 {navigation.length > 0 ? (
                   navigation.map((item) => (
                     <li key={`${item.href}-${item.label}`}>
-                      <NavLink item={item} className="text-body-xs" />
+                      <NavLink item={item} className="text-label-md font-semibold" />
                     </li>
                   ))
                 ) : (
                   <li>
-                    <span className="text-body-xs text-text-muted">
+                    <span className="text-label-md font-semibold text-text-muted">
                       Navigation pending CMS setup
                     </span>
                   </li>
@@ -59,8 +51,7 @@ export function Header({ settings }: HeaderProps) {
               <LinkButton
                 href={headerCta.href}
                 external={headerCta.openInNewTab}
-                size="sm"
-                className="hidden px-3.5 py-1.5 lg:inline-flex"
+                className="hidden px-3.5 py-1.5 font-semibold lg:inline-flex"
               >
                 {headerCta.label}
                 {!headerCta.label.includes("→") ? " →" : ""}
@@ -70,7 +61,7 @@ export function Header({ settings }: HeaderProps) {
             <MobileNav navigation={navigation} headerCta={headerCta} />
           </div>
         </HeaderMotion>
-      </Container>
+      </div>
     </HeaderShell>
   );
 }

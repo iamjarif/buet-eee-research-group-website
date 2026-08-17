@@ -57,18 +57,22 @@ export function revalidateCmsContent({ _type, slug: slugInput }: RevalidateCmsOp
     }
   }
 
+  // Bust the shared (site) layout cache (header, footer, nav from Site Settings).
+  revalidatePath("/", "layout");
+
   for (const path of STATIC_PATHS) {
-    revalidatePath(path);
+    revalidatePath(path, "page");
   }
 
   if (_type && slug && SLUG_PATH_BY_TYPE[_type]) {
-    revalidatePath(`${SLUG_PATH_BY_TYPE[_type]}/${slug}`);
+    revalidatePath(`${SLUG_PATH_BY_TYPE[_type]}/${slug}`, "page");
   }
 
   return {
     revalidated: true,
+    _type: _type ?? null,
     tags: tags ?? Object.values(CMS_TAGS),
-    slug,
+    slug: slug ?? null,
     now: Date.now(),
   };
 }

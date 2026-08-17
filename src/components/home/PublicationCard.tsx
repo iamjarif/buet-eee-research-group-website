@@ -31,7 +31,7 @@ export function PublicationCard({ publication }: PublicationCardProps) {
       )}
 
       <div className="flex flex-col gap-3.5 px-[18px] pb-[17px] pt-[15px]">
-        <h3 className="font-serif text-[length:var(--text-label-md-size)] leading-[var(--text-label-md-line)] text-text-primary">
+        <h3 className="text-heading-sm text-text-primary">
           {externalUrl ? (
             <a
               href={externalUrl}

@@ -7,11 +7,6 @@ import type { PublicationSummary } from "../../../sanity/types";
 
 type PublicationListEntryProps = {
   publication: PublicationSummary;
-  /**
-   * Reserves the image column for the whole list so figures align on a single
-   * edge. Omitted when no entry in view has an image.
-   */
-  withFigureColumn?: boolean;
   priority?: boolean;
 };
 
@@ -23,7 +18,6 @@ const linkClassName = cn(
 
 export function PublicationListEntry({
   publication,
-  withFigureColumn = false,
   priority = false,
 }: PublicationListEntryProps) {
   const externalUrl = getPublicationExternalUrl(publication);
@@ -68,7 +62,7 @@ export function PublicationListEntry({
     <article
       className={cn(
         "grid items-start gap-5 border-b border-border-default py-6 sm:gap-8 sm:py-7 lg:gap-x-12 lg:py-10 xl:gap-x-16",
-        withFigureColumn && "lg:grid-cols-[minmax(0,1fr)_22rem]",
+        hasImage && "lg:grid-cols-[minmax(0,1fr)_22rem]",
       )}
     >
       <div className="flex min-w-0 flex-col gap-3 sm:gap-5">
@@ -76,7 +70,7 @@ export function PublicationListEntry({
 
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1 space-y-2">
-            <h3 className="text-heading-lg text-text-primary">
+            <h3 className="text-heading-md text-text-primary">
               {externalUrl ? (
                 <a
                   href={externalUrl}
@@ -116,7 +110,10 @@ export function PublicationListEntry({
         {hasDescription ? (
           <PortableTextContent
             value={publication.description}
-            className="max-w-[38rem] space-y-3 [&_p]:text-body-sm"
+            className={cn(
+              "space-y-3 [&_p]:text-body-sm",
+              hasImage ? "max-w-[38rem]" : "max-w-none",
+            )}
           />
         ) : null}
       </div>

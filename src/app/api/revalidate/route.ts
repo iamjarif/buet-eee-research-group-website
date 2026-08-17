@@ -21,6 +21,8 @@ export async function POST(request: NextRequest) {
       slug: body.slug,
     });
 
+    console.info("[revalidate]", result);
+
     return NextResponse.json(result);
   } catch (error) {
     console.error("Revalidation error:", error);

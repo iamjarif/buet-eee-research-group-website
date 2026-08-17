@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Tinos } from "next/font/google";
+import { Host_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 
 import { SiteAnalytics } from "@/components/analytics/SiteAnalytics";
@@ -7,18 +7,11 @@ import { colorValues } from "@/config/design-tokens";
 
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const hostGrotesk = Host_Grotesk({
+  variable: "--font-host-grotesk",
   subsets: ["latin"],
+  display: "swap",
   weight: ["400", "500", "600"],
-  display: "swap",
-});
-
-const tinos = Tinos({
-  variable: "--font-tinos",
-  subsets: ["latin"],
-  weight: "400",
-  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -35,7 +28,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${tinos.variable} h-full antialiased`}
+      className={`${hostGrotesk.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         {children}

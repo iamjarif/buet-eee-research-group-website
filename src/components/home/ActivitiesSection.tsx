@@ -26,7 +26,7 @@ function ActivityFeatured({ activity }: ActivityFeaturedProps) {
       </StaggerItem>
 
       <StaggerItem>
-        <h3 className="text-display-sm text-text-primary">{activity.title}</h3>
+        <h3 className="text-heading-md text-text-primary">{activity.title}</h3>
       </StaggerItem>
 
       {description ? (

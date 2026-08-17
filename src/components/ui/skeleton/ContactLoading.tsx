@@ -40,7 +40,7 @@ export function ContactLoading() {
       <CatalogPageHeaderSkeleton />
       <IdentityBarSkeleton />
 
-      <section className="bg-surface-base pb-20 pt-14 lg:pb-24 lg:pt-16">
+      <section className="bg-surface-base page-content-padding">
         <Container as="div">
           <div className="grid items-start gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,19rem)] lg:gap-x-20 xl:gap-x-24">
             <ContactFormSkeleton />

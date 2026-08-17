@@ -40,7 +40,7 @@ export function PatentsLoading() {
     <LoadingRoot>
       <CatalogPageHeaderSkeleton />
 
-      <section className="bg-surface-base pb-10 pt-8">
+      <section className="bg-surface-base page-content-padding">
         <Container as="div">
           {[0, 1, 2, 3].map((index) => (
             <PatentRowSkeleton key={index} />

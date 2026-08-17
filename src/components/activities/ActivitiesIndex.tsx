@@ -74,7 +74,7 @@ export function ActivitiesIndex({ activities }: ActivitiesIndexProps) {
 
       <section
         aria-label="News and activities"
-        className="bg-surface-base pt-4 pb-16 sm:pt-8 sm:pb-[120px]"
+        className="bg-surface-base page-content-padding"
       >
         <Container as="div">
           {visible.length > 0 ? (

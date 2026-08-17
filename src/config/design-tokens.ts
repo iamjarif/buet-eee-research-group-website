@@ -37,7 +37,20 @@ export const designTokens = {
   typography: {
     fontFamily: {
       sans: "var(--font-sans)",
-      serif: "var(--font-serif)",
+      /** Alias — same as sans (Host Grotesk site-wide) */
+      display: "var(--font-display)",
+    },
+    weight: {
+      display: "var(--weight-display)",
+      heading: "var(--weight-heading)",
+      body: "var(--weight-body)",
+      labelMd: "var(--weight-label-md)",
+      labelSm: "var(--weight-label-sm)",
+      labelXs: "var(--weight-label-xs)",
+      overline: "var(--weight-overline)",
+      overlineSm: "var(--weight-overline-sm)",
+      caption: "var(--weight-caption)",
+      stat: "var(--weight-stat)",
     },
     display: {
       xl: "var(--text-display-xl)",
@@ -126,31 +139,31 @@ export const typographyValues = {
       fontSize: "74px",
       lineHeight: "78.44px",
       letterSpacing: "-1.85px",
-      weight: 400,
+      weight: 600,
     },
     lg: {
       fontSize: "60px",
       lineHeight: "61.2px",
       letterSpacing: "-1.2px",
-      weight: 400,
+      weight: 600,
     },
     md: {
       fontSize: "46px",
       lineHeight: "51.52px",
       letterSpacing: "-0.84px",
-      weight: 400,
+      weight: 600,
     },
-    sm: { fontSize: "36px", lineHeight: "45px", letterSpacing: "0", weight: 400 },
+    sm: { fontSize: "36px", lineHeight: "45px", letterSpacing: "0", weight: 600 },
   },
   heading: {
     lg: {
       fontSize: "30px",
       lineHeight: "34.5px",
       letterSpacing: "-0.45px",
-      weight: 400,
+      weight: 500,
     },
-    md: { fontSize: "28px", lineHeight: "33px", letterSpacing: "0", weight: 400 },
-    sm: { fontSize: "18px", lineHeight: "33px", letterSpacing: "0", weight: 400 },
+    md: { fontSize: "28px", lineHeight: "33px", letterSpacing: "0", weight: 500 },
+    sm: { fontSize: "18px", lineHeight: "33px", letterSpacing: "0", weight: 500 },
   },
   body: {
     lg: { fontSize: "18px", lineHeight: "29.25px", letterSpacing: "0", weight: 400 },
@@ -190,7 +203,7 @@ export const typographyValues = {
     weight: 400,
   },
   stat: {
-    xl: { fontSize: "60px", lineHeight: "60px", letterSpacing: "0", weight: 400 },
+    xl: { fontSize: "60px", lineHeight: "60px", letterSpacing: "0", weight: 600 },
   },
 } as const;
 

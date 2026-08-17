@@ -25,7 +25,7 @@ export function ResearchAreaSection({
   const output = formatResearchOutput(area);
 
   return (
-    <section aria-labelledby={headingId} className="py-10 lg:py-14">
+    <section aria-labelledby={headingId}>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
         <p className="type-overline shrink-0 text-text-tertiary">
           {formatSectionIndex(index)}

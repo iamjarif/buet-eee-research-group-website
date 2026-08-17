@@ -46,7 +46,19 @@
   --color-border-strong: var(--border-strong);
   --color-border-subtle: var(--border-subtle);
 
-  /* --- Typography: Display (Tinos) — fluid scale preserves desktop sizes --- */
+  /* --- Typography: weights (Figma text styles, adapted for Host Grotesk) --- */
+  --weight-display: 600;
+  --weight-heading: 500;
+  --weight-body: 400;
+  --weight-label-md: 500;
+  --weight-label-sm: 600;
+  --weight-label-xs: 400;
+  --weight-overline: 500;
+  --weight-overline-sm: 400;
+  --weight-caption: 400;
+  --weight-stat: 600;
+
+  /* --- Typography: Display — fluid scale preserves desktop sizes --- */
   --text-display-xl-size: clamp(2.25rem, 4.5vw + 1rem, 4.625rem);
   --text-display-xl-line: clamp(2.5rem, 4.8vw + 1.1rem, 4.9025rem);
   --text-display-xl-tracking: clamp(-0.05rem, -0.2vw, -0.115625rem);
@@ -68,7 +80,7 @@
   --text-display-sm-line: clamp(1.85rem, 2.4vw + 0.6rem, 2.8125rem);
   --text-display-sm-tracking: 0;
 
-  /* --- Typography: Heading (Tinos) --- */
+  /* --- Typography: Heading --- */
   --text-heading-lg-size: clamp(1.375rem, 1.5vw + 0.75rem, 1.875rem);
   --text-heading-lg-line: clamp(1.6rem, 1.7vw + 0.85rem, 2.15625rem);
   --text-heading-lg-tracking: clamp(-0.015rem, -0.05vw, -0.028125rem);
@@ -81,7 +93,7 @@
   --text-heading-sm-line: clamp(1.4rem, 1.2vw + 1.05rem, 2.0625rem);
   --text-heading-sm-tracking: 0;
 
-  /* --- Typography: Body (Geist) --- */
+  /* --- Typography: Body --- */
   --text-body-lg-size: 1.125rem;
   --text-body-lg-line: 1.828125rem;
 
@@ -97,7 +109,7 @@
   --text-body-xs-size: 0.875rem;
   --text-body-xs-line: 1.28125rem;
 
-  /* --- Typography: Label (Geist) --- */
+  /* --- Typography: Label --- */
   --text-label-md-size: 1rem;
   --text-label-md-line: 1.21875rem;
 
@@ -121,7 +133,7 @@
   --text-caption-size: 0.71875rem;
   --text-caption-line: 1.00625rem;
 
-  /* --- Typography: Stat (Tinos) --- */
+  /* --- Typography: Stat --- */
   --text-stat-xl-size: clamp(2rem, 3.5vw + 0.75rem, 3.75rem);
   --text-stat-xl-line: clamp(2rem, 3.5vw + 0.75rem, 3.75rem);
 
@@ -192,9 +204,9 @@
   --color-accent: var(--accent);
   --color-border: var(--border);
 
-  /* Font families */
-  --font-sans: var(--font-geist-sans);
-  --font-serif: var(--font-tinos);
+  /* Font families — Host Grotesk site-wide */
+  --font-sans: var(--font-host-grotesk);
+  --font-display: var(--font-host-grotesk);
 
   /* Font sizes for Tailwind utilities */
   --text-display-xl: var(--text-display-xl-size);
@@ -237,74 +249,74 @@
    ============================================================================= */
 
 .text-display-xl {
-  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-display-xl-size);
   line-height: var(--text-display-xl-line);
   letter-spacing: var(--text-display-xl-tracking);
-  font-weight: 400;
+  font-weight: var(--weight-display);
   overflow-wrap: anywhere;
 }
 
 .text-display-lg {
-  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-display-lg-size);
   line-height: var(--text-display-lg-line);
   letter-spacing: var(--text-display-lg-tracking);
-  font-weight: 400;
+  font-weight: var(--weight-display);
   overflow-wrap: anywhere;
 }
 
 .text-display-md {
-  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-display-md-size);
   line-height: var(--text-display-md-line);
   letter-spacing: var(--text-display-md-tracking);
-  font-weight: 400;
+  font-weight: var(--weight-display);
   overflow-wrap: anywhere;
 }
 
 .text-section-title {
-  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-section-title-size);
   line-height: var(--text-section-title-line);
   letter-spacing: var(--text-section-title-tracking);
-  font-weight: 400;
+  font-weight: var(--weight-display);
   overflow-wrap: anywhere;
 }
 
 .text-display-sm {
-  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-display-sm-size);
   line-height: var(--text-display-sm-line);
   letter-spacing: var(--text-display-sm-tracking);
-  font-weight: 400;
+  font-weight: var(--weight-display);
   overflow-wrap: anywhere;
 }
 
 .text-heading-lg {
-  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-heading-lg-size);
   line-height: var(--text-heading-lg-line);
   letter-spacing: var(--text-heading-lg-tracking);
-  font-weight: 400;
+  font-weight: var(--weight-heading);
   overflow-wrap: anywhere;
 }
 
 .text-heading-md {
-  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-heading-md-size);
   line-height: var(--text-heading-md-line);
   letter-spacing: var(--text-heading-md-tracking);
-  font-weight: 400;
+  font-weight: var(--weight-heading);
   overflow-wrap: anywhere;
 }
 
 .text-heading-sm {
-  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-heading-sm-size);
   line-height: var(--text-heading-sm-line);
   letter-spacing: var(--text-heading-sm-tracking);
-  font-weight: 400;
+  font-weight: var(--weight-heading);
   overflow-wrap: anywhere;
 }
 
@@ -312,42 +324,42 @@
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-body-lg-size);
   line-height: var(--text-body-lg-line);
-  font-weight: 400;
+  font-weight: var(--weight-body);
 }
 
 .text-body-md {
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-body-md-size);
   line-height: var(--text-body-md-line);
-  font-weight: 400;
+  font-weight: var(--weight-body);
 }
 
 .text-body-base {
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-body-base-size);
   line-height: var(--text-body-base-line);
-  font-weight: 400;
+  font-weight: var(--weight-body);
 }
 
 .text-body-sm {
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-body-sm-size);
   line-height: var(--text-body-sm-line);
-  font-weight: 400;
+  font-weight: var(--weight-body);
 }
 
 .text-body-xs {
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-body-xs-size);
   line-height: var(--text-body-xs-line);
-  font-weight: 400;
+  font-weight: var(--weight-body);
 }
 
 .text-label-md {
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-label-md-size);
   line-height: var(--text-label-md-line);
-  font-weight: 500;
+  font-weight: var(--weight-label-md);
 }
 
 .text-label-sm {
@@ -355,7 +367,7 @@
   font-size: var(--text-label-sm-size);
   line-height: var(--text-label-sm-line);
   letter-spacing: var(--text-label-sm-tracking);
-  font-weight: 600;
+  font-weight: var(--weight-label-sm);
 }
 
 .text-label-xs {
@@ -363,7 +375,7 @@
   font-size: var(--text-label-xs-size);
   line-height: var(--text-label-xs-line);
   letter-spacing: var(--text-label-xs-tracking);
-  font-weight: 400;
+  font-weight: var(--weight-label-xs);
 }
 
 .type-overline {
@@ -371,7 +383,7 @@
   font-size: var(--text-overline-size);
   line-height: var(--text-overline-line);
   letter-spacing: var(--text-overline-tracking);
-  font-weight: 500;
+  font-weight: var(--weight-overline);
   text-transform: uppercase;
 }
 
@@ -380,7 +392,7 @@
   font-size: var(--text-overline-sm-size);
   line-height: var(--text-overline-sm-line);
   letter-spacing: var(--text-overline-sm-tracking);
-  font-weight: 400;
+  font-weight: var(--weight-overline-sm);
   text-transform: uppercase;
 }
 
@@ -388,14 +400,14 @@
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-caption-size);
   line-height: var(--text-caption-line);
-  font-weight: 400;
+  font-weight: var(--weight-caption);
 }
 
 .text-stat-xl {
-  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   font-size: var(--text-stat-xl-size);
   line-height: var(--text-stat-xl-line);
-  font-weight: 400;
+  font-weight: var(--weight-stat);
 }
 
 /* =============================================================================
@@ -442,7 +454,12 @@
 }
 
 .page-header-padding {
-  padding-top: calc(var(--layout-header-height) + clamp(2rem, 5vw, 4.375rem));
+  padding-top: calc(var(--layout-header-height) + clamp(2.5rem, 5vw, 4.375rem));
+  padding-bottom: clamp(2.5rem, 5vw, 4.375rem);
+}
+
+.page-content-padding {
+  padding-block: clamp(4rem, 6vw, 7.5rem);
 }
 
 .section-padding-y {

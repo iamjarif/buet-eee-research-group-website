@@ -11,13 +11,6 @@ export function splitContactLines(value?: string | null): string[] {
     .filter(Boolean);
 }
 
-export function getContactPageDescription(settings?: SiteSettings | null): string {
-  return (
-    settings?.contactPageDescription?.trim() ??
-    "For research inquiries, collaborations, and academic correspondence, reach NC Group by email, phone, or the form below."
-  );
-}
-
 export function getContactMapEmbedUrl(settings?: SiteSettings | null): string {
   return settings?.contactMapEmbedUrl?.trim() || DEFAULT_MAP_EMBED_URL;
 }

@@ -39,11 +39,7 @@ export function Footer({ settings }: FooterProps) {
         >
           <StaggerItem>
             <div className="space-y-3.5">
-              <SiteLogo
-                siteName={siteName}
-                partnerLogo={settings?.partnerLogo}
-                size="footer"
-              />
+              <SiteLogo siteName={siteName} size="footer" />
               <p className="max-w-[320px] text-body-xs text-text-primary">
                 {siteConfig.fullName}
               </p>

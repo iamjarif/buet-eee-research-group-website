@@ -52,7 +52,7 @@ export function PersonPortrait({
           aria-hidden
           className="flex h-full w-full items-center justify-center bg-surface-subtle"
         >
-          <span className="font-serif text-heading-md text-text-tertiary">
+          <span className="font-display text-heading-md text-text-tertiary">
             {getPersonInitials(name)}
           </span>
         </div>

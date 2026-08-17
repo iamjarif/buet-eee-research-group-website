@@ -48,25 +48,21 @@ export function PeopleLoading() {
     <LoadingRoot>
       <CatalogPageHeaderSkeleton />
 
-      <section className="bg-surface-base py-8 sm:py-14 lg:py-16">
+      <div className="bg-surface-base page-content-padding">
         <Container as="div">
           <PIFeatureSkeleton />
         </Container>
-      </section>
 
-      <section className="bg-surface-base py-10 sm:py-14 lg:py-16">
-        <Container as="div" className="space-y-6 sm:space-y-10 lg:space-y-12">
+        <Container as="div" className="mt-10 space-y-6 sm:mt-14 sm:space-y-10 lg:mt-16 lg:space-y-12">
           <SectionRuleSkeleton />
           <PeopleGridSkeleton />
         </Container>
-      </section>
 
-      <section className="bg-surface-base py-10 pb-16 sm:py-14 sm:pb-[120px] lg:py-16">
-        <Container as="div" className="space-y-6 sm:space-y-10 lg:space-y-12">
+        <Container as="div" className="mt-10 space-y-6 sm:mt-14 sm:space-y-10 lg:mt-16 lg:space-y-12">
           <SectionRuleSkeleton />
           <PeopleGridSkeleton />
         </Container>
-      </section>
+      </div>
     </LoadingRoot>
   );
 }

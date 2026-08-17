@@ -5,14 +5,30 @@ import {
   SkeletonBlock,
 } from "@/components/ui/skeleton/primitives";
 
+function NewsFilterBarSkeleton() {
+  return (
+    <div className="border-t border-border-default bg-surface-subtle py-4">
+      <Container as="div">
+        <div className="flex flex-wrap items-center gap-2">
+          {[0, 1, 2, 3].map((index) => (
+            <SkeletonBlock key={index} className="h-8 w-[5.5rem]" />
+          ))}
+        </div>
+      </Container>
+    </div>
+  );
+}
+
 function NewsEntrySkeleton() {
   return (
     <div
       aria-hidden
-      className="grid items-start gap-8 border-b border-border-default py-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-x-12 lg:py-14 xl:gap-x-16"
+      className="grid items-start gap-5 border-b border-border-default py-7 sm:gap-8 sm:py-10 lg:grid-cols-[22rem_minmax(0,1fr)] lg:gap-x-12 lg:py-14 xl:gap-x-16"
     >
-      <div className="flex flex-col gap-5">
-        <div className="flex items-baseline gap-3.5">
+      <SkeletonBlock className="aspect-[4/3] w-full max-w-[26rem] lg:max-w-none" />
+
+      <div className="flex min-w-0 flex-col gap-3 sm:gap-5">
+        <div className="flex flex-wrap items-baseline gap-x-3.5 gap-y-1">
           <SkeletonBlock className="h-3 w-[6.5rem]" />
           <SkeletonBlock className="h-3 w-[4.5rem]" />
         </div>
@@ -22,7 +38,6 @@ function NewsEntrySkeleton() {
           <SkeletonBlock className="h-4 max-w-[28rem] w-full" />
         </div>
       </div>
-      <SkeletonBlock className="aspect-[4/3] w-full max-w-[26rem] lg:col-start-2 lg:max-w-none" />
     </div>
   );
 }
@@ -30,9 +45,11 @@ function NewsEntrySkeleton() {
 export function ActivitiesLoading() {
   return (
     <LoadingRoot>
-      <CatalogPageHeaderSkeleton className="pb-8" />
+      <CatalogPageHeaderSkeleton />
 
-      <section className="bg-surface-base pb-[120px] pt-8">
+      <NewsFilterBarSkeleton />
+
+      <section className="bg-surface-base page-content-padding">
         <Container as="div">
           {[0, 1, 2].map((index) => (
             <NewsEntrySkeleton key={index} />

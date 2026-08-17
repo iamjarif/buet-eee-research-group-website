@@ -24,10 +24,18 @@ export function ActivityEntry({
     <article
       className={cn(
         "grid items-start gap-5 border-b border-border-default py-7 sm:gap-8 sm:py-10 lg:gap-x-12 lg:py-14 xl:gap-x-16",
-        withFigureColumn && "lg:grid-cols-[minmax(0,1fr)_22rem]",
+        withFigureColumn && "lg:grid-cols-[22rem_minmax(0,1fr)]",
       )}
     >
-      <div className="flex flex-col gap-3 sm:gap-5">
+      <MediaFrame
+        image={activity.image}
+        width={800}
+        sizes="(max-width: 640px) 92vw, (max-width: 1024px) 26rem, 22rem"
+        priority={priority}
+        className="max-w-[26rem] lg:max-w-none"
+      />
+
+      <div className="flex min-w-0 flex-col gap-3 sm:gap-5">
         <ActivityMeta activity={activity} />
 
         <h3 className="max-w-[45rem] text-heading-md text-text-primary">
@@ -36,14 +44,6 @@ export function ActivityEntry({
 
         <PortableTextContent value={activity.description} className="max-w-[38rem]" />
       </div>
-
-      <MediaFrame
-        image={activity.image}
-        width={800}
-        sizes="(max-width: 640px) 92vw, (max-width: 1024px) 26rem, 22rem"
-        priority={priority}
-        className="max-w-[26rem] lg:col-start-2 lg:max-w-none"
-      />
     </article>
   );
 }

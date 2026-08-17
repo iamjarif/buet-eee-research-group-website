@@ -36,10 +36,6 @@ export default async function ResearchAreaPage({ params }: PageProps) {
   if (!area) notFound();
 
   return (
-    <PageShell title={area.title}>
-      <p className="text-sm text-muted">
-        Research area detail content will be implemented in the next development phase.
-      </p>
-    </PageShell>
+    <PageShell title={area.title} />
   );
 }

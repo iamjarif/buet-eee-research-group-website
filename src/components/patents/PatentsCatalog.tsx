@@ -16,7 +16,7 @@ export function PatentsCatalog({ patents }: PatentsCatalogProps) {
   return (
     <>
       {granted.length > 0 ? (
-        <section aria-label="Granted patents" className="bg-surface-base pb-16 pt-6 sm:pb-[120px] sm:pt-8">
+        <section aria-label="Granted patents" className="bg-surface-base page-content-padding">
           <Container as="div">
             <Stagger stagger={0.06}>
               {granted.map((patent, index) => (
@@ -40,7 +40,7 @@ export function PatentsCatalog({ patents }: PatentsCatalogProps) {
           <Container as="div" className="flex flex-col gap-8 sm:gap-12">
             <Reveal variant="fadeUpSubtle">
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                <h2 className="shrink-0 text-heading-md text-text-primary sm:text-display-sm">
+                <h2 className="shrink-0 text-heading-sm text-text-primary">
                   Patent Applications
                 </h2>
                 <span aria-hidden className="hidden h-px min-w-[1.5rem] flex-1 basis-12 bg-border-default sm:block" />
@@ -63,7 +63,7 @@ export function PatentsCatalog({ patents }: PatentsCatalogProps) {
       ) : null}
 
       {granted.length === 0 && pending.length === 0 ? (
-        <section className="bg-surface-base pb-[120px] pt-14">
+        <section className="bg-surface-base page-content-padding">
           <Container as="div">
             <Reveal variant="fadeUpSubtle">
               <p className="text-body-sm text-text-secondary">

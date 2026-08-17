@@ -31,7 +31,7 @@ export function PublicationsLoading() {
       <CatalogPageHeaderSkeleton withBorder />
       <FilterBarSkeleton pillCount={3} />
 
-      <div className="bg-surface-base pb-[120px] pt-10">
+      <div className="bg-surface-base page-content-padding">
         <Container as="div">
           <SkeletonBlock className="mb-8 h-8 w-[5rem]" />
           {[0, 1, 2, 3].map((index) => (

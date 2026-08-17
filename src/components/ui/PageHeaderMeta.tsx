@@ -13,13 +13,13 @@ type PageHeaderMetaProps = {
 export function PageHeaderMeta({ eyebrow, stats, className }: PageHeaderMetaProps) {
   return (
     <div className={cn("flex flex-wrap items-center gap-x-4 gap-y-2", className)}>
-      <p className="type-overline shrink-0 text-text-secondary">{eyebrow}</p>
+      <p className="type-overline shrink-0 text-text-inverse-secondary">{eyebrow}</p>
       <span
         aria-hidden
-        className="h-px min-w-[1.5rem] flex-1 basis-12 bg-border-default"
+        className="h-px min-w-[1.5rem] flex-1 basis-12 bg-white/15"
       />
       {stats ? (
-        <p className="type-overline shrink-0 text-text-tertiary">{stats}</p>
+        <p className="type-overline shrink-0 text-text-inverse-muted">{stats}</p>
       ) : null}
     </div>
   );

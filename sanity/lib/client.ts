@@ -3,7 +3,6 @@ import { createClient, type QueryParams } from "next-sanity";
 import {
   apiVersion,
   dataset,
-  isSanityConfigured,
   projectId,
   readToken,
   writeToken,
@@ -12,12 +11,12 @@ import {
 const DEFAULT_REVALIDATE = 3600; // 1 hour
 const isDevelopment = process.env.NODE_ENV === "development";
 
-/** Public Sanity client — published perspective; bypass CDN in dev for fresher reads. */
+/** Public Sanity client — published perspective; bypass CDN (Next.js data cache handles TTL). */
 export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: isSanityConfigured && !isDevelopment,
+  useCdn: false,
   perspective: "published",
   stega: {
     enabled: false,

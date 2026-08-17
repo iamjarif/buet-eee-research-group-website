@@ -33,7 +33,7 @@ export function ResearchAreaPublications({
               key={publication._id}
               className="border-b border-border-default py-4"
             >
-              <h3 className="text-body-md text-text-primary">
+              <h3 className="text-heading-sm text-text-primary">
                 {externalUrl ? (
                   <a
                     href={externalUrl}

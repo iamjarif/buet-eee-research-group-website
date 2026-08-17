@@ -38,10 +38,6 @@ export default async function PersonPage({ params }: PageProps) {
   if (!person) notFound();
 
   return (
-    <PageShell title={person.name} description={person.position}>
-      <p className="text-sm text-muted">
-        Person profile content will be implemented in the next development phase.
-      </p>
-    </PageShell>
+    <PageShell title={person.name} />
   );
 }

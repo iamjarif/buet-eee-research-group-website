@@ -9,7 +9,8 @@
  *   NEXT_PUBLIC_SANITY_PROJECT_ID
  *   NEXT_PUBLIC_SANITY_DATASET
  *   SANITY_REVALIDATE_SECRET
- *   SANITY_API_WRITE_TOKEN (Editor or Deploy token with webhook permissions)
+ *   SANITY_DEPLOY_TOKEN (preferred — Deploy token with webhook permissions)
+ *   SANITY_API_WRITE_TOKEN (fallback — needs sanity.project.webhooks grant)
  */
 
 const WEBHOOK_NAME = "Vercel on-demand revalidation";
@@ -23,7 +24,8 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET?.trim() || "production";
 /** Hooks live on the project API (v2021-10-04), not the Content Lake query version. */
 const hooksApiVersion = "2021-10-04";
 const revalidateSecret = process.env.SANITY_REVALIDATE_SECRET?.trim();
-const token = process.env.SANITY_API_WRITE_TOKEN?.trim();
+const token =
+  process.env.SANITY_DEPLOY_TOKEN?.trim() || process.env.SANITY_API_WRITE_TOKEN?.trim();
 
 const siteUrl = (
   siteUrlArg ??
@@ -40,7 +42,7 @@ function fail(message) {
 
 if (!projectId) fail("Missing NEXT_PUBLIC_SANITY_PROJECT_ID.");
 if (!revalidateSecret) fail("Missing SANITY_REVALIDATE_SECRET.");
-if (!token) fail("Missing SANITY_API_WRITE_TOKEN.");
+if (!token) fail("Missing SANITY_DEPLOY_TOKEN or SANITY_API_WRITE_TOKEN.");
 if (!siteUrl || siteUrl.includes("localhost")) {
   fail(
     "Production site URL required. Pass --url https://your-domain.com or set NEXT_PUBLIC_SITE_URL to your deployed domain.",
@@ -64,6 +66,9 @@ const webhookBody = {
   description:
     "Instantly revalidate the Next.js site on Vercel when CMS content is published.",
 };
+
+/** PATCH rejects `type`; create requires it. */
+const { type: _webhookType, ...webhookPatchBody } = webhookBody;
 
 const base = `https://${projectId}.api.sanity.io/v${hooksApiVersion}/hooks/projects/${projectId}`;
 
@@ -96,6 +101,21 @@ async function sanityRequest(path, options = {}) {
   return data;
 }
 
+function printManualSetup() {
+  console.error("");
+  console.error("Manual setup in sanity.io/manage → API → Webhooks → Create webhook:");
+  console.error("");
+  console.error(`  Name:        ${WEBHOOK_NAME}`);
+  console.error(`  URL:         ${webhookUrl.replace(revalidateSecret, "<SANITY_REVALIDATE_SECRET>")}`);
+  console.error(`  Dataset:     ${dataset}`);
+  console.error("  Trigger on:  Create, Update, Delete");
+  console.error(`  Filter:      ${webhookBody.rule.filter}`);
+  console.error(`  Projection:  ${webhookBody.rule.projection}`);
+  console.error("  HTTP method: POST");
+  console.error("");
+  console.error("Then ensure SANITY_REVALIDATE_SECRET is set on Vercel (Production) and redeploy.");
+}
+
 async function main() {
   console.log("Sanity instant revalidation webhook setup");
   console.log(`Project:  ${projectId}`);
@@ -110,11 +130,21 @@ async function main() {
 
   if (match?.id) {
     console.log(`Updating existing webhook (${match.id})…`);
-    await sanityRequest(`/${match.id}`, {
-      method: "PUT",
-      body: JSON.stringify(webhookBody),
-    });
-    console.log("✓ Webhook updated.");
+    try {
+      await sanityRequest(`/${match.id}`, {
+        method: "PATCH",
+        body: JSON.stringify(webhookPatchBody),
+      });
+      console.log("✓ Webhook updated.");
+    } catch (error) {
+      console.log("PATCH failed, recreating webhook…");
+      await sanityRequest(`/${match.id}`, { method: "DELETE" });
+      await sanityRequest("", {
+        method: "POST",
+        body: JSON.stringify(webhookBody),
+      });
+      console.log("✓ Webhook recreated.");
+    }
   } else {
     console.log("Creating webhook…");
     await sanityRequest("", {
@@ -134,8 +164,10 @@ async function main() {
 main().catch((error) => {
   console.error("\nSetup failed:", error.message);
   console.error(
-    "\nIf the token lacks permission, create a Deploy token at sanity.io/manage → API → Tokens,",
+    "\nCreate a Deploy token at sanity.io/manage → API → Tokens (Developer role),",
   );
-  console.error("add it as SANITY_API_WRITE_TOKEN (or a dedicated SANITY_DEPLOY_TOKEN), and retry.");
+  console.error("add it as SANITY_DEPLOY_TOKEN in .env.local, and retry:");
+  console.error("  npm run setup:webhook -- --url https://www.nadimchowdhury.com");
+  printManualSetup();
   process.exit(1);
 });

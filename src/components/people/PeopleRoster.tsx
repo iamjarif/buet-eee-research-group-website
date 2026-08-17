@@ -26,7 +26,7 @@ function RosterSection({
   const headingId = `people-${group}`;
 
   return (
-    <section aria-labelledby={headingId} className="bg-surface-base py-10 sm:py-14 lg:py-16">
+    <section aria-labelledby={headingId} className="pt-10 sm:pt-14 lg:pt-16">
       <Container as="div" className="space-y-6 sm:space-y-10 lg:space-y-12">
         <PeopleGroupHeading
           id={headingId}
@@ -54,7 +54,7 @@ export function PeopleRoster({ grouped }: PeopleRosterProps) {
 
   if (isEmpty) {
     return (
-      <section className="bg-surface-base pb-[120px] pt-10">
+      <section className="bg-surface-base page-content-padding">
         <Container as="div">
           <Reveal variant="fadeUpSubtle">
             <p className="text-body-sm text-text-secondary">
@@ -67,11 +67,11 @@ export function PeopleRoster({ grouped }: PeopleRosterProps) {
   }
 
   return (
-    <div className="pb-16 sm:pb-[120px]">
+    <div className="bg-surface-base page-content-padding">
       {grouped.pi.length > 0 ? (
         <section
           aria-label={PERSON_GROUPS.pi.title}
-          className="bg-surface-base pt-8 pb-10 sm:pt-14 sm:pb-14 lg:pt-16 lg:pb-16"
+          className="pb-10 sm:pb-14 lg:pb-16"
         >
           <Container as="div" className="space-y-12 sm:space-y-20 lg:space-y-24">
             {grouped.pi.map((person, index) => (

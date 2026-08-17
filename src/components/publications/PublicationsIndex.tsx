@@ -42,9 +42,6 @@ export function PublicationsIndex({ publications }: PublicationsIndexProps) {
     [visiblePublications],
   );
 
-  const withFigureColumn = visiblePublications.some((publication) =>
-    Boolean(publication.image?.asset),
-  );
   const firstEntryId = visiblePublications[0]?._id;
 
   return (
@@ -96,7 +93,7 @@ export function PublicationsIndex({ publications }: PublicationsIndexProps) {
 
       <section
         aria-label="Publication results"
-        className="bg-surface-base pb-20 pt-10 sm:pb-[120px] sm:pt-14"
+        className="bg-surface-base page-content-padding"
       >
         <Container as="div" className="flex flex-col gap-14">
           {yearGroups.length > 0 ? (
@@ -108,7 +105,7 @@ export function PublicationsIndex({ publications }: PublicationsIndexProps) {
                 stagger={0.06}
               >
                 <StaggerItem>
-                  <h2 className="font-serif text-heading-lg italic tracking-[-0.028125rem] text-text-secondary">
+                  <h2 className="text-display-sm text-text-primary">
                     {year}
                   </h2>
                 </StaggerItem>
@@ -120,7 +117,6 @@ export function PublicationsIndex({ publications }: PublicationsIndexProps) {
                   >
                     <PublicationListEntry
                       publication={publication}
-                      withFigureColumn={withFigureColumn}
                       priority={publication._id === firstEntryId}
                     />
                   </StaggerItem>

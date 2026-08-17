@@ -82,7 +82,7 @@ export function ContactForm({ className }: ContactFormProps) {
     return (
       <div className={cn("w-full max-w-[38rem]", className)}>
         <p className="type-overline text-text-tertiary">Send a message</p>
-        <h2 className="mt-5 font-serif text-heading-md text-text-primary">
+        <h2 className="mt-5 font-display text-heading-md text-text-primary">
           Thank you for reaching out.
         </h2>
         <p className="mt-3 max-w-md text-body-md text-text-secondary">

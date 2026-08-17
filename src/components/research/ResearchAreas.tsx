@@ -9,8 +9,8 @@ type ResearchAreasProps = {
 
 export function ResearchAreas({ areas }: ResearchAreasProps) {
   return (
-    <div className="bg-surface-base pb-[120px]">
-      <Container as="div">
+    <div className="bg-surface-base page-content-padding">
+      <Container as="div" className="space-y-10 lg:space-y-14">
         {areas.length > 0 ? (
           areas.map((area, index) => (
             <Reveal key={area._id} variant="fadeUpSubtle" viewport={{ once: true, amount: 0 }}>

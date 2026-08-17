@@ -46,7 +46,7 @@ export function ContactIdentityBar({ settings }: ContactIdentityBarProps) {
           <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between lg:gap-16">
             <div className="space-y-2">
               {settings?.contactPrimaryName ? (
-                <p className="font-serif text-heading-md text-text-primary">
+                <p className="font-display text-heading-md text-text-primary">
                   {settings.contactPrimaryName}
                 </p>
               ) : null}
