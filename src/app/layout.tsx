@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Tinos } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import type { ReactNode } from "react";
 
+import { SiteAnalytics } from "@/components/analytics/SiteAnalytics";
 import { colorValues } from "@/config/design-tokens";
 
 import "./globals.css";
@@ -39,15 +39,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     >
       <body className="min-h-full">
         {children}
-        <Analytics
-          beforeSend={(event) => {
-            const path = new URL(event.url).pathname;
-            if (path.startsWith("/studio") || path.startsWith("/api")) {
-              return null;
-            }
-            return event;
-          }}
-        />
+        <SiteAnalytics />
       </body>
     </html>
   );
