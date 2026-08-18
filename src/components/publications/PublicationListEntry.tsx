@@ -2,7 +2,7 @@ import { PortableTextContent } from "@/components/ui/PortableTextContent";
 import { MediaFrame } from "@/components/ui/MediaFrame";
 import { getPublicationExternalUrl } from "@/lib/publications";
 import { hoverEaseClass } from "@/lib/motion/transitions";
-import { cn, formatPublicationAuthors } from "@/lib/utils";
+import { cn, formatPublicationAuthors, getDoiUrl } from "@/lib/utils";
 import type { PublicationSummary } from "../../../sanity/types";
 
 type PublicationListEntryProps = {
@@ -90,7 +90,22 @@ export function PublicationListEntry({
             ) : null}
 
             <p className="text-caption uppercase text-text-tertiary">
+              <time dateTime={String(publication.year)}>{publication.year}</time>
+              {" · "}
               {publication.journalOrConference}
+              {publication.doi ? (
+                <>
+                  {" · "}
+                  <a
+                    href={getDoiUrl(publication.doi)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={linkClassName}
+                  >
+                    {publication.doi.replace(/^https?:\/\/(dx\.)?doi\.org\//i, "")}
+                  </a>
+                </>
+              ) : null}
             </p>
           </div>
 

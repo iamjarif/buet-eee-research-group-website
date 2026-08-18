@@ -25,8 +25,9 @@ export async function generateMetadata({ params }: PageProps) {
     description: person.position,
     seo: person.seo,
     siteSettings: settings,
-    path: `/people/${slug}`,
+    path: "/people",
     type: "profile",
+    index: false,
   });
 }
 

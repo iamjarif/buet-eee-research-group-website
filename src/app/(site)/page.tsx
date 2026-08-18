@@ -9,7 +9,9 @@ import { ResearchSection } from "@/components/home/ResearchSection";
 import { TeamSection } from "@/components/home/TeamSection";
 import { Reveal } from "@/components/motion/Reveal";
 import { Container } from "@/components/ui/Container";
-import { getActivities, getHomepage, getPublications, getSiteSettings } from "@/lib/cms";
+import { getActivities, getContributionCounts, getHomepage, getRecentPublications, getSiteSettings } from "@/lib/cms";
+import { enrichContributionsWithLiveCounts } from "@/lib/contributions";
+import { siteConfig } from "@/config/site";
 import { buildMetadata } from "@/lib/metadata";
 import { isSanityConfigured } from "../../../sanity/env";
 
@@ -17,11 +19,14 @@ export async function generateMetadata() {
   const [settings, homepage] = await Promise.all([getSiteSettings(), getHomepage()]);
 
   return buildMetadata({
-    title: homepage?.heroHeading,
-    description: homepage?.heroDescription,
+    title: siteConfig.defaultTitle,
+    description:
+      homepage?.heroDescription ??
+      "NC Group at BUET EEE, led by Prof. Nadim Chowdhury, researches Gallium Nitride (GaN) devices for power electronics, RF systems, and high-temperature applications.",
     seo: homepage?.seo,
     siteSettings: settings,
     path: "/",
+    absoluteTitle: true,
   });
 }
 
@@ -73,15 +78,20 @@ export default async function HomePage() {
     );
   }
 
-  const activities =
+  const [activities, featuredPublications, contributionCounts] = await Promise.all([
     homepage.featuredActivities?.length && homepage.featuredActivities.length > 0
-      ? homepage.featuredActivities
-      : (await getActivities()).slice(0, 4);
-
-  const featuredPublications =
+      ? Promise.resolve(homepage.featuredActivities)
+      : getActivities().then((items) => items.slice(0, 4)),
     homepage.featuredPublications?.length && homepage.featuredPublications.length > 0
-      ? homepage.featuredPublications
-      : (await getPublications()).slice(0, 6);
+      ? Promise.resolve(homepage.featuredPublications)
+      : getRecentPublications().then((items) => items.slice(0, 6)),
+    getContributionCounts(),
+  ]);
+
+  const contributions = enrichContributionsWithLiveCounts(
+    homepage.featuredContributions ?? [],
+    contributionCounts,
+  );
 
   return (
     <>
@@ -109,7 +119,7 @@ export default async function HomePage() {
 
       <ContributionsSection
         heading={homepage.contributionsSectionHeading}
-        contributions={homepage.featuredContributions ?? []}
+        contributions={contributions}
       />
 
       <ActivitiesSection

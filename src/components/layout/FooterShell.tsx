@@ -14,13 +14,11 @@ type FooterShellProps = {
 export function FooterShell({ children }: FooterShellProps) {
   const pathname = usePathname();
   const reduced = useReducedMotion();
-  const [armed, setArmed] = useState(false);
+  const [armedPath, setArmedPath] = useState<string | null>(null);
 
   useEffect(() => {
-    setArmed(false);
-
     const timer = window.setTimeout(() => {
-      setArmed(true);
+      setArmedPath(pathname);
     }, 480);
 
     return () => window.clearTimeout(timer);
@@ -29,6 +27,8 @@ export function FooterShell({ children }: FooterShellProps) {
   if (reduced) {
     return children;
   }
+
+  const armed = armedPath === pathname;
 
   return (
     <motion.div

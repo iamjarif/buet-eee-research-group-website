@@ -10,7 +10,8 @@ export async function generateMetadata() {
   const settings = await getSiteSettings();
   return buildMetadata({
     title: "Contact",
-    description: "Contact NC Group at BUET.",
+    description:
+      "Contact NC Group and Prof. Nadim Chowdhury at BUET EEE for research collaboration, visiting, or joining the group.",
     siteSettings: settings,
     path: "/contact",
   });

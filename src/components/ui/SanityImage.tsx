@@ -66,6 +66,8 @@ export function SanityImageComponent({
         className={cn(!className?.includes("object-") && "object-cover", className)}
         sizes={sizes}
         priority={priority}
+        fetchPriority={priority ? "high" : "auto"}
+        quality={80}
         placeholder={blurDataURL ? "blur" : "empty"}
         blurDataURL={blurDataURL}
       />
@@ -81,6 +83,8 @@ export function SanityImageComponent({
       className={cn("h-auto max-w-full", className)}
       sizes={sizes}
       priority={priority}
+      fetchPriority={priority ? "high" : "auto"}
+      quality={80}
       placeholder={blurDataURL ? "blur" : "empty"}
       blurDataURL={blurDataURL}
     />

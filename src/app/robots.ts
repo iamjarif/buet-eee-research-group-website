@@ -3,14 +3,15 @@ import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/site";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = siteConfig.url;
-
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/studio", "/api/"],
-    },
-    sitemap: `${baseUrl}/sitemap.xml`,
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/studio", "/studio/", "/api/"],
+      },
+    ],
+    sitemap: `${siteConfig.url}/sitemap.xml`,
+    host: siteConfig.url,
   };
 }

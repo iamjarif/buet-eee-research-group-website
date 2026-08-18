@@ -6,13 +6,6 @@ export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
-/** Join class names without Tailwind merge (for non-Tailwind contexts). */
-export function classNames(
-  ...classes: Array<string | false | null | undefined>
-): string {
-  return classes.filter(Boolean).join(" ");
-}
-
 /** Returns true when a slug string is non-empty. */
 export function isValidSlug(slug: string | undefined | null): slug is string {
   return typeof slug === "string" && slug.length > 0;

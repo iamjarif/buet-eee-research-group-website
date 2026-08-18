@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 
 import { NavLink } from "@/components/navigation/NavLink";
@@ -19,13 +19,13 @@ type MobileNavProps = {
 
 export function MobileNav({ navigation, headerCta, className }: MobileNavProps) {
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
   const panelRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const toggleMenu = useCallback(() => {
     setOpen((current) => !current);

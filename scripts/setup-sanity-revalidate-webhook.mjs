@@ -136,7 +136,7 @@ async function main() {
         body: JSON.stringify(webhookPatchBody),
       });
       console.log("✓ Webhook updated.");
-    } catch (error) {
+    } catch {
       console.log("PATCH failed, recreating webhook…");
       await sanityRequest(`/${match.id}`, { method: "DELETE" });
       await sanityRequest("", {

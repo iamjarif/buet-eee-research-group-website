@@ -9,7 +9,7 @@ export async function generateMetadata() {
   return buildMetadata({
     title: "Patents",
     description:
-      "Granted patents and pending applications from NC Group, BUET.",
+      "U.S. patents from NC Group and Prof. Nadim Chowdhury on GaN device architecture for RF and power electronics.",
     siteSettings: settings,
     path: "/patents",
   });

@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import { sanityFetch } from "../../sanity/lib/client";
 import {
   activityBySlugQuery,
@@ -6,10 +8,12 @@ import {
   allPeopleQuery,
   allPublicationsQuery,
   allResearchAreasQuery,
+  contributionCountsQuery,
   homepageQuery,
   patentBySlugQuery,
   personBySlugQuery,
   publicationBySlugQuery,
+  recentPublicationsQuery,
   researchAreaBySlugQuery,
   siteSettingsQuery,
   sitemapSlugsQuery,
@@ -30,6 +34,7 @@ import type {
   SitemapSlugs,
 } from "../../sanity/types";
 import { safeCmsFetch } from "@/lib/errors";
+import type { ContributionCounts } from "@/lib/contributions";
 
 const CMS_TAGS = {
   siteSettings: "siteSettings",
@@ -41,7 +46,7 @@ const CMS_TAGS = {
   activities: "activities",
 } as const;
 
-export async function getSiteSettings(): Promise<SiteSettings | null> {
+export const getSiteSettings = cache(async (): Promise<SiteSettings | null> => {
   return safeCmsFetch(
     () =>
       sanityFetch<SiteSettings | null>({
@@ -50,9 +55,9 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
       }),
     { label: "getSiteSettings" },
   );
-}
+});
 
-export async function getHomepage(): Promise<Homepage | null> {
+export const getHomepage = cache(async (): Promise<Homepage | null> => {
   return safeCmsFetch(
     () =>
       sanityFetch<Homepage | null>({
@@ -63,13 +68,14 @@ export async function getHomepage(): Promise<Homepage | null> {
           CMS_TAGS.researchAreas,
           CMS_TAGS.people,
           CMS_TAGS.activities,
+          CMS_TAGS.patents,
         ],
       }),
     { label: "getHomepage" },
   );
-}
+});
 
-export async function getResearchAreas(): Promise<ResearchAreaEntry[]> {
+export const getResearchAreas = cache(async (): Promise<ResearchAreaEntry[]> => {
   return (
     (await safeCmsFetch(
       () =>
@@ -80,23 +86,23 @@ export async function getResearchAreas(): Promise<ResearchAreaEntry[]> {
       { label: "getResearchAreas", fallback: [] },
     )) ?? []
   );
-}
+});
 
-export async function getResearchAreaBySlug(
-  slug: string,
-): Promise<ResearchArea | null> {
-  return safeCmsFetch(
-    () =>
-      sanityFetch<ResearchArea | null>({
-        query: researchAreaBySlugQuery,
-        params: { slug },
-        tags: [CMS_TAGS.researchAreas, `researchArea:${slug}`],
-      }),
-    { label: `getResearchAreaBySlug(${slug})` },
-  );
-}
+export const getResearchAreaBySlug = cache(
+  async (slug: string): Promise<ResearchArea | null> => {
+    return safeCmsFetch(
+      () =>
+        sanityFetch<ResearchArea | null>({
+          query: researchAreaBySlugQuery,
+          params: { slug },
+          tags: [CMS_TAGS.researchAreas, `researchArea:${slug}`],
+        }),
+      { label: `getResearchAreaBySlug(${slug})` },
+    );
+  },
+);
 
-export async function getPublications(): Promise<PublicationSummary[]> {
+export const getPublications = cache(async (): Promise<PublicationSummary[]> => {
   return (
     (await safeCmsFetch(
       () =>
@@ -107,7 +113,22 @@ export async function getPublications(): Promise<PublicationSummary[]> {
       { label: "getPublications", fallback: [] },
     )) ?? []
   );
-}
+});
+
+export const getRecentPublications = cache(
+  async (): Promise<PublicationSummary[]> => {
+    return (
+      (await safeCmsFetch(
+        () =>
+          sanityFetch<PublicationSummary[]>({
+            query: recentPublicationsQuery,
+            tags: [CMS_TAGS.publications],
+          }),
+        { label: "getRecentPublications", fallback: [] },
+      )) ?? []
+    );
+  },
+);
 
 export async function getPublicationBySlug(slug: string): Promise<Publication | null> {
   return safeCmsFetch(
@@ -121,7 +142,25 @@ export async function getPublicationBySlug(slug: string): Promise<Publication | 
   );
 }
 
-export async function getPatents(): Promise<PatentSummary[]> {
+export const getContributionCounts = cache(
+  async (): Promise<ContributionCounts> => {
+    return (
+      (await safeCmsFetch(
+        () =>
+          sanityFetch<ContributionCounts>({
+            query: contributionCountsQuery,
+            tags: [CMS_TAGS.publications, CMS_TAGS.patents],
+          }),
+        {
+          label: "getContributionCounts",
+          fallback: { publications: 0, patents: 0 },
+        },
+      )) ?? { publications: 0, patents: 0 }
+    );
+  },
+);
+
+export const getPatents = cache(async (): Promise<PatentSummary[]> => {
   return (
     (await safeCmsFetch(
       () =>
@@ -132,7 +171,7 @@ export async function getPatents(): Promise<PatentSummary[]> {
       { label: "getPatents", fallback: [] },
     )) ?? []
   );
-}
+});
 
 export async function getPatentBySlug(slug: string): Promise<Patent | null> {
   return safeCmsFetch(
@@ -146,7 +185,7 @@ export async function getPatentBySlug(slug: string): Promise<Patent | null> {
   );
 }
 
-export async function getPeople(): Promise<PersonRosterEntry[]> {
+export const getPeople = cache(async (): Promise<PersonRosterEntry[]> => {
   return (
     (await safeCmsFetch(
       () =>
@@ -157,9 +196,9 @@ export async function getPeople(): Promise<PersonRosterEntry[]> {
       { label: "getPeople", fallback: [] },
     )) ?? []
   );
-}
+});
 
-export async function getPersonBySlug(slug: string): Promise<Person | null> {
+export const getPersonBySlug = cache(async (slug: string): Promise<Person | null> => {
   return safeCmsFetch(
     () =>
       sanityFetch<Person | null>({
@@ -169,9 +208,9 @@ export async function getPersonBySlug(slug: string): Promise<Person | null> {
       }),
     { label: `getPersonBySlug(${slug})` },
   );
-}
+});
 
-export async function getActivities(): Promise<ActivitySummary[]> {
+export const getActivities = cache(async (): Promise<ActivitySummary[]> => {
   return (
     (await safeCmsFetch(
       () =>
@@ -182,19 +221,21 @@ export async function getActivities(): Promise<ActivitySummary[]> {
       { label: "getActivities", fallback: [] },
     )) ?? []
   );
-}
+});
 
-export async function getActivityBySlug(slug: string): Promise<Activity | null> {
-  return safeCmsFetch(
-    () =>
-      sanityFetch<Activity | null>({
-        query: activityBySlugQuery,
-        params: { slug },
-        tags: [CMS_TAGS.activities, `activity:${slug}`],
-      }),
-    { label: `getActivityBySlug(${slug})` },
-  );
-}
+export const getActivityBySlug = cache(
+  async (slug: string): Promise<Activity | null> => {
+    return safeCmsFetch(
+      () =>
+        sanityFetch<Activity | null>({
+          query: activityBySlugQuery,
+          params: { slug },
+          tags: [CMS_TAGS.activities, `activity:${slug}`],
+        }),
+      { label: `getActivityBySlug(${slug})` },
+    );
+  },
+);
 
 export async function getSitemapSlugs(): Promise<SitemapSlugs> {
   return (

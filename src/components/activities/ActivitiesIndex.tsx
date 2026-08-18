@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { ActivityEntry } from "@/components/activities/ActivityEntry";
 import { Reveal } from "@/components/motion/Reveal";
@@ -26,16 +26,13 @@ export function ActivitiesIndex({ activities }: ActivitiesIndexProps) {
   const ordered = useMemo(() => sortActivities(activities), [activities]);
   const filters = useMemo(() => getActivityCategoryFilters(ordered), [ordered]);
   const showFilters = useMemo(() => shouldShowActivityFilters(ordered), [ordered]);
-
-  useEffect(() => {
-    if (category === "all") return;
-    const isValid = filters.some((filter) => filter.value === category);
-    if (!isValid) setCategory("all");
-  }, [category, filters]);
+  const activeCategory = filters.some((filter) => filter.value === category)
+    ? category
+    : "all";
 
   const visible = useMemo(
-    () => filterActivitiesByCategory(ordered, category),
-    [ordered, category],
+    () => filterActivitiesByCategory(ordered, activeCategory),
+    [ordered, activeCategory],
   );
 
   const withFigureColumn = visible.some((activity) => Boolean(activity.image?.asset));
@@ -53,7 +50,7 @@ export function ActivitiesIndex({ activities }: ActivitiesIndexProps) {
                 aria-label="Filter activities by category"
               >
                 {filters.map((filter) => {
-                  const isActive = category === filter.value;
+                  const isActive = activeCategory === filter.value;
 
                   return (
                     <button
@@ -84,7 +81,7 @@ export function ActivitiesIndex({ activities }: ActivitiesIndexProps) {
       >
         <Container as="div">
           {visible.length > 0 ? (
-            <Stagger key={category} immediate stagger={0.06}>
+            <Stagger key={activeCategory} immediate stagger={0.06}>
               {visible.map((activity) => (
                 <StaggerItem key={activity._id}>
                   <ActivityEntry

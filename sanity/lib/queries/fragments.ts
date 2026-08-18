@@ -71,6 +71,24 @@ export const researchAreaSummaryFields = /* groq */ `
   isPublished
 `;
 
+export const publicationCardFields = /* groq */ `
+  _id,
+  title,
+  "slug": slug.current,
+  journalOrConference,
+  publicationType,
+  categoryLabel,
+  year,
+  doi,
+  externalUrl,
+  isFeatured,
+  displayOrder,
+  image {
+    ${imageFields}
+  },
+  authorLine
+`;
+
 export const publicationSummaryFields = /* groq */ `
   _id,
   title,

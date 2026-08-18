@@ -98,12 +98,17 @@ export const PEOPLE_SEED = [
   {
     slug: "nadim-chowdhury",
     name: "Dr. Nadim Chowdhury",
-    position: "Assistant Professor, Department of EEE",
+    position: "Associate Professor, Department of EEE",
     group: "pi",
     displayOrder: 0,
     email: "nadim@eee.buet.ac.bd",
-    biography:
-      "Dr. Nadim Chowdhury is an Assistant Professor at BUET, specializing in semiconductor devices, particularly Gallium Nitride (GaN) technology. He earned his Ph.D. from MIT in 2022, focusing on GaN CMOS technology for high-performance electronics. His work has garnered multiple awards, and he holds several U.S. patents in the field.",
+    biography: [
+      "Dr. Nadim Chowdhury (Senior Member, IEEE) is an Associate Professor in the Department of Electrical and Electronic Engineering (EEE) at Bangladesh University of Engineering and Technology (BUET). He received his Ph.D. in Electrical Engineering and Computer Science from the Massachusetts Institute of Technology (MIT), Cambridge, MA, in 2022, following his SM degree from the same institution in 2018, and earned his B.Sc. and M.Sc. degrees in Electrical and Electronic Engineering from BUET.",
+      "His doctoral research made pioneering contributions to GaN-based p-channel transistor technology, including the first demonstration of a p-FET on GaN-on-Si wafers compatible with 650 V high-voltage GaN platforms, the first self-aligned GaN p-FET, and the first regrowth-free GaN complementary (CMOS) technology; he also developed a self-aligned FinFET process on 650 V GaN-on-Si wafers. His current research interests lie at the intersection of wide-bandgap semiconductor device design, fabrication, and characterization, with a focus on power electronics, radio-frequency (RF) systems, and high-temperature applications.",
+      "Dr. Chowdhury has authored over 60 peer-reviewed journal and conference papers in leading venues, including IEEE Electron Device Letters, IEEE Transactions on Electron Devices, the International Electron Devices Meeting (IEDM), and the VLSI Symposium, and his work has been featured in Compound Semiconductor Magazine, Semiconductor Today, and MIT Spectrum. Beyond academia, he has served as a technology consultant for several leading semiconductor companies, including Mitsubishi Electric, Finwave Inc., and GlobalFoundries Inc., where he played a key role in developing the 130 nm GaN RF platform and the second-generation 180 V high-voltage GaN power technology. His industrial and academic contributions have resulted in 16 granted U.S. patents, with an additional 3 pending.",
+      "Dr. Chowdhury is the recipient of several honors, including the Prime Minister of Bangladesh Gold Medal (2012), the Jacobs Presidential Fellowship at MIT (2015), the Chancellor's Gold Medal at BUET (2018), the IEEE Electron Device Society George E. Smith Award (2019), and the MIT-MTL Doctoral Dissertation Seminar Award (2022).",
+      "Dr. Chowdhury is serving as an Editor of IEEE Electron Device Letters.",
+    ],
     externalProfileLinks: [
       {
         label: "Google Scholar",
@@ -282,25 +287,32 @@ export function getPortraitSource(slug) {
   };
 }
 
-function buildBiographyBlocks(person) {
+/** Builds portable-text biography blocks from string or paragraph array. */
+export function buildBiographyBlocks(person) {
   if (!person.biography) return undefined;
 
-  return [
-    {
-      _type: "block",
-      _key: `${person.slug}-bio`,
-      style: "normal",
-      markDefs: [],
-      children: [
-        {
-          _type: "span",
-          _key: `${person.slug}-bio-span`,
-          text: person.biography,
-          marks: [],
-        },
-      ],
-    },
-  ];
+  const paragraphs = (
+    Array.isArray(person.biography) ? person.biography : [person.biography]
+  )
+    .flatMap((entry) =>
+      typeof entry === "string" ? entry.split(/\n\n+/).map((part) => part.trim()) : [],
+    )
+    .filter(Boolean);
+
+  return paragraphs.map((text, index) => ({
+    _type: "block",
+    _key: `${person.slug}-bio-${index}`,
+    style: "normal",
+    markDefs: [],
+    children: [
+      {
+        _type: "span",
+        _key: `${person.slug}-bio-${index}-span`,
+        text,
+        marks: [],
+      },
+    ],
+  }));
 }
 
 /** Builds the person document, attaching an uploaded portrait asset when available. */

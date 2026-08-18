@@ -9,7 +9,7 @@ export async function generateMetadata() {
   return buildMetadata({
     title: "Research",
     description:
-      "Wide-bandgap semiconductor device research at NC Group, BUET: GaN RF and power devices, device physics, compact modeling, and TCAD simulation.",
+      "Wide-bandgap semiconductor research at NC Group, BUET: GaN RF and power devices, device physics, compact modeling, and TCAD simulation.",
     siteSettings: settings,
     path: "/research",
   });

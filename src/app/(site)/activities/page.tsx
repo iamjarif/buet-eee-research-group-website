@@ -7,9 +7,9 @@ import { buildMetadata } from "@/lib/metadata";
 export async function generateMetadata() {
   const settings = await getSiteSettings();
   return buildMetadata({
-    title: "News",
+    title: "News & Activities",
     description:
-      "Publications, conference participation, talks, and student achievements from NC Group, BUET.",
+      "News from NC Group at BUET: publications, conference talks, awards, and student achievements in semiconductor device research.",
     siteSettings: settings,
     path: "/activities",
   });

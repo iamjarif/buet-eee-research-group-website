@@ -24,8 +24,9 @@ export async function generateMetadata({ params }: PageProps) {
     title: activity.title,
     seo: activity.seo,
     siteSettings: settings,
-    path: `/activities/${slug}`,
+    path: "/activities",
     type: "article",
+    index: false,
   });
 }
 

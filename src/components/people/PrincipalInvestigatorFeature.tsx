@@ -1,7 +1,7 @@
 import { PersonPortrait } from "@/components/people/PersonPortrait";
+import { ExpandableBiography } from "@/components/people/ExpandableBiography";
 import { Reveal } from "@/components/motion/Reveal";
 import { Stagger, StaggerItem } from "@/components/motion/Stagger";
-import { PortableTextContent } from "@/components/ui/PortableTextContent";
 import { TextLink } from "@/components/ui/TextLink";
 import {
   formatResearchInterests,
@@ -50,7 +50,7 @@ export function PrincipalInvestigatorFeature({
 
         {person.biography?.length ? (
           <StaggerItem>
-            <PortableTextContent value={person.biography} className="max-w-[36rem]" />
+            <ExpandableBiography value={person.biography} className="max-w-[36rem]" />
           </StaggerItem>
         ) : null}
 

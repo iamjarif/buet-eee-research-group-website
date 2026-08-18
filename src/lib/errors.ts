@@ -38,8 +38,3 @@ export async function safeCmsFetch<T>(
     return fallback;
   }
 }
-
-/** Returns the value or a fallback without throwing on null/undefined. */
-export function withFallback<T>(value: T | null | undefined, fallback: T): T {
-  return value ?? fallback;
-}

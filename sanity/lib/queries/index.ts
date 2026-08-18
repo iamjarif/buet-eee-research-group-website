@@ -5,6 +5,7 @@ import {
   navItemFields,
   patentSummaryFields,
   personSummaryFields,
+  publicationCardFields,
   publicationSummaryFields,
   researchAreaSummaryFields,
   seoFields,
@@ -79,7 +80,7 @@ export const homepageQuery = /* groq */ `
     publicationsSectionHeading,
     publicationsSectionDescription,
     featuredPublications[]->{
-      ${publicationSummaryFields}
+      ${publicationCardFields}
     },
     researchSectionHeading,
     researchSectionDescription,
@@ -160,6 +161,12 @@ export const allPublicationsQuery = /* groq */ `
   }
 `;
 
+export const recentPublicationsQuery = /* groq */ `
+  *[_type == "publication"] | order(year desc, displayOrder asc)[0...6] {
+    ${publicationCardFields}
+  }
+`;
+
 export const publicationBySlugQuery = /* groq */ `
   *[_type == "publication" && slug.current == $slug][0] {
     ${publicationSummaryFields},
@@ -173,6 +180,11 @@ export const allPatentsQuery = /* groq */ `
     ${patentSummaryFields}
   }
 `;
+
+export const contributionCountsQuery = /* groq */ `{
+  "publications": count(*[_type == "publication"]),
+  "patents": count(*[_type == "patent"])
+}`;
 
 export const patentBySlugQuery = /* groq */ `
   *[_type == "patent" && slug.current == $slug][0] {
