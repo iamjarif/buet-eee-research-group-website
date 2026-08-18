@@ -1,6 +1,6 @@
 "use client";
 
-import { LaunchIcon } from "@sanity/icons";
+import { LaunchIcon } from "@sanity/icons/Launch";
 import { Box, Button, Flex, Text } from "@sanity/ui";
 import { useFormValue, type StringInputProps } from "sanity";
 
