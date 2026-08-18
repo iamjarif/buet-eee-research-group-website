@@ -61,10 +61,11 @@ export function ContactForm({ className }: ContactFormProps) {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setStatus("submitting");
     setFormError(null);
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
 
     if (!applyingToJoin) {
       formData.delete("cv");
@@ -76,7 +77,20 @@ export function ContactForm({ className }: ContactFormProps) {
         body: formData,
       });
 
-      const result = (await response.json()) as { error?: string; success?: boolean };
+      let result: { error?: string; success?: boolean };
+      try {
+        result = (await response.json()) as { error?: string; success?: boolean };
+      } catch (parseError) {
+        console.error("Contact form: server returned non-JSON response", parseError, {
+          status: response.status,
+          statusText: response.statusText,
+        });
+        setStatus("error");
+        setFormError(
+          "The server returned an unexpected response. Please try again, or email us directly.",
+        );
+        return;
+      }
 
       if (!response.ok) {
         setStatus("error");
@@ -85,10 +99,25 @@ export function ContactForm({ className }: ContactFormProps) {
       }
 
       setStatus("success");
-      resetFormState(event.currentTarget);
-    } catch {
+      try {
+        resetFormState(form);
+      } catch (resetError) {
+        console.error("Contact form: message sent but form reset failed", resetError);
+      }
+    } catch (error) {
+      console.error("Contact form submission failed", error);
       setStatus("error");
-      setFormError("Unable to send your message. Please check your connection and try again.");
+
+      if (error instanceof TypeError) {
+        setFormError(
+          "Unable to reach the server. Check your connection and try again.",
+        );
+        return;
+      }
+
+      setFormError(
+        "Something went wrong while sending your message. Please try again.",
+      );
     }
   }
 
