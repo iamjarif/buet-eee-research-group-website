@@ -1,6 +1,5 @@
 import { NavLink } from "@/components/navigation/NavLink";
 import { SiteLogo } from "@/components/layout/SiteLogo";
-import { Reveal } from "@/components/motion/Reveal";
 import { RuleReveal } from "@/components/motion/RuleReveal";
 import { Container } from "@/components/ui/Container";
 import { TextLink } from "@/components/ui/TextLink";
@@ -10,7 +9,7 @@ import {
   StaggerList,
   StaggerListItem,
 } from "@/components/motion/Stagger";
-import { VIEWPORT_FOOTER } from "@/lib/motion/constants";
+import { VIEWPORT, VIEWPORT_FOOTER } from "@/lib/motion/constants";
 import { siteConfig } from "@/config/site";
 import type { SiteSettings } from "../../../sanity/types";
 
@@ -99,14 +98,12 @@ export function Footer({ settings }: FooterProps) {
         </Stagger>
 
         <div>
-          <RuleReveal viewport={VIEWPORT_FOOTER} />
+          <RuleReveal viewport={VIEWPORT} />
 
-          <Reveal variant="fadeUpSubtle" delay={0.08} viewport={VIEWPORT_FOOTER}>
-            <div className="flex flex-col gap-3 pt-7 text-caption text-text-tertiary sm:flex-row sm:items-center sm:justify-between">
-              <p>{siteConfig.organization}</p>
-              <p>{copyright}</p>
-            </div>
-          </Reveal>
+          <div className="flex flex-col gap-3 pt-7 text-caption text-text-tertiary sm:flex-row sm:items-center sm:justify-between">
+            <p>{siteConfig.organization}</p>
+            <p>{copyright}</p>
+          </div>
         </div>
       </Container>
     </footer>

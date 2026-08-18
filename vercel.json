@@ -3,6 +3,10 @@
     {
       "path": "/api/sync/publications",
       "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/applications/cleanup",
+      "schedule": "0 3 * * 0"
     }
   ]
 }
