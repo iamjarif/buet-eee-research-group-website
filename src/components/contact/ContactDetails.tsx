@@ -77,18 +77,6 @@ export function ContactIdentityBar({ settings }: ContactIdentityBarProps) {
                   </a>
                 </div>
               ) : null}
-
-              {settings?.contactPhone ? (
-                <div className="space-y-1.5">
-                  <p className="type-overline text-text-tertiary">Phone</p>
-                  <a
-                    href={`tel:${settings.contactPhone.replace(/\s/g, "")}`}
-                    className={contactLinkClassName}
-                  >
-                    {settings.contactPhone}
-                  </a>
-                </div>
-              ) : null}
             </div>
           </div>
         </Container>
