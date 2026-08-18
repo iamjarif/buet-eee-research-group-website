@@ -3,44 +3,18 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createApplicationDocument, uploadApplicationCv } from "@/lib/applications";
 import { buildCvDownloadUrl } from "@/lib/cv-access";
 import { getSiteSettings } from "@/lib/cms";
+import { buildContactNotificationEmail } from "@/lib/email/contact-notification";
 import {
-  escapeHtml,
   parseContactSubmission,
   validateContactForm,
   validateCvFile,
 } from "@/lib/contact";
 
-type ContactEmailContent = {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  cvDownloadUrl?: string;
-  cvFilename?: string;
-};
-
 async function sendContactEmail(
-  content: ContactEmailContent,
+  content: Parameters<typeof buildContactNotificationEmail>[0],
   config: { apiKey: string; fromEmail: string; toEmail: string },
 ): Promise<boolean> {
-  const { name, email, subject, message, cvDownloadUrl, cvFilename } = content;
-  const safeName = escapeHtml(name);
-  const safeEmail = escapeHtml(email);
-  const safeSubject = escapeHtml(subject);
-  const safeMessage = escapeHtml(message).replaceAll("\n", "<br />");
-  const safeCvFilename = cvFilename ? escapeHtml(cvFilename) : "";
-  const safeCvDownloadUrl = cvDownloadUrl ? escapeHtml(cvDownloadUrl) : "";
-
-  const cvText = cvDownloadUrl
-    ? `\n\nCV: ${cvFilename ?? "Attached resume"}\n${cvDownloadUrl}`
-    : "";
-  const cvHtml = cvDownloadUrl
-    ? `<p><strong>CV:</strong> <a href="${safeCvDownloadUrl}">${safeCvFilename || "Download resume"}</a></p>`
-    : "";
-
-  const emailSubject = cvDownloadUrl
-    ? `[NC Group Application] ${subject}`
-    : `[NC Group Contact] ${subject}`;
+  const { subject, text, html } = buildContactNotificationEmail(content);
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
@@ -51,16 +25,10 @@ async function sendContactEmail(
     body: JSON.stringify({
       from: config.fromEmail,
       to: [config.toEmail],
-      reply_to: email,
-      subject: emailSubject,
-      text: `From: ${name} <${email}>\nSubject: ${subject}\n\n${message}${cvText}`,
-      html: `
-        <p><strong>From:</strong> ${safeName} &lt;${safeEmail}&gt;</p>
-        <p><strong>Subject:</strong> ${safeSubject}</p>
-        <p><strong>Message:</strong></p>
-        <p>${safeMessage}</p>
-        ${cvHtml}
-      `.trim(),
+      reply_to: content.email,
+      subject,
+      text,
+      html,
     }),
   });
 

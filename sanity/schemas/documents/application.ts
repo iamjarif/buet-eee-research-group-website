@@ -1,5 +1,7 @@
 import { defineField, defineType } from "sanity";
 
+import { CvOpenInput } from "../../components/CvOpenInput";
+
 export const application = defineType({
   name: "application",
   title: "Team Application",
@@ -28,6 +30,8 @@ export const application = defineType({
       name: "cvFilename",
       title: "CV Filename",
       type: "string",
+      readOnly: true,
+      hidden: ({ document }) => Boolean(document?.cvDownloadUrl),
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -36,14 +40,18 @@ export const application = defineType({
       type: "string",
       description: "Internal Vercel Blob pathname. Not directly accessible without auth.",
       readOnly: true,
+      hidden: true,
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: "cvDownloadUrl",
-      title: "Download CV",
+      title: "CV",
       type: "url",
-      description:
-        "Signed link to download the CV. Expires after 90 days; regenerate by re-saving if needed.",
+      description: "Opens the applicant's resume in a new browser tab.",
+      readOnly: true,
+      components: {
+        input: CvOpenInput,
+      },
       validation: (rule) =>
         rule.uri({ allowRelative: false, scheme: ["http", "https"] }).required(),
     }),
