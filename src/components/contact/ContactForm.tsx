@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useState, type ChangeEvent, type FormEvent, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
@@ -16,6 +16,11 @@ const fieldClassName = cn(
   "text-body-md text-text-primary placeholder:text-text-tertiary",
   "transition-[border-color] duration-300",
   "focus-visible:border-brand-primary focus-visible:outline-none",
+);
+
+const checkboxClassName = cn(
+  "mt-0.5 size-4 shrink-0 rounded-sm border border-border-strong",
+  "text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
 );
 
 function FormField({
@@ -40,6 +45,19 @@ function FormField({
 export function ContactForm({ className }: ContactFormProps) {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [formError, setFormError] = useState<string | null>(null);
+  const [applyingToJoin, setApplyingToJoin] = useState(false);
+  const [selectedCvName, setSelectedCvName] = useState<string | null>(null);
+
+  function handleCvChange(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    setSelectedCvName(file?.name ?? null);
+  }
+
+  function resetFormState(form: HTMLFormElement) {
+    form.reset();
+    setApplyingToJoin(false);
+    setSelectedCvName(null);
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,19 +65,15 @@ export function ContactForm({ className }: ContactFormProps) {
     setFormError(null);
 
     const formData = new FormData(event.currentTarget);
-    const payload = {
-      name: String(formData.get("name") ?? ""),
-      email: String(formData.get("email") ?? ""),
-      subject: String(formData.get("subject") ?? ""),
-      message: String(formData.get("message") ?? ""),
-      company: String(formData.get("company") ?? ""),
-    };
+
+    if (!applyingToJoin) {
+      formData.delete("cv");
+    }
 
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       const result = (await response.json()) as { error?: string; success?: boolean };
@@ -71,7 +85,7 @@ export function ContactForm({ className }: ContactFormProps) {
       }
 
       setStatus("success");
-      event.currentTarget.reset();
+      resetFormState(event.currentTarget);
     } catch {
       setStatus("error");
       setFormError("Unable to send your message. Please check your connection and try again.");
@@ -105,6 +119,7 @@ export function ContactForm({ className }: ContactFormProps) {
         noValidate
         onSubmit={handleSubmit}
         aria-label="Send a message"
+        encType="multipart/form-data"
         className="relative mt-7 space-y-8"
       >
         <div className="absolute left-[-9999px]" aria-hidden>
@@ -169,6 +184,54 @@ export function ContactForm({ className }: ContactFormProps) {
             disabled={status === "submitting"}
           />
         </FormField>
+
+        <div className="space-y-4 border-t border-border-default pt-6">
+          <label htmlFor="contact-applying" className="flex items-start gap-3">
+            <input
+              id="contact-applying"
+              name="applyingToJoin"
+              type="checkbox"
+              checked={applyingToJoin}
+              onChange={(event) => {
+                setApplyingToJoin(event.target.checked);
+                if (!event.target.checked) {
+                  setSelectedCvName(null);
+                }
+              }}
+              className={checkboxClassName}
+              disabled={status === "submitting"}
+            />
+            <span className="space-y-1">
+              <span className="block text-body-md text-text-primary">
+                I&apos;m applying to join the team
+              </span>
+              <span className="block text-body-sm text-text-secondary">
+                Optional — attach a CV or resume if you&apos;d like us to review your application.
+              </span>
+            </span>
+          </label>
+
+          {applyingToJoin ? (
+            <FormField id="contact-cv" label="CV / Resume (optional)">
+              <input
+                id="contact-cv"
+                name="cv"
+                type="file"
+                accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                onChange={handleCvChange}
+                className={cn(
+                  fieldClassName,
+                  "cursor-pointer py-3 file:mr-4 file:border-0 file:bg-transparent file:text-body-sm file:text-text-primary",
+                )}
+                disabled={status === "submitting"}
+              />
+              <p className="text-body-sm text-text-tertiary">
+                PDF or Word, up to 5 MB.
+                {selectedCvName ? ` Selected: ${selectedCvName}` : null}
+              </p>
+            </FormField>
+          ) : null}
+        </div>
 
         {formError ? (
           <p className="text-body-sm text-text-secondary" role="alert">

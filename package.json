@@ -19,7 +19,11 @@
     "seed:people:apply": "node --env-file=.env.local scripts/seed-people.mjs --apply",
     "setup:webhook": "node --env-file=.env.local scripts/setup-sanity-revalidate-webhook.mjs",
     "feature:publications": "node --env-file=.env.local scripts/feature-all-publications.mjs",
-    "feature:publications:apply": "node --env-file=.env.local scripts/feature-all-publications.mjs --apply"
+    "feature:publications:apply": "node --env-file=.env.local scripts/feature-all-publications.mjs --apply",
+    "import:wix-news": "node --env-file=.env.local scripts/import-wix-news.mjs",
+    "import:wix-news:apply": "node --env-file=.env.local scripts/import-wix-news.mjs --apply",
+    "import:cv-patents": "node --env-file=.env.local scripts/import-cv-patents.mjs",
+    "import:cv-patents:apply": "node --env-file=.env.local scripts/import-cv-patents.mjs --apply"
   },
   "dependencies": {
     "@portabletext/react": "^7.0.1",
@@ -28,6 +32,7 @@
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^6.9.2",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/blob": "^2.8.0",
     "@vercel/speed-insights": "^2.0.0",
     "clsx": "^2.1.1",
     "html-entities": "^2.6.0",

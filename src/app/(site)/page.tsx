@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { ActivitiesSection } from "@/components/home/ActivitiesSection";
+import { ContributionsSection } from "@/components/home/ContributionsSection";
 import { HeroSection } from "@/components/home/HeroSection";
 import { JoinSection } from "@/components/home/JoinSection";
 import { PublicationTrack } from "@/components/home/PublicationTrack";
@@ -104,6 +105,11 @@ export default async function HomePage() {
         description={homepage.teamSectionDescription}
         image={homepage.teamImage}
         link={homepage.teamSectionLink}
+      />
+
+      <ContributionsSection
+        heading={homepage.contributionsSectionHeading}
+        contributions={homepage.featuredContributions ?? []}
       />
 
       <ActivitiesSection

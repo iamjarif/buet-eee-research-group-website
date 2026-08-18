@@ -1,4 +1,6 @@
 import activity from "./documents/activity";
+import application from "./documents/application";
+import contribution from "./documents/contribution";
 import homepage from "./documents/homepage";
 import patent from "./documents/patent";
 import person from "./documents/person";
@@ -31,4 +33,6 @@ export const schemaTypes = [
   patent,
   person,
   activity,
+  application,
+  contribution,
 ];

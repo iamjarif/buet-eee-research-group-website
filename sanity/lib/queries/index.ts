@@ -1,5 +1,6 @@
 import {
   activitySummaryFields,
+  contributionSummaryFields,
   linkFields,
   navItemFields,
   patentSummaryFields,
@@ -104,6 +105,11 @@ export const homepageQuery = /* groq */ `
     },
     featuredTeam[]->{
       ${personSummaryFields}
+    },
+    contributionsSectionHeading,
+    contributionsSectionDescription,
+    featuredContributions[]->{
+      ${contributionSummaryFields}
     },
     activitiesSectionHeading,
     activitiesSectionDescription,

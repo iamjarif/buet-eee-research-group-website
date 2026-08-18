@@ -78,6 +78,16 @@ export function HomeLoading() {
         </div>
       </HomeSectionSkeleton>
 
+      <HomeSectionSkeleton className="section-padding-y bg-surface-base">
+        <SkeletonBlock className="mb-10 h-3 w-[12rem]" />
+        <SkeletonBlock className="mb-10 h-8 w-[16rem]" />
+        <div className="grid gap-0 lg:grid-cols-3">
+          {[0, 1, 2].map((index) => (
+            <SkeletonBlock key={index} className="h-[251px] w-full border border-border-strong" />
+          ))}
+        </div>
+      </HomeSectionSkeleton>
+
       <HomeSectionSkeleton className="bg-surface-base pb-24 pt-20">
         <SkeletonBlock className="mb-10 h-8 w-[10rem]" />
         <div className="grid gap-8 lg:grid-cols-2">

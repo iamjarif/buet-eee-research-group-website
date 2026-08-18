@@ -3,6 +3,8 @@
  * Pure data — no Sanity mutations. Used by seed-homepage-content.mjs.
  */
 
+import { buildCvPatents } from "./data/cv-patents.mjs";
+
 /** All deterministic document IDs owned by this seed. Nothing outside this list is touched. */
 export const SEED_DOCUMENT_IDS = [
   "siteSettings",
@@ -17,12 +19,28 @@ export const SEED_DOCUMENT_IDS = [
   "publication-thermal-transport-limits-lateral-gan-power",
   "publication-field-plate-optimization-high-voltage-gan-hemts",
   "publication-tcad-study-dynamic-on-resistance-gan-diodes",
-  "patent-gan-hemts-field-plate-architecture",
-  "patent-vertical-gan-power-diode-termination",
-  "patent-semiconductor-device-vertically-stacked-gan-complementary-fets",
-  "patent-compound-semiconductor-device-high-power-high-frequency",
-  "patent-polarization-direction-changeable-semiconductor-device",
-  "patent-high-electron-mobility-transistors-low-on-resistance",
+  "patent-us12520516b2",
+  "patent-us12501699b1",
+  "patent-us20250294864a1",
+  "patent-us20250203907a1",
+  "patent-us20250307491a1",
+  "patent-us12113061",
+  "patent-us11869946b2",
+  "patent-us20240136121a1",
+  "patent-us11973134b2",
+  "patent-us11152471b1",
+  "patent-us10886393b2",
+  "patent-us10910480b2",
+  "patent-us10622960b2",
+  "patent-us10879368b2",
+  "patent-us10658501b2",
+  "patent-us10276704b1",
+  "patent-us-patent-app-18-052-776",
+  "patent-us-patent-app-18-523-477",
+  "patent-us-patent-app-18-537-865",
+  "contribution-publications",
+  "contribution-patents-innovations",
+  "contribution-recognition",
   "activity-vertical-gan-power-diodes-edl",
   "activity-rf-reliability-device-physics-workshop",
   "activity-welcomes-graduate-researchers",
@@ -271,98 +289,50 @@ export function buildPublications() {
 }
 
 export function buildPatents() {
+  return buildCvPatents();
+}
+
+export function buildContributions() {
   return [
     {
-      _id: "patent-gan-hemts-field-plate-architecture",
-      _type: "patent",
-      title: "Semiconductor device with vertically stacked GaN complementary FETs",
-      slug: {
-        _type: "slug",
-        current: "semiconductor-device-vertically-stacked-gan-complementary-fets",
+      _id: "contribution-publications",
+      _type: "contribution",
+      label: "Publications",
+      value: "12+",
+      description:
+        "Peer-reviewed journal and conference papers on GaN devices and modeling.",
+      link: {
+        _type: "link",
+        label: "Browse Publications →",
+        href: "/publications",
       },
-      patentNumber: "US12501699B1",
-      status: "granted",
-      year: 2025,
-      externalUrl: "https://patents.google.com/patent/US12501699B1",
       displayOrder: 0,
-      researchAreas: [ref("researchArea-gan-rf-devices")],
     },
     {
-      _id: "patent-vertical-gan-power-diode-termination",
-      _type: "patent",
-      title: "Compound semiconductor device for high power and high frequency operation",
-      slug: {
-        _type: "slug",
-        current: "compound-semiconductor-device-high-power-high-frequency",
+      _id: "contribution-patents-innovations",
+      _type: "contribution",
+      label: "Patents & Innovations",
+      value: "16",
+      description: "Patents on device architecture for RF and power GaN.",
+      link: {
+        _type: "link",
+        label: "View Patents →",
+        href: "/patents",
       },
-      patentNumber: "US20250294864A1",
-      status: "granted",
-      year: 2025,
-      externalUrl: "https://patents.google.com/patent/US20250294864A1",
       displayOrder: 1,
-      researchAreas: [ref("researchArea-gan-power-devices")],
     },
     {
-      _id: "patent-semiconductor-device-vertically-stacked-gan-complementary-fets",
-      _type: "patent",
-      title: "High electron mobility transistors with low specific on-resistance",
-      slug: {
-        _type: "slug",
-        current: "high-electron-mobility-transistors-low-specific-on-resistance-granted",
+      _id: "contribution-recognition",
+      _type: "contribution",
+      label: "Recognition",
+      value: "Best Paper recognition at a device physics workshop",
+      description: "2023",
+      link: {
+        _type: "link",
+        label: "All awards →",
+        href: "/activities",
       },
-      patentNumber: "US20250203907A1",
-      status: "granted",
-      year: 2025,
-      externalUrl: "https://patents.google.com/patent/US20250203907A1",
       displayOrder: 2,
-      researchAreas: [ref("researchArea-gan-power-devices")],
-    },
-    {
-      _id: "patent-compound-semiconductor-device-high-power-high-frequency",
-      _type: "patent",
-      title: "Artificial intelligence assisted design and fabrication of semiconductor devices",
-      slug: {
-        _type: "slug",
-        current: "artificial-intelligence-assisted-design-fabrication-semiconductor-devices",
-      },
-      patentNumber: "US20250307491A1",
-      status: "granted",
-      year: 2025,
-      externalUrl: "https://patents.google.com/patent/US20250307491A1",
-      displayOrder: 3,
-      researchAreas: [ref("researchArea-tcad-advanced-simulation")],
-    },
-    {
-      _id: "patent-polarization-direction-changeable-semiconductor-device",
-      _type: "patent",
-      title: "Semiconductor Device with a Changeable Polarization Direction",
-      slug: {
-        _type: "slug",
-        current: "semiconductor-device-changeable-polarization-direction",
-      },
-      patentNumber: "US PATENT APP. 18/052,776",
-      status: "pending",
-      year: 2025,
-      inventorLine: "Koon Hoo Teo, Nadim Chowdhury",
-      externalUrl: "https://patents.google.com/",
-      displayOrder: 0,
-      researchAreas: [ref("researchArea-gan-rf-devices")],
-    },
-    {
-      _id: "patent-high-electron-mobility-transistors-low-on-resistance",
-      _type: "patent",
-      title: "High Electron Mobility Transistors with Low Specific On-Resistance",
-      slug: {
-        _type: "slug",
-        current: "high-electron-mobility-transistors-low-specific-on-resistance",
-      },
-      patentNumber: "US PATENT APP. 18/537,865",
-      status: "pending",
-      year: 2025,
-      inventorLine: "Koon Hoo Teo, Nadim Chowdhury",
-      externalUrl: "https://patents.google.com/",
-      displayOrder: 1,
-      researchAreas: [ref("researchArea-gan-power-devices")],
     },
   ];
 }
@@ -500,6 +470,7 @@ export const SITE_SETTINGS_SEED_FIELDS = [
 export function buildHomepage({
   researchAreas,
   publications,
+  contributions,
   activities,
   teamPhotoAssetId,
 }) {
@@ -526,6 +497,8 @@ export function buildHomepage({
       ? { teamImage: imageField(teamPhotoAssetId, SEED_IMAGE_ASSETS[0].alt) }
       : {}),
     teamSectionLink: link("Meet the whole team →", "/people"),
+    contributionsSectionHeading: "What the group has produced.",
+    featuredContributions: contributions.map((doc) => ref(doc._id)),
     activitiesSectionHeading: "Recent activity.",
     featuredActivities: activities.map((doc) => ref(doc._id)),
     joinUsHeading: "Curious about\nsemiconductor devices?",
@@ -548,12 +521,14 @@ export function buildAllSeedDocuments(imageAssetIds = {}) {
   const researchAreas = buildResearchAreas();
   const publications = buildPublications();
   const patents = buildPatents();
+  const contributions = buildContributions();
   const activities = buildActivities();
 
   const collectionDocuments = [
     ...researchAreas,
     ...publications,
     ...patents,
+    ...contributions,
     ...activities,
   ];
 
@@ -561,6 +536,7 @@ export function buildAllSeedDocuments(imageAssetIds = {}) {
   const homepage = buildHomepage({
     researchAreas,
     publications,
+    contributions,
     activities,
     teamPhotoAssetId: imageAssetIds.teamPhoto,
   });
@@ -573,6 +549,7 @@ export function buildAllSeedDocuments(imageAssetIds = {}) {
       researchAreas: researchAreas.length,
       publications: publications.length,
       patents: patents.length,
+      contributions: contributions.length,
       activities: activities.length,
       singletons: 2,
       totalDocuments: collectionDocuments.length + 2,

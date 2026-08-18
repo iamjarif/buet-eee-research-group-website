@@ -78,10 +78,18 @@ export function sortActivities(activities: ActivitySummary[]): ActivitySummary[]
 }
 
 /** Category filters present in the data, so empty categories never appear. */
+function normalizeActivityCategory(category: string | undefined | null): string {
+  return (category ?? "").trim().toLowerCase();
+}
+
 export function getActivityCategoryFilters(
   activities: ActivitySummary[],
 ): Array<{ value: ActivityCategoryFilter; label: string }> {
-  const present = new Set(activities.map((activity) => activity.category));
+  const present = new Set(
+    activities
+      .map((activity) => normalizeActivityCategory(activity.category))
+      .filter(Boolean),
+  );
 
   const known = CATEGORY_ORDER.filter((category) => present.has(category)).map(
     (category) => ({
@@ -106,15 +114,17 @@ export function filterActivitiesByCategory(
   category: ActivityCategoryFilter,
 ): ActivitySummary[] {
   if (category === "all") return activities;
-  return activities.filter((activity) => activity.category === category);
+  const normalized = normalizeActivityCategory(category);
+  return activities.filter(
+    (activity) => normalizeActivityCategory(activity.category) === normalized,
+  );
 }
 
 /**
- * Filters only earn their space once the archive is large enough to need them.
+ * Filters appear when the archive spans more than one category.
  */
 export function shouldShowActivityFilters(activities: ActivitySummary[]): boolean {
-  const filters = getActivityCategoryFilters(activities);
-  return activities.length >= 6 && filters.length > 2;
+  return getActivityCategoryFilters(activities).length > 2;
 }
 
 /** Header summary, e.g. "24 entries · 2023—2026". */

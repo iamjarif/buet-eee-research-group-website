@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { ActivityEntry } from "@/components/activities/ActivityEntry";
 import { Reveal } from "@/components/motion/Reveal";
@@ -26,6 +26,12 @@ export function ActivitiesIndex({ activities }: ActivitiesIndexProps) {
   const ordered = useMemo(() => sortActivities(activities), [activities]);
   const filters = useMemo(() => getActivityCategoryFilters(ordered), [ordered]);
   const showFilters = useMemo(() => shouldShowActivityFilters(ordered), [ordered]);
+
+  useEffect(() => {
+    if (category === "all") return;
+    const isValid = filters.some((filter) => filter.value === category);
+    if (!isValid) setCategory("all");
+  }, [category, filters]);
 
   const visible = useMemo(
     () => filterActivitiesByCategory(ordered, category),
@@ -78,7 +84,7 @@ export function ActivitiesIndex({ activities }: ActivitiesIndexProps) {
       >
         <Container as="div">
           {visible.length > 0 ? (
-            <Stagger stagger={0.06}>
+            <Stagger key={category} immediate stagger={0.06}>
               {visible.map((activity) => (
                 <StaggerItem key={activity._id}>
                   <ActivityEntry

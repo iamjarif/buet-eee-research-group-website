@@ -153,6 +153,16 @@ export type Patent = PatentSummary & {
   seo?: SeoFields;
 };
 
+export type Contribution = {
+  _id: string;
+  value: string;
+  label: string;
+  description?: string;
+  link?: Link;
+  icon?: SanityImage;
+  displayOrder?: number;
+};
+
 export type ActivitySummary = {
   _id: string;
   title: string;
@@ -186,6 +196,9 @@ export type Homepage = {
   teamImage?: SanityImage;
   teamSectionLink?: Link;
   featuredTeam?: PersonSummary[];
+  contributionsSectionHeading?: string;
+  contributionsSectionDescription?: string;
+  featuredContributions?: Contribution[];
   activitiesSectionHeading?: string;
   activitiesSectionDescription?: string;
   featuredActivities?: ActivitySummary[];

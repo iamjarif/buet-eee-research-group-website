@@ -115,6 +115,20 @@ export const patentSummaryFields = /* groq */ `
   }
 `;
 
+export const contributionSummaryFields = /* groq */ `
+  _id,
+  value,
+  label,
+  description,
+  link {
+    ${linkFields}
+  },
+  icon {
+    ${imageFields}
+  },
+  displayOrder
+`;
+
 export const activitySummaryFields = /* groq */ `
   _id,
   title,
