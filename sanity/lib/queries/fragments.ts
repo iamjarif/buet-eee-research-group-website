@@ -110,6 +110,11 @@ export const publicationSummaryFields = /* groq */ `
     _id,
     title,
     "slug": slug.current
+  },
+  suggestedResearchAreas[]->{
+    _id,
+    title,
+    "slug": slug.current
   }
 `;
 

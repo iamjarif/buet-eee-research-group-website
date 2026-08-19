@@ -127,6 +127,8 @@ export type PublicationSummary = {
   image?: SanityImage;
   authorLine?: string;
   researchAreas?: Array<{ _id: string; title: string; slug: string }>;
+  /** Sync suggestions — used for filtering until editors confirm into researchAreas. */
+  suggestedResearchAreas?: Array<{ _id: string; title: string; slug: string }>;
 };
 
 export type Publication = PublicationSummary & {

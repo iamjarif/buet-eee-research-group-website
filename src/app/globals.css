@@ -466,6 +466,208 @@
   padding-block: clamp(4rem, 8vw, 7.5rem);
 }
 
+/* Hero honeycomb: scale to the hero band height, not the full viewport. */
+.hero-honeycomb {
+  --hero-hex-scale: min(
+    (100vw - 2rem) / 40.25rem,
+    min(85vh, 40rem) / 42.5rem
+  );
+}
+
+@media (min-width: 640px) {
+  .hero-honeycomb {
+    --hero-hex-scale: min(
+      (100vw - 2rem) / 40.25rem,
+      min(88vh, 47.5rem) / 42.5rem
+    );
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-honeycomb {
+    --hero-hex-scale: min(
+      0.97,
+      (100vw - 2rem) / 40.25rem,
+      min(90vh, 53.75rem) / 42.5rem
+    );
+  }
+}
+
+.hero-honeycomb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to bottom,
+      var(--color-surface-base) 0%,
+      transparent 14%,
+      transparent 86%,
+      var(--color-surface-base) 100%
+    ),
+    linear-gradient(
+      to right,
+      var(--color-surface-base) 0%,
+      transparent 10%,
+      transparent 90%,
+      var(--color-surface-base) 100%
+    );
+}
+
+@keyframes hero-hex-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hero-hex-enter {
+  animation: hero-hex-enter 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--hex-enter-delay, 0s);
+}
+
+.hero-hex-node {
+  z-index: 2;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.hero-hex-node:hover,
+.hero-hex-node:focus-visible {
+  z-index: 4;
+  outline: none;
+}
+
+.hero-hex-node-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: auto;
+  clip-path: polygon(50% 3%, 97% 26.5%, 97% 73.5%, 50% 97%, 3% 73.5%, 3% 26.5%);
+}
+
+.hero-hex-node-visual {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  transform-origin: center;
+  transition:
+    transform 0.45s cubic-bezier(0.33, 1, 0.68, 1),
+    filter 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.hero-hex-node:hover .hero-hex-node-visual,
+.hero-hex-node:focus-visible .hero-hex-node-visual {
+  transform: scale(1.04);
+}
+
+.hero-hex-node-label {
+  transition: color 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.hero-hex-node:hover .hero-hex-node-label,
+.hero-hex-node:focus-visible .hero-hex-node-label {
+  color: var(--color-brand-primary);
+}
+
+@keyframes hero-hex-center-float {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translateY(-5px);
+  }
+}
+
+.hero-hex-center-mark {
+  transform: translate(-50%, -50%);
+  animation: hero-hex-center-float 6.5s ease-in-out infinite;
+  animation-delay: 1.1s;
+}
+
+.hero-hex-bg {
+  z-index: 0;
+}
+
+.hero-hex-bg-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: auto;
+  clip-path: polygon(50% 3%, 97% 26.5%, 97% 73.5%, 50% 97%, 3% 73.5%, 3% 26.5%);
+}
+
+.hero-hex-bg-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  clip-path: polygon(50% 3%, 97% 26.5%, 97% 73.5%, 50% 97%, 3% 73.5%, 3% 26.5%);
+  background: rgb(70 132 243 / 0.04);
+  box-shadow: inset 0 0 28px rgb(70 132 243 / 0.08);
+  opacity: 0;
+  transition: opacity 0.85s ease-out;
+}
+
+.hero-hex-bg:hover .hero-hex-bg-glow {
+  opacity: 1;
+  transition: opacity 0s;
+}
+
+@keyframes hero-hex-opacity-pulse {
+  0%,
+  100% {
+    opacity: var(--hex-opacity-min);
+  }
+
+  50% {
+    opacity: var(--hex-opacity-max);
+  }
+}
+
+.hero-hex-skeleton-cell {
+  clip-path: polygon(50% 3%, 97% 26.5%, 97% 73.5%, 50% 97%, 3% 73.5%, 3% 26.5%);
+  background: var(--color-surface-subtle);
+}
+
+.hero-hex-skeleton-cell-node {
+  background: #e3e8eb;
+}
+
+.hero-hex-skeleton-cell-center {
+  background: #d4e3ff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-hex-enter,
+  .hero-hex-bg-visual,
+  .hero-hex-center-mark {
+    animation: none;
+  }
+
+  .hero-hex-bg-visual {
+    opacity: var(--hex-opacity-max);
+  }
+
+  .hero-hex-center-mark {
+    transform: translate(-50%, -50%);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

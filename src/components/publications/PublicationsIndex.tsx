@@ -1,21 +1,29 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 
 import { PublicationListEntry } from "@/components/publications/PublicationListEntry";
+import { ResearchAreaFilterControl } from "@/components/publications/ResearchAreaFilterControl";
 import { Reveal } from "@/components/motion/Reveal";
 import { Stagger, StaggerItem } from "@/components/motion/Stagger";
 import { Container } from "@/components/ui/Container";
 import {
   filterPublications,
+  getPublicationsPath,
   groupPublicationsByYear,
+  parseResearchAreaFilter,
+  shouldShowResearchAreaFilters,
   type PublicationTypeFilter,
+  type ResearchAreaFilter,
 } from "@/lib/publications";
 import { cn } from "@/lib/utils";
-import type { PublicationSummary } from "../../../sanity/types";
+import type { PublicationSummary, ResearchAreaEntry } from "../../../sanity/types";
 
 type PublicationsIndexProps = {
   publications: PublicationSummary[];
+  researchAreas: ResearchAreaEntry[];
+  initialResearchArea?: string;
 };
 
 const TYPE_FILTERS: Array<{ value: PublicationTypeFilter; label: string }> = [
@@ -24,17 +32,40 @@ const TYPE_FILTERS: Array<{ value: PublicationTypeFilter; label: string }> = [
   { value: "conference", label: "Conference" },
 ];
 
-export function PublicationsIndex({ publications }: PublicationsIndexProps) {
+export function PublicationsIndex({
+  publications,
+  researchAreas,
+  initialResearchArea,
+}: PublicationsIndexProps) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<PublicationTypeFilter>("all");
+  const [researchAreaFilter, setResearchAreaFilter] = useState<ResearchAreaFilter>(
+    () => parseResearchAreaFilter(initialResearchArea, researchAreas),
+  );
+
+  const showResearchAreaFilters = useMemo(
+    () => shouldShowResearchAreaFilters(researchAreas),
+    [researchAreas],
+  );
+  const activeResearchArea = parseResearchAreaFilter(
+    researchAreaFilter,
+    researchAreas,
+  );
+
+  function handleResearchAreaChange(next: ResearchAreaFilter) {
+    setResearchAreaFilter(next);
+    router.replace(getPublicationsPath(next), { scroll: false });
+  }
 
   const visiblePublications = useMemo(
     () =>
       filterPublications(publications, {
         query,
         type: typeFilter,
+        researchArea: activeResearchArea,
       }),
-    [publications, query, typeFilter],
+    [publications, query, typeFilter, activeResearchArea],
   );
 
   const yearGroups = useMemo(
@@ -61,30 +92,48 @@ export function PublicationsIndex({ publications }: PublicationsIndexProps) {
                 />
               </label>
 
-              <div
-                className="flex flex-wrap items-center gap-2"
-                role="group"
-                aria-label="Filter by publication type"
-              >
-                {TYPE_FILTERS.map((filter) => {
-                  const isActive = typeFilter === filter.value;
+              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2">
+                <div
+                  className="flex flex-wrap items-center gap-1 sm:gap-2"
+                  role="group"
+                  aria-label="Filter by publication type"
+                >
+                  {TYPE_FILTERS.map((filter) => {
+                    const isActive = typeFilter === filter.value;
 
-                  return (
-                    <button
-                      key={filter.value}
-                      type="button"
-                      onClick={() => setTypeFilter(filter.value)}
-                      className={cn(
-                        "type-overline px-3.5 py-1.5 transition-colors duration-300",
-                        isActive
-                          ? "bg-text-primary text-text-inverse"
-                          : "text-text-secondary hover:text-text-primary",
-                      )}
-                    >
-                      {filter.label}
-                    </button>
-                  );
-                })}
+                    return (
+                      <button
+                        key={filter.value}
+                        type="button"
+                        aria-pressed={isActive}
+                        onClick={() => setTypeFilter(filter.value)}
+                        className={cn(
+                          "type-overline px-3 py-1.5 transition-colors duration-300 sm:px-3.5",
+                          isActive
+                            ? "bg-text-primary text-text-inverse"
+                            : "text-text-secondary hover:text-text-primary",
+                        )}
+                      >
+                        {filter.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {showResearchAreaFilters ? (
+                  <>
+                    <span
+                      aria-hidden
+                      className="hidden h-5 w-px shrink-0 bg-border-strong sm:block"
+                    />
+                    <ResearchAreaFilterControl
+                      researchAreas={researchAreas}
+                      value={activeResearchArea}
+                      onChange={handleResearchAreaChange}
+                      className="w-full sm:w-auto"
+                    />
+                  </>
+                ) : null}
               </div>
             </div>
           </Container>
@@ -99,7 +148,7 @@ export function PublicationsIndex({ publications }: PublicationsIndexProps) {
           {yearGroups.length > 0 ? (
             yearGroups.map(({ year, publications: groupedPublications }) => (
               <Stagger
-                key={`${year}-${typeFilter}-${query}`}
+                key={`${year}-${typeFilter}-${activeResearchArea}-${query}`}
                 immediate
                 className="flex flex-col gap-6"
                 stagger={0.06}

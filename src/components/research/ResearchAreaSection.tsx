@@ -63,6 +63,7 @@ export function ResearchAreaSection({
           <ResearchAreaPublications
             publications={area.selectedPublications ?? []}
             totalCount={area.publicationCount ?? 0}
+            researchAreaSlug={area.slug}
           />
         </div>
       </div>

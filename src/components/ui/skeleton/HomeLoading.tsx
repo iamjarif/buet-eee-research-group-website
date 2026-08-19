@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 
+import { HeroHoneycombSkeleton } from "@/components/home/HeroHoneycomb";
 import { Container } from "@/components/ui/Container";
 import { LoadingRoot, SkeletonBlock } from "@/components/ui/skeleton/primitives";
 
@@ -19,28 +20,11 @@ function HomeSectionSkeleton({
 
 export function HomeLoading() {
   return (
-    <LoadingRoot className="bg-gradient-to-b from-surface-gradient-start from-0% to-surface-base to-[13.613%]">
-      <section className="relative overflow-hidden bg-transparent">
-        <Container
-          as="div"
-          className="flex min-h-[min(640px,85vh)] flex-col justify-center py-16 sm:min-h-[min(760px,88vh)] sm:py-20 lg:min-h-[min(860px,90vh)] lg:py-[120px]"
-        >
-          <div className="flex max-w-full flex-col gap-8">
-            <SkeletonBlock className="h-3 w-[5rem]" />
-            <div className="space-y-3">
-              <SkeletonBlock className="h-[4.5rem] max-w-[36rem] w-full" />
-              <SkeletonBlock className="h-[4.5rem] max-w-[28rem] w-full" />
-            </div>
-            <div className="max-w-[32rem] space-y-2">
-              <SkeletonBlock className="h-4 w-full" />
-              <SkeletonBlock className="h-4 w-full" />
-            </div>
-            <div className="flex gap-3 pt-2">
-              <SkeletonBlock className="h-10 w-[8.5rem]" />
-              <SkeletonBlock className="h-10 w-[9rem]" />
-            </div>
-          </div>
-        </Container>
+    <LoadingRoot className="bg-surface-base">
+      <section className="relative overflow-hidden bg-surface-base">
+        <div className="relative min-h-[min(640px,85vh)] sm:min-h-[min(760px,88vh)] lg:min-h-[min(860px,90vh)]">
+          <HeroHoneycombSkeleton />
+        </div>
       </section>
 
       <HomeSectionSkeleton className="border-y border-border-default bg-surface-base py-10">

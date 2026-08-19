@@ -10,6 +10,7 @@ import {
 import { Stagger, StaggerItem } from "@/components/motion/Stagger";
 import { formatSectionIndex } from "@/lib/format";
 import { portableTextToPlainText } from "@/lib/portable-text";
+import { getPublicationsPath } from "@/lib/publications";
 import type { ResearchAreaSummary } from "../../../sanity/types";
 
 type ResearchRowProps = {
@@ -20,6 +21,7 @@ type ResearchRowProps = {
 
 function ResearchRow({ area, index, isLast = false }: ResearchRowProps) {
   const description = portableTextToPlainText(area.description);
+  const publicationsHref = getPublicationsPath(area.slug);
 
   return (
     <ResearchRowMotion isLast={isLast}>
@@ -28,7 +30,7 @@ function ResearchRow({ area, index, isLast = false }: ResearchRowProps) {
         <div className="min-w-0 max-w-[700px] space-y-2">
           <h3 className="text-heading-lg text-text-primary">
             <Link
-              href="/publications"
+              href={publicationsHref}
               className="group/link inline-flex transition-[color,opacity] duration-300 ease-[cubic-bezier(0.33,1,0.68,1)] hover:opacity-80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
             >
               <ResearchTitleMotion>{area.title}</ResearchTitleMotion>
@@ -42,7 +44,7 @@ function ResearchRow({ area, index, isLast = false }: ResearchRowProps) {
         </div>
       </div>
 
-      <TextLink href="/publications" arrow className="shrink-0 self-start lg:self-auto">
+      <TextLink href={publicationsHref} arrow className="shrink-0 self-start lg:self-auto">
         Explore
       </TextLink>
     </ResearchRowMotion>

@@ -1,12 +1,13 @@
 import { TextLink } from "@/components/ui/TextLink";
 import { hoverEaseClass } from "@/lib/motion/transitions";
-import { getPublicationExternalUrl } from "@/lib/publications";
+import { getPublicationExternalUrl, getPublicationsPath } from "@/lib/publications";
 import { cn } from "@/lib/utils";
 import type { PublicationSummary } from "../../../sanity/types";
 
 type ResearchAreaPublicationsProps = {
   publications: PublicationSummary[];
   totalCount: number;
+  researchAreaSlug: string;
 };
 
 const linkClassName = cn(
@@ -19,6 +20,7 @@ const linkClassName = cn(
 export function ResearchAreaPublications({
   publications,
   totalCount,
+  researchAreaSlug,
 }: ResearchAreaPublicationsProps) {
   if (publications.length === 0) return null;
 
@@ -56,7 +58,7 @@ export function ResearchAreaPublications({
       </div>
 
       {totalCount > publications.length ? (
-        <TextLink href="/publications" className="mt-5">
+        <TextLink href={getPublicationsPath(researchAreaSlug)} className="mt-5">
           All publications
         </TextLink>
       ) : null}
