@@ -32,21 +32,19 @@ export function CvOpenInput(_props: StringInputProps) {
 
     const token =
       client.config().token?.trim() || getStudioSessionToken(projectId) || null;
-
-    if (!token) {
-      setError("Studio session expired. Refresh the page and try again.");
-      return;
-    }
+    const studioUserId = currentUser.id;
 
     setDownloading(true);
     setError(null);
 
     try {
+      const headers: Record<string, string> = token
+        ? { Authorization: `Bearer ${token}` }
+        : { "X-Sanity-User-Id": studioUserId };
+
       const linkResponse = await fetch(
         `/api/applications/${encodeURIComponent(applicationId)}/cv-link`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
+        { headers },
       );
 
       const body = (await linkResponse.json()) as { url?: string; error?: string };

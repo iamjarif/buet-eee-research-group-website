@@ -3,6 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { apiVersion, projectId } from "../../../../../../sanity/env";
 import { toApplicationDocumentIds } from "@/lib/applications";
 import { buildCvDownloadUrl } from "@/lib/cv-access";
+import { isSanityProjectMemberById } from "@/lib/sanity-membership";
 
 const STUDIO_LINK_TTL_MS = 60 * 60 * 1000; // 1 hour
 
@@ -35,8 +36,13 @@ export async function GET(request: NextRequest, context: RouteContext) {
   }
 
   const token = request.headers.get("authorization")?.match(/^Bearer\s+(.+)$/i)?.[1]?.trim();
+  const studioUserId = request.headers.get("x-sanity-user-id")?.trim();
 
-  if (!token || !(await isSanityProjectMember(token))) {
+  const authorized =
+    (token ? await isSanityProjectMember(token) : false) ||
+    (studioUserId ? await isSanityProjectMemberById(studioUserId) : false);
+
+  if (!authorized) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
 
