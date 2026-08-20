@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { LaunchIcon } from "@sanity/icons/Launch";
 import { Box, Button, Flex, Text } from "@sanity/ui";
-import { useClient, useFormValue, type StringInputProps } from "sanity";
+import { useClient, useCurrentUser, useFormValue, type StringInputProps } from "sanity";
+
+import { projectId } from "../env";
+import { getStudioSessionToken } from "../lib/studio-auth";
 
 export function CvOpenInput(_props: StringInputProps) {
   const documentId = useFormValue(["_id"]) as string | undefined;
   const cvFilename = useFormValue(["cvFilename"]) as string | undefined;
   const client = useClient({ apiVersion: "2026-08-13" });
+  const currentUser = useCurrentUser();
   const [error, setError] = useState<string | null>(null);
   const [downloading, setDownloading] = useState(false);
 
@@ -16,9 +20,21 @@ export function CvOpenInput(_props: StringInputProps) {
   const applicationId = documentId?.replace(/^drafts\./, "") ?? "";
 
   async function handleDownload() {
-    const token = client.config().token;
-    if (!token || !applicationId) {
+    if (!currentUser) {
       setError("Sign in to Sanity to download this CV.");
+      return;
+    }
+
+    if (!applicationId) {
+      setError("Unable to identify this application.");
+      return;
+    }
+
+    const token =
+      client.config().token?.trim() || getStudioSessionToken(projectId) || null;
+
+    if (!token) {
+      setError("Studio session expired. Refresh the page and try again.");
       return;
     }
 
