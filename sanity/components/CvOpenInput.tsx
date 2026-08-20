@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { LaunchIcon } from "@sanity/icons/Launch";
 import { Box, Button, Flex, Text } from "@sanity/ui";
-import { useClient, useCurrentUser, useFormValue, type StringInputProps } from "sanity";
+import { useClient, useFormValue, type StringInputProps } from "sanity";
 
 import { projectId } from "../env";
 import { getStudioSessionToken } from "../lib/studio-auth";
@@ -12,7 +12,6 @@ export function CvOpenInput(_props: StringInputProps) {
   const documentId = useFormValue(["_id"]) as string | undefined;
   const cvFilename = useFormValue(["cvFilename"]) as string | undefined;
   const client = useClient({ apiVersion: "2026-08-13" });
-  const currentUser = useCurrentUser();
   const [error, setError] = useState<string | null>(null);
   const [downloading, setDownloading] = useState(false);
 
@@ -20,7 +19,10 @@ export function CvOpenInput(_props: StringInputProps) {
   const applicationId = documentId?.replace(/^drafts\./, "") ?? "";
 
   async function handleDownload() {
-    if (!currentUser) {
+    const token =
+      client.config().token?.trim() || getStudioSessionToken(projectId) || null;
+
+    if (!token) {
       setError("Sign in to Sanity to download this CV.");
       return;
     }
@@ -30,33 +32,22 @@ export function CvOpenInput(_props: StringInputProps) {
       return;
     }
 
-    const token =
-      client.config().token?.trim() || getStudioSessionToken(projectId) || null;
-    const studioUserId = currentUser.id;
-
     setDownloading(true);
     setError(null);
 
     try {
-      const headers: Record<string, string> = token
-        ? { Authorization: `Bearer ${token}` }
-        : { "X-Sanity-User-Id": studioUserId };
-
-      const linkResponse = await fetch(
-        `/api/applications/${encodeURIComponent(applicationId)}/cv-link`,
-        { headers },
+      const fileResponse = await fetch(
+        `/api/applications/${encodeURIComponent(applicationId)}/cv`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
       );
 
-      const body = (await linkResponse.json()) as { url?: string; error?: string };
-
-      if (!linkResponse.ok || !body.url) {
-        setError(body.error ?? "Unable to download CV.");
-        return;
-      }
-
-      const fileResponse = await fetch(body.url);
       if (!fileResponse.ok) {
-        setError("Unable to download CV.");
+        const fileBody = (await fileResponse.json().catch(() => null)) as
+          | { error?: string }
+          | null;
+        setError(fileBody?.error ?? `Unable to download CV (${fileResponse.status}).`);
         return;
       }
 

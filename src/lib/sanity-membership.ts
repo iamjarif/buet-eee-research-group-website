@@ -1,42 +1,57 @@
 import "server-only";
 
-import { apiVersion, projectId, readToken, writeToken } from "../../sanity/env";
+import { apiVersion, projectId } from "../../sanity/env";
 
-const MEMBERSHIP_TIMEOUT_MS = 5000;
-
-function getProjectsApiToken(): string | null {
-  return readToken ?? writeToken ?? null;
-}
+const MANAGEMENT_API_VERSION = "2021-06-07";
 
 /**
- * Verify a Sanity user id belongs to the configured project.
- * Uses the global Projects API with a server-only token.
+ * Confirms the bearer token belongs to a member of this Sanity project.
+ * Requires both /users/me and a project membership match — a valid
+ * users/me response alone is not enough.
  */
-export async function isSanityProjectMemberById(userId: string): Promise<boolean> {
-  const token = getProjectsApiToken();
-
-  if (!token || !userId || projectId === "placeholder") {
+export async function isSanityProjectMember(token: string): Promise<boolean> {
+  if (!token || projectId === "placeholder") {
     return false;
   }
 
-  try {
-    const response = await fetch(
-      `https://api.sanity.io/v${apiVersion}/projects/${encodeURIComponent(projectId)}/users/${encodeURIComponent(userId)}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        cache: "no-store",
-        signal: AbortSignal.timeout(MEMBERSHIP_TIMEOUT_MS),
-      },
-    );
+  const headers = { Authorization: `Bearer ${token}` };
 
-    if (!response.ok) {
+  try {
+    const [meResponse, projectResponse] = await Promise.all([
+      fetch(`https://${projectId}.api.sanity.io/v${apiVersion}/users/me`, {
+        headers,
+        cache: "no-store",
+      }),
+      fetch(`https://api.sanity.io/v${MANAGEMENT_API_VERSION}/projects/${projectId}`, {
+        headers,
+        cache: "no-store",
+      }),
+    ]);
+
+    if (!meResponse.ok || !projectResponse.ok) {
       return false;
     }
 
-    const body = (await response.json()) as { id?: unknown };
-    return typeof body.id === "string" && body.id === userId;
-  } catch (error) {
-    console.error("Sanity project membership lookup failed:", error);
+    const me = (await meResponse.json()) as { id?: unknown };
+    const project = (await projectResponse.json()) as { members?: unknown };
+
+    if (typeof me.id !== "string" || me.id.length === 0) {
+      return false;
+    }
+
+    if (!Array.isArray(project.members)) {
+      return false;
+    }
+
+    return project.members.some((member) => {
+      if (typeof member !== "object" || member === null) {
+        return false;
+      }
+
+      const record = member as { id?: unknown; userId?: unknown };
+      return record.id === me.id || record.userId === me.id;
+    });
+  } catch {
     return false;
   }
 }

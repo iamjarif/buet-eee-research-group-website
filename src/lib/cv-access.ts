@@ -1,6 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-const DEFAULT_STUDIO_LINK_TTL_MS = 90 * 24 * 60 * 60 * 1000; // 90 days
 const DEFAULT_EMAIL_LINK_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 export function getCvSigningSecret(): string {
@@ -59,19 +58,21 @@ export function verifyCvAccess(
   return left.length === right.length && timingSafeEqual(left, right);
 }
 
-export function buildCvDownloadUrl(
+export function buildCvDownloadPath(
   applicationId: string,
   expiresInMs = DEFAULT_EMAIL_LINK_TTL_MS,
 ): string {
   const expiresAtMs = Date.now() + expiresInMs;
   const token = signCvAccess(applicationId, expiresAtMs);
-  const baseUrl = getSiteBaseUrl();
 
-  return `${baseUrl}/api/applications/${encodeURIComponent(applicationId)}/cv?expires=${expiresAtMs}&token=${token}`;
+  return `/api/applications/${encodeURIComponent(applicationId)}/cv?expires=${expiresAtMs}&token=${token}`;
 }
 
-export function buildStudioCvDownloadUrl(applicationId: string): string {
-  return buildCvDownloadUrl(applicationId, DEFAULT_STUDIO_LINK_TTL_MS);
+export function buildCvDownloadUrl(
+  applicationId: string,
+  expiresInMs = DEFAULT_EMAIL_LINK_TTL_MS,
+): string {
+  return `${getSiteBaseUrl()}${buildCvDownloadPath(applicationId, expiresInMs)}`;
 }
 
 export function isAuthorizedCvRequest(
