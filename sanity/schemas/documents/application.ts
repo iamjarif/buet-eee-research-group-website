@@ -30,8 +30,7 @@ export const application = defineType({
       name: "cvFilename",
       title: "CV",
       type: "string",
-      description:
-        "Stored filename only. Download links are minted in email, not saved on this document.",
+      description: "Private resume file. Use Download to fetch it; the link is not stored on this document.",
       readOnly: true,
       components: {
         input: CvOpenInput,
@@ -46,6 +45,14 @@ export const application = defineType({
       readOnly: true,
       hidden: true,
       validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: "cvDownloadUrl",
+      title: "CV download URL (deprecated)",
+      type: "url",
+      description: "No longer stored. Hidden leftover from older submissions.",
+      readOnly: true,
+      hidden: true,
     }),
     defineField({
       name: "submittedAt",
