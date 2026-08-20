@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-import { getWriteClient } from "../../../../../sanity/lib/client";
+import { getWriteClient } from "../../../../../sanity/lib/write-client";
 import { writeToken } from "../../../../../sanity/env";
 import { revalidateCmsContent } from "@/lib/revalidate-cms";
 import { cleanOpenAlexText, normalizeTitle } from "@/lib/openalex-text";

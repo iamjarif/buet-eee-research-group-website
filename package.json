@@ -31,6 +31,8 @@
     "@sanity/client": "^7.26.2",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^6.9.2",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.2",
     "@vercel/analytics": "^2.0.1",
     "@vercel/blob": "^2.8.0",
     "@vercel/speed-insights": "^2.0.0",

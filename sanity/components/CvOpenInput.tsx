@@ -1,41 +1,29 @@
 "use client";
 
-import { LaunchIcon } from "@sanity/icons/Launch";
-import { Box, Button, Flex, Text } from "@sanity/ui";
-import { useFormValue, type StringInputProps } from "sanity";
+import { Box, Text } from "@sanity/ui";
+import type { StringInputProps } from "sanity";
 
 export function CvOpenInput(props: StringInputProps) {
-  const cvDownloadUrl = typeof props.value === "string" ? props.value.trim() : "";
-  const cvFilename = useFormValue(["cvFilename"]) as string | undefined;
+  const cvFilename = typeof props.value === "string" ? props.value.trim() : "";
 
-  if (!cvDownloadUrl) {
+  if (!cvFilename) {
     return (
       <Box padding={3}>
-        <Text muted>
-          No CV attached.
-        </Text>
+        <Text muted>No CV attached.</Text>
       </Box>
     );
   }
 
   return (
-    <Box>
-      {cvFilename ? (
-        <Box marginBottom={3}>
-          <Text muted>{cvFilename}</Text>
-        </Box>
-      ) : null}
-      <Flex>
-        <Button
-          as="a"
-          href={cvDownloadUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          icon={LaunchIcon}
-          text="Open CV"
-          tone="primary"
-        />
-      </Flex>
+    <Box padding={3}>
+      <Text>{cvFilename}</Text>
+      <Box marginTop={3}>
+        <Text muted size={1}>
+          The file is stored privately. Use the signed download link from the
+          application notification email — this document does not store a
+          download URL.
+        </Text>
+      </Box>
     </Box>
   );
 }

@@ -21,4 +21,13 @@ export default defineConfig({
   schema: {
     types: schemaTypes,
   },
+  document: {
+    actions: (prev, { schemaType }) => {
+      if (schemaType === "application") {
+        return prev.filter((item) => item.action !== "publish");
+      }
+
+      return prev;
+    },
+  },
 });

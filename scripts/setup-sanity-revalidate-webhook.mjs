@@ -49,7 +49,7 @@ if (!siteUrl || siteUrl.includes("localhost")) {
   );
 }
 
-const webhookUrl = `${siteUrl}/api/revalidate?secret=${encodeURIComponent(revalidateSecret)}`;
+const webhookUrl = `${siteUrl}/api/revalidate`;
 
 const webhookBody = {
   type: "document",
@@ -58,6 +58,9 @@ const webhookBody = {
   dataset,
   apiVersion: "v2021-10-04",
   httpMethod: "POST",
+  headers: {
+    "x-revalidate-secret": revalidateSecret,
+  },
   rule: {
     on: ["create", "update", "delete"],
     filter: `_type in ["siteSettings","homepage","researchArea","publication","patent","person","activity"]`,
@@ -106,7 +109,8 @@ function printManualSetup() {
   console.error("Manual setup in sanity.io/manage → API → Webhooks → Create webhook:");
   console.error("");
   console.error(`  Name:        ${WEBHOOK_NAME}`);
-  console.error(`  URL:         ${webhookUrl.replace(revalidateSecret, "<SANITY_REVALIDATE_SECRET>")}`);
+  console.error(`  URL:         ${webhookUrl}`);
+  console.error(`  Header:      x-revalidate-secret: <SANITY_REVALIDATE_SECRET>`);
   console.error(`  Dataset:     ${dataset}`);
   console.error("  Trigger on:  Create, Update, Delete");
   console.error(`  Filter:      ${webhookBody.rule.filter}`);
@@ -120,7 +124,8 @@ async function main() {
   console.log("Sanity instant revalidation webhook setup");
   console.log(`Project:  ${projectId}`);
   console.log(`Dataset:  ${dataset}`);
-  console.log(`Target:   ${webhookUrl.replace(revalidateSecret, "***")}`);
+  console.log(`Target:   ${webhookUrl}`);
+  console.log(`Header:   x-revalidate-secret: ***`);
   console.log("");
 
   const existing = await sanityRequest("");
@@ -157,8 +162,9 @@ async function main() {
   console.log("");
   console.log("Next steps:");
   console.log("1. Ensure SANITY_REVALIDATE_SECRET is set on Vercel (Production).");
-  console.log("2. Publish a test change in Sanity Studio.");
-  console.log("3. Check webhook deliveries in sanity.io/manage → API → Webhooks.");
+  console.log("2. Webhook must send header x-revalidate-secret (not ?secret= in the URL).");
+  console.log("3. Publish a test change in Sanity Studio.");
+  console.log("4. Check webhook deliveries in sanity.io/manage → API → Webhooks.");
 }
 
 main().catch((error) => {

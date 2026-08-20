@@ -9,6 +9,7 @@ import {
   validateContactForm,
   validateCvFile,
 } from "@/lib/contact";
+import { enforceContactRateLimit } from "@/lib/rate-limit";
 
 async function sendContactEmail(
   content: Parameters<typeof buildContactNotificationEmail>[0],
@@ -53,6 +54,11 @@ function isEmailConfigured(toEmail?: string | null): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  const rateLimited = await enforceContactRateLimit(request);
+  if (rateLimited) {
+    return rateLimited;
+  }
+
   let submission: Awaited<ReturnType<typeof parseContactSubmission>>;
 
   try {
@@ -69,7 +75,7 @@ export async function POST(request: NextRequest) {
   }
 
   if (cvFile) {
-    const cvValidationError = validateCvFile(cvFile);
+    const cvValidationError = await validateCvFile(cvFile);
     if (cvValidationError) {
       return NextResponse.json({ error: cvValidationError }, { status: 400 });
     }
@@ -133,7 +139,9 @@ export async function POST(request: NextRequest) {
         ? "CV uploads are not configured yet. Please email your resume directly."
         : error instanceof Error && error.message.includes("Missing SANITY_API_WRITE_TOKEN")
           ? "Applications are not configured yet. Please email your resume directly."
-          : "Unable to send your message. Please try again later.";
+          : error instanceof Error && error.message.includes("APPLICATIONS_CV_SIGNING_SECRET")
+            ? "Applications are not configured yet. Please email your resume directly."
+            : "Unable to send your message. Please try again later.";
 
     return NextResponse.json({ error: messageText }, { status: 500 });
   }

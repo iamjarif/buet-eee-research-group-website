@@ -1,22 +1,16 @@
 import { createClient, type QueryParams } from "next-sanity";
 
-import {
-  apiVersion,
-  dataset,
-  projectId,
-  readToken,
-  writeToken,
-} from "../env";
+import { apiVersion, dataset, projectId, readToken } from "../env";
 
 const DEFAULT_REVALIDATE = 3600; // 1 hour
 const isDevelopment = process.env.NODE_ENV === "development";
 
-/** Public Sanity client — published perspective; bypass CDN (Next.js data cache handles TTL). */
+/** Public Sanity client — published CMS content only. No token. Never query applications. */
 export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: false,
+  useCdn: true,
   perspective: "published",
   stega: {
     enabled: false,
@@ -71,28 +65,6 @@ export async function sanityFetch<T>({
       revalidate: useNoStore ? 0 : revalidate,
       tags,
     },
-  });
-}
-
-/**
- * Write client for server-only mutations. Matches scripts/seed-homepage-content.mjs
- * (projectId, dataset, apiVersion, SANITY_API_WRITE_TOKEN, useCdn: false).
- * `raw` perspective includes drafts so sync can detect already-imported documents.
- */
-export function getWriteClient() {
-  if (!writeToken) {
-    throw new Error(
-      "Missing SANITY_API_WRITE_TOKEN. Create an Editor token at sanity.io/manage and add it to .env.local (never NEXT_PUBLIC_*).",
-    );
-  }
-
-  return createClient({
-    projectId,
-    dataset,
-    apiVersion,
-    useCdn: false,
-    token: writeToken,
-    perspective: "raw",
   });
 }
 

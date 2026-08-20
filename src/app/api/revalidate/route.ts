@@ -1,12 +1,39 @@
+import { timingSafeEqual } from "node:crypto";
 import { type NextRequest, NextResponse } from "next/server";
 
 import { revalidateSecret } from "../../../../sanity/env";
 import { revalidateCmsContent } from "@/lib/revalidate-cms";
 
-export async function POST(request: NextRequest) {
-  const secret = request.nextUrl.searchParams.get("secret");
+function getRevalidateSecretFromRequest(request: NextRequest): string | null {
+  const headerSecret = request.headers.get("x-revalidate-secret")?.trim();
+  if (headerSecret) {
+    return headerSecret;
+  }
 
-  if (!revalidateSecret || secret !== revalidateSecret) {
+  const authorization = request.headers.get("authorization");
+  if (authorization?.toLowerCase().startsWith("bearer ")) {
+    return authorization.slice("Bearer ".length).trim();
+  }
+
+  return null;
+}
+
+function isAuthorizedRevalidateRequest(request: NextRequest): boolean {
+  const provided = getRevalidateSecretFromRequest(request);
+  const expected = revalidateSecret;
+
+  if (!expected || !provided) {
+    return false;
+  }
+
+  const left = Buffer.from(expected, "utf8");
+  const right = Buffer.from(provided, "utf8");
+
+  return left.length === right.length && timingSafeEqual(left, right);
+}
+
+export async function POST(request: NextRequest) {
+  if (!isAuthorizedRevalidateRequest(request)) {
     return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
   }
 

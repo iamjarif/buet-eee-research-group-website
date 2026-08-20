@@ -14,11 +14,11 @@ export async function GET(request: NextRequest, context: RouteContext) {
     return NextResponse.json({ error: "Invalid application id." }, { status: 400 });
   }
 
-  if (!isAuthorizedCvRequest(id, request)) {
-    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
-  }
-
   try {
+    if (!isAuthorizedCvRequest(id, request)) {
+      return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    }
+
     const application = await getApplicationCv(id);
 
     if (!application?.cvPathname) {
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
     return new NextResponse(result.stream, {
       headers: {
         "Content-Type": result.blob.contentType ?? "application/octet-stream",
-        "Content-Disposition": `inline; filename="${filename}"; filename*=UTF-8''${encodedFilename}`,
+        "Content-Disposition": `attachment; filename="${filename}"; filename*=UTF-8''${encodedFilename}`,
         "Cache-Control": "private, no-store",
         "X-Content-Type-Options": "nosniff",
       },

@@ -28,10 +28,14 @@ export const application = defineType({
     }),
     defineField({
       name: "cvFilename",
-      title: "CV Filename",
+      title: "CV",
       type: "string",
+      description:
+        "Stored filename only. Download links are minted in email, not saved on this document.",
       readOnly: true,
-      hidden: ({ document }) => Boolean(document?.cvDownloadUrl),
+      components: {
+        input: CvOpenInput,
+      },
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -42,18 +46,6 @@ export const application = defineType({
       readOnly: true,
       hidden: true,
       validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: "cvDownloadUrl",
-      title: "CV",
-      type: "url",
-      description: "Opens the applicant's resume in a new browser tab.",
-      readOnly: true,
-      components: {
-        input: CvOpenInput,
-      },
-      validation: (rule) =>
-        rule.uri({ allowRelative: false, scheme: ["http", "https"] }).required(),
     }),
     defineField({
       name: "submittedAt",

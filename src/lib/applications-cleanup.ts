@@ -1,6 +1,6 @@
 import { del } from "@vercel/blob";
 
-import { getWriteClient } from "../../sanity/lib/client";
+import { getWriteClient } from "../../sanity/lib/write-client";
 import { writeToken } from "../../sanity/env";
 import { extractCvPathname } from "@/lib/cv-access";
 

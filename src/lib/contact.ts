@@ -17,11 +17,53 @@ export const CV_MAX_BYTES = 5 * 1024 * 1024;
 
 const CV_EXTENSIONS = new Set([".pdf", ".doc", ".docx"]);
 
-const CV_MIME_TYPES = new Set([
-  "application/pdf",
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-]);
+const CV_EXTENSION_CONTENT_TYPE = {
+  ".pdf": "pdf",
+  ".doc": "doc",
+  ".docx": "docx",
+} as const;
+
+type CvContentType = (typeof CV_EXTENSION_CONTENT_TYPE)[keyof typeof CV_EXTENSION_CONTENT_TYPE];
+
+const PDF_SIGNATURE = new TextEncoder().encode("%PDF");
+const OLE_SIGNATURE = Uint8Array.from([0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1]);
+const ZIP_SIGNATURE = Uint8Array.from([0x50, 0x4b, 0x03, 0x04]);
+const CV_CONTENT_SAMPLE_BYTES = 8192;
+
+function bytesStartWith(haystack: Uint8Array, needle: Uint8Array): boolean {
+  if (haystack.length < needle.length) {
+    return false;
+  }
+
+  for (let index = 0; index < needle.length; index += 1) {
+    if (haystack[index] !== needle[index]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function detectCvContentType(sample: Uint8Array): CvContentType | null {
+  const header = sample.subarray(0, Math.min(8, sample.length));
+
+  if (bytesStartWith(header, PDF_SIGNATURE)) {
+    return "pdf";
+  }
+
+  if (bytesStartWith(header, OLE_SIGNATURE)) {
+    return "doc";
+  }
+
+  if (bytesStartWith(header, ZIP_SIGNATURE)) {
+    const text = new TextDecoder("utf-8", { fatal: false }).decode(sample);
+    if (text.includes("word/") || text.includes("wordprocessingml")) {
+      return "docx";
+    }
+  }
+
+  return null;
+}
 
 export function validateContactForm(payload: ContactFormPayload): string | null {
   if (payload.company?.trim()) {
@@ -56,7 +98,7 @@ export function getCvFileExtension(filename: string): string {
   return match?.[1] ?? "";
 }
 
-export function validateCvFile(file: File): string | null {
+export async function validateCvFile(file: File): Promise<string | null> {
   if (file.size <= 0) {
     return "Please choose a CV file to upload.";
   }
@@ -70,8 +112,17 @@ export function validateCvFile(file: File): string | null {
     return "CV must be a PDF or Word document (.pdf, .doc, .docx).";
   }
 
-  if (file.type && !CV_MIME_TYPES.has(file.type)) {
+  const sampleSize = Math.min(file.size, CV_CONTENT_SAMPLE_BYTES);
+  const sample = new Uint8Array(await file.slice(0, sampleSize).arrayBuffer());
+  const detectedType = detectCvContentType(sample);
+
+  if (!detectedType) {
     return "CV must be a PDF or Word document (.pdf, .doc, .docx).";
+  }
+
+  const expectedType = CV_EXTENSION_CONTENT_TYPE[extension as keyof typeof CV_EXTENSION_CONTENT_TYPE];
+  if (detectedType !== expectedType) {
+    return "CV file content does not match its extension.";
   }
 
   return null;
