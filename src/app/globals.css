@@ -574,12 +574,48 @@
 }
 
 .hero-hex-node-label {
-  transition: color 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+  overflow-wrap: anywhere;
 }
 
-.hero-hex-node:hover .hero-hex-node-label,
-.hero-hex-node:focus-visible .hero-hex-node-label {
-  color: var(--color-brand-primary);
+@media (min-width: 1024px) {
+  .hero-hex-node-label {
+    font-size: 18px;
+    line-height: 24px;
+  }
+}
+
+.hero-hex-node-overlay {
+  transition: background-color 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.hero-hex-node-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-hex-node-shine::after {
+  content: "";
+  position: absolute;
+  top: -35%;
+  left: 0;
+  width: 22%;
+  height: 170%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(255 255 255 / 0.2) 50%,
+    transparent 100%
+  );
+  transform: translateX(-110%) rotate(20deg);
+  transition: transform 0.15s linear;
+}
+
+.hero-hex-node:hover .hero-hex-node-shine::after,
+.hero-hex-node:focus-visible .hero-hex-node-shine::after {
+  transform: translateX(510%) rotate(20deg);
 }
 
 @keyframes hero-hex-center-float {
@@ -657,6 +693,10 @@
   .hero-hex-bg-visual,
   .hero-hex-center-mark {
     animation: none;
+  }
+
+  .hero-hex-node-shine::after {
+    transition: none;
   }
 
   .hero-hex-bg-visual {

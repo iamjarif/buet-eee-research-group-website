@@ -47,6 +47,30 @@ export const homepage = defineType({
         "Up to two buttons. First = secondary style (e.g. Meet the Team). Second = primary style (e.g. Explore Research →).",
       validation: (rule) => rule.max(2).warning("Two hero buttons is recommended."),
     }),
+    defineField({
+      name: "heroHoneycombNodes",
+      title: "Hero Honeycomb Nodes",
+      type: "array",
+      group: "hero",
+      of: [{ type: "heroHoneycombNode" }],
+      description:
+        "Labels and background images for the six research hexagons around the center logo. Leave image empty for a plain hex (e.g. AI Hardware).",
+      validation: (rule) =>
+        rule.max(6).custom((nodes) => {
+          if (!Array.isArray(nodes) || nodes.length === 0) return true;
+          const positions = nodes.map((node) => {
+            const entry = node as { position?: string };
+            return entry.position;
+          });
+          const duplicates = positions.filter(
+            (position, index) => position && positions.indexOf(position) !== index,
+          );
+          if (duplicates.length > 0) {
+            return `Duplicate positions: ${[...new Set(duplicates)].join(", ")}`;
+          }
+          return true;
+        }),
+    }),
 
     // Featured Publications
     defineField({

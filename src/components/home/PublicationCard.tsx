@@ -3,7 +3,8 @@ import {
   PublicationImageMotion,
 } from "@/components/motion/PublicationCardMotion";
 import { SanityImage } from "@/components/ui/SanityImage";
-import { getPublicationExternalUrl } from "@/lib/publications";
+import { getPublicationExternalUrl, getPublicationHighlightTitle } from "@/lib/publications";
+import { cn } from "@/lib/utils";
 import type { PublicationSummary } from "../../../sanity/types";
 
 type PublicationCardProps = {
@@ -12,47 +13,53 @@ type PublicationCardProps = {
 
 export function PublicationCard({ publication }: PublicationCardProps) {
   const externalUrl = getPublicationExternalUrl(publication);
+  const highlightTitle = getPublicationHighlightTitle(publication);
 
-  return (
-    <PublicationCardMotion className="flex w-[min(280px,calc(100vw-2.5rem))] shrink-0 flex-col border border-border-default bg-surface-base sm:w-[min(340px,calc(100vw-4rem))]">
-      {publication.image ? (
-        <PublicationImageMotion className="h-24 w-full">
+  const body = (
+    <>
+      <PublicationImageMotion className="h-40 w-full bg-surface-subtle">
+        {publication.image ? (
           <SanityImage
             image={publication.image}
-            alt={publication.image.alt ?? publication.title}
-            width={340}
-            height={96}
-            className="h-24 w-full object-cover"
-            sizes="340px"
+            alt={publication.image.alt ?? highlightTitle}
+            width={640}
+            height={320}
+            className="h-full w-full object-cover"
+            sizes="320px"
           />
-        </PublicationImageMotion>
-      ) : (
-        <div aria-hidden className="h-24 w-full bg-surface-subtle" />
-      )}
+        ) : null}
+      </PublicationImageMotion>
 
-      <div className="flex flex-col gap-3.5 px-[18px] pb-[17px] pt-[15px]">
-        <h3 className="text-heading-sm text-text-primary">
-          {externalUrl ? (
-            <a
-              href={externalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="transition-colors duration-300 ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary"
-            >
-              {publication.title}
-            </a>
-          ) : (
-            publication.title
-          )}
+      <div className="flex min-h-[8.5rem] flex-1 flex-col justify-between gap-4 px-5 py-4">
+        <h3 className="line-clamp-3 text-[1.125rem] leading-6 font-medium text-pretty text-text-primary [overflow-wrap:break-word]">
+          {highlightTitle}
         </h3>
 
-        <div className="flex items-start justify-between gap-3 text-caption">
-          <p className="min-w-0 text-text-secondary">
-            {publication.journalOrConference}
-          </p>
-          <p className="shrink-0 text-text-tertiary">{publication.year}</p>
-        </div>
+        <p className="text-caption text-text-tertiary">
+          <span className="text-text-secondary">{publication.journalOrConference}</span>
+          {publication.year ? ` · ${publication.year}` : null}
+        </p>
       </div>
+    </>
+  );
+
+  return (
+    <PublicationCardMotion className="flex w-[min(300px,calc(100vw-2.5rem))] shrink-0 flex-col overflow-hidden border border-border-default bg-surface-base sm:w-[320px]">
+      {externalUrl ? (
+        <a
+          href={externalUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={cn(
+            "flex h-full flex-col outline-none",
+            "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
+          )}
+        >
+          {body}
+        </a>
+      ) : (
+        body
+      )}
     </PublicationCardMotion>
   );
 }

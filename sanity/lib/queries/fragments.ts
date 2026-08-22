@@ -71,8 +71,12 @@ export const researchAreaSummaryFields = /* groq */ `
   isPublished
 `;
 
+/** Site-visible publications must have a highlighting title. */
+export const publishedPublicationFilter = /* groq */ `defined(highlightTitle) && highlightTitle != ""`;
+
 export const publicationCardFields = /* groq */ `
   _id,
+  highlightTitle,
   title,
   "slug": slug.current,
   journalOrConference,
@@ -91,6 +95,7 @@ export const publicationCardFields = /* groq */ `
 
 export const publicationSummaryFields = /* groq */ `
   _id,
+  highlightTitle,
   title,
   "slug": slug.current,
   journalOrConference,

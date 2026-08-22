@@ -1,6 +1,6 @@
 import { PortableTextContent } from "@/components/ui/PortableTextContent";
 import { MediaFrame } from "@/components/ui/MediaFrame";
-import { getPublicationExternalUrl } from "@/lib/publications";
+import { getPublicationExternalUrl, getPublicationHighlightTitle } from "@/lib/publications";
 import { hoverEaseClass } from "@/lib/motion/transitions";
 import { cn, formatPublicationAuthors, getDoiUrl } from "@/lib/utils";
 import type { PublicationSummary } from "../../../sanity/types";
@@ -13,7 +13,7 @@ type PublicationListEntryProps = {
 const linkClassName = cn(
   "transition-[color,opacity] duration-300",
   hoverEaseClass,
-  "hover:text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
+  "hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
 );
 
 export function PublicationListEntry({
@@ -21,10 +21,14 @@ export function PublicationListEntry({
   priority = false,
 }: PublicationListEntryProps) {
   const externalUrl = getPublicationExternalUrl(publication);
+  const highlightTitle = getPublicationHighlightTitle(publication);
+  const showPublicationTitle = publication.title.trim() !== highlightTitle;
   const authors = formatPublicationAuthors(publication);
   const hasImage = Boolean(publication.image?.asset);
   const imageUrl = publication.image?.asset?.url;
   const hasDescription = Boolean(publication.description?.length);
+  const doiUrl = getDoiUrl(publication.doi);
+  const doiLabel = publication.doi?.replace(/^https?:\/\/(dx\.)?doi\.org\//i, "");
 
   const figure = hasImage ? (
     imageUrl ? (
@@ -32,9 +36,9 @@ export function PublicationListEntry({
         href={imageUrl}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label={`View image for ${publication.title}`}
+        aria-label={`View image for ${highlightTitle}`}
         className={cn(
-          "block max-w-[26rem] transition-opacity duration-300 lg:col-start-2 lg:max-w-none",
+          "block w-full max-w-[22rem] transition-opacity duration-300",
           hoverEaseClass,
           "hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
         )}
@@ -42,71 +46,97 @@ export function PublicationListEntry({
         <MediaFrame
           image={publication.image}
           width={800}
-          sizes="(max-width: 640px) 92vw, (max-width: 1024px) 26rem, 22rem"
+          sizes="(max-width: 640px) 92vw, 22rem"
           priority={priority}
-          className="w-full"
+          className="w-full border-0"
         />
       </a>
     ) : (
       <MediaFrame
         image={publication.image}
         width={800}
-        sizes="(max-width: 640px) 92vw, (max-width: 1024px) 26rem, 22rem"
+        sizes="(max-width: 640px) 92vw, 22rem"
         priority={priority}
-        className="max-w-[26rem] lg:col-start-2 lg:max-w-none"
+        className="w-full max-w-[22rem] border-0"
       />
     )
   ) : null;
 
   return (
-    <article
-      className={cn(
-        "grid items-start gap-5 border-b border-border-default py-6 sm:gap-8 sm:py-7 lg:gap-x-12 lg:py-10 xl:gap-x-16",
-        hasImage && "lg:grid-cols-[minmax(0,1fr)_22rem]",
-      )}
-    >
-      <div className="flex min-w-0 flex-col gap-3 sm:gap-5">
-        <p className="text-label-xs text-text-tertiary">{publication.categoryLabel}</p>
+    <article className="border-b border-border-default py-8 sm:py-9 lg:py-12">
+      <p className="text-label-xs tracking-[0.04em] text-text-tertiary">
+        {publication.categoryLabel}
+      </p>
 
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0 flex-1 space-y-2">
-            <h3 className="text-heading-md text-text-primary">
-              {externalUrl ? (
-                <a
-                  href={externalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={linkClassName}
-                >
-                  {publication.title}
-                </a>
-              ) : (
-                publication.title
-              )}
-            </h3>
+      <div
+        className={cn(
+          "mt-5 flex flex-col gap-6",
+          hasImage && "lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-x-14",
+        )}
+      >
+        <div className="flex items-start gap-4">
+          <div className="flex min-w-0 flex-1 flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <h3 className="text-heading-lg max-w-[42rem] text-text-primary [overflow-wrap:break-word]">
+                {highlightTitle}
+              </h3>
 
-            {authors ? (
-              <p className="text-body-sm text-text-secondary">{authors}</p>
-            ) : null}
-
-            <p className="text-caption uppercase text-text-tertiary">
-              <time dateTime={String(publication.year)}>{publication.year}</time>
-              {" · "}
-              {publication.journalOrConference}
-              {publication.doi ? (
-                <>
-                  {" · "}
+              {showPublicationTitle ? (
+                externalUrl ? (
                   <a
-                    href={getDoiUrl(publication.doi)}
+                    href={externalUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={linkClassName}
+                    className={cn(
+                      "text-body-lg max-w-[42rem] font-medium text-balance text-brand-primary [overflow-wrap:break-word]",
+                      linkClassName,
+                    )}
                   >
-                    {publication.doi.replace(/^https?:\/\/(dx\.)?doi\.org\//i, "")}
+                    {publication.title}
                   </a>
-                </>
+                ) : (
+                  <p className="text-body-lg max-w-[42rem] font-medium text-balance text-brand-primary [overflow-wrap:break-word]">
+                    {publication.title}
+                  </p>
+                )
               ) : null}
-            </p>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              {authors ? (
+                <p className="text-body-sm max-w-[42rem] text-text-secondary">{authors}</p>
+              ) : null}
+
+              <p className="text-caption tracking-[0.04em] text-text-tertiary uppercase">
+                <time dateTime={String(publication.year)}>{publication.year}</time>
+                {publication.journalOrConference ? (
+                  <>
+                    {" · "}
+                    {publication.journalOrConference}
+                  </>
+                ) : null}
+                {doiUrl && doiLabel ? (
+                  <>
+                    {" · "}
+                    <a
+                      href={doiUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={linkClassName}
+                    >
+                      {doiLabel}
+                    </a>
+                  </>
+                ) : null}
+              </p>
+            </div>
+
+            {hasDescription ? (
+              <PortableTextContent
+                value={publication.description}
+                className="publication-entry-copy max-w-[38rem] space-y-2.5 [&_ol]:mt-0.5 [&_p]:text-body-sm [&_p]:leading-[1.46] [&_ul]:mt-0.5"
+              />
+            ) : null}
           </div>
 
           {externalUrl ? (
@@ -114,26 +144,19 @@ export function PublicationListEntry({
               href={externalUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Open ${publication.title}`}
-              className={cn("shrink-0 text-label-xs text-text-tertiary", linkClassName)}
+              aria-label={`Open ${highlightTitle}`}
+              className={cn(
+                "mt-1 shrink-0 text-label-md leading-none text-text-tertiary",
+                linkClassName,
+              )}
             >
               ↗
             </a>
           ) : null}
         </div>
 
-        {hasDescription ? (
-          <PortableTextContent
-            value={publication.description}
-            className={cn(
-              "space-y-3 [&_p]:text-body-sm",
-              hasImage ? "max-w-[38rem]" : "max-w-none",
-            )}
-          />
-        ) : null}
+        {figure}
       </div>
-
-      {figure}
     </article>
   );
 }

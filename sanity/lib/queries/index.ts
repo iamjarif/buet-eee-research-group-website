@@ -7,6 +7,7 @@ import {
   personSummaryFields,
   publicationCardFields,
   publicationSummaryFields,
+  publishedPublicationFilter,
   researchAreaSummaryFields,
   seoFields,
   socialLinkFields,
@@ -77,9 +78,24 @@ export const homepageQuery = /* groq */ `
       href,
       openInNewTab
     },
+    heroHoneycombNodes[] {
+      position,
+      label,
+      slug,
+      image {
+        asset->{
+          _id,
+          url,
+          metadata { dimensions, lqip }
+        },
+        alt,
+        hotspot,
+        crop
+      }
+    },
     publicationsSectionHeading,
     publicationsSectionDescription,
-    featuredPublications[]->{
+    featuredPublications[defined(@->highlightTitle) && @->highlightTitle != ""]->{
       ${publicationCardFields}
     },
     researchSectionHeading,
@@ -133,8 +149,8 @@ export const homepageQuery = /* groq */ `
 export const allResearchAreasQuery = /* groq */ `
   *[_type == "researchArea" && isPublished == true] | order(displayOrder asc) {
     ${researchAreaSummaryFields},
-    "publicationCount": count(*[_type == "publication" && references(^._id)]),
-    "selectedPublications": *[_type == "publication" && references(^._id)]
+    "publicationCount": count(*[_type == "publication" && ${publishedPublicationFilter} && references(^._id)]),
+    "selectedPublications": *[_type == "publication" && ${publishedPublicationFilter} && references(^._id)]
       | order(year desc, displayOrder asc)[0...3] {
       ${publicationSummaryFields}
     },
@@ -146,7 +162,7 @@ export const researchAreaBySlugQuery = /* groq */ `
   *[_type == "researchArea" && slug.current == $slug && isPublished == true][0] {
     ${researchAreaSummaryFields},
     seo { ${seoFields} },
-    "relatedPublications": *[_type == "publication" && references(^._id)] | order(year desc) {
+    "relatedPublications": *[_type == "publication" && ${publishedPublicationFilter} && references(^._id)] | order(year desc) {
       ${publicationSummaryFields}
     },
     "relatedPeople": *[_type == "person" && references(^._id) && isActive == true] | order(displayOrder asc) {
@@ -156,19 +172,19 @@ export const researchAreaBySlugQuery = /* groq */ `
 `;
 
 export const allPublicationsQuery = /* groq */ `
-  *[_type == "publication"] | order(year desc, displayOrder asc) {
+  *[_type == "publication" && ${publishedPublicationFilter}] | order(year desc, displayOrder asc) {
     ${publicationSummaryFields}
   }
 `;
 
 export const recentPublicationsQuery = /* groq */ `
-  *[_type == "publication"] | order(year desc, displayOrder asc)[0...6] {
+  *[_type == "publication" && ${publishedPublicationFilter}] | order(year desc, displayOrder asc)[0...6] {
     ${publicationCardFields}
   }
 `;
 
 export const publicationBySlugQuery = /* groq */ `
-  *[_type == "publication" && slug.current == $slug][0] {
+  *[_type == "publication" && ${publishedPublicationFilter} && slug.current == $slug][0] {
     ${publicationSummaryFields},
     description,
     seo { ${seoFields} }
@@ -182,7 +198,7 @@ export const allPatentsQuery = /* groq */ `
 `;
 
 export const contributionCountsQuery = /* groq */ `{
-  "publications": count(*[_type == "publication"]),
+  "publications": count(*[_type == "publication" && ${publishedPublicationFilter}]),
   "patents": count(*[_type == "patent"])
 }`;
 
@@ -242,7 +258,7 @@ export const activityBySlugQuery = /* groq */ `
 export const sitemapSlugsQuery = /* groq */ `
   {
     "researchAreas": *[_type == "researchArea" && isPublished == true]{ "slug": slug.current },
-    "publications": *[_type == "publication"]{ "slug": slug.current },
+    "publications": *[_type == "publication" && ${publishedPublicationFilter}]{ "slug": slug.current },
     "patents": *[_type == "patent"]{ "slug": slug.current },
     "people": *[_type == "person" && isActive == true]{ "slug": slug.current },
     "activities": *[_type == "activity" && isPublished == true]{ "slug": slug.current }

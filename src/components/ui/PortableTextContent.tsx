@@ -16,11 +16,26 @@ const linkClassName = cn(
   "hover:opacity-70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
 );
 
+const listClassName =
+  "flex flex-col gap-1.5 pl-5 text-body-sm text-text-secondary marker:text-text-tertiary [&_p]:m-0 [&_p]:text-inherit [&_p]:leading-[1.46]";
+
 const components: PortableTextComponents = {
   block: {
     normal: ({ children }) => (
       <p className="text-body-md text-text-secondary">{children}</p>
     ),
+  },
+  list: {
+    bullet: ({ children }) => (
+      <ul className={cn("list-disc", listClassName)}>{children}</ul>
+    ),
+    number: ({ children }) => (
+      <ol className={cn("list-decimal", listClassName)}>{children}</ol>
+    ),
+  },
+  listItem: {
+    bullet: ({ children }) => <li className="pl-0">{children}</li>,
+    number: ({ children }) => <li className="pl-0">{children}</li>,
   },
   marks: {
     strong: ({ children }) => (

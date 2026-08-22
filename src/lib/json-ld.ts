@@ -96,7 +96,7 @@ export function buildPublicationsJsonLd(publications: PublicationSummary[]) {
         position: index + 1,
         item: {
           "@type": "ScholarlyArticle",
-          headline: publication.title,
+          headline: publication.highlightTitle?.trim() || publication.title,
           name: publication.title,
           ...(publication.authorLine
             ? { author: publication.authorLine.split(/,\s*/).map((name) => ({

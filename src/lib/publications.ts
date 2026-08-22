@@ -34,6 +34,13 @@ export function inferPublicationType(
     : "journal";
 }
 
+export function getPublicationHighlightTitle(
+  publication: Pick<PublicationSummary, "highlightTitle" | "title">,
+) {
+  const highlight = publication.highlightTitle?.trim();
+  return highlight || publication.title;
+}
+
 export function getPublicationExternalUrl(
   publication: PublicationSummary,
 ): string | undefined {
@@ -122,6 +129,7 @@ export function filterPublications(
     if (!normalizedQuery) return true;
 
     const haystack = [
+      publication.highlightTitle ?? "",
       publication.title,
       publication.categoryLabel,
       publication.journalOrConference,

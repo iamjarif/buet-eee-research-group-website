@@ -1,4 +1,5 @@
 import { HeroHoneycomb } from "@/components/home/HeroHoneycomb";
+import type { HeroHoneycombNode } from "@/lib/hero-honeycomb";
 import type { Link } from "../../../sanity/types";
 
 type HeroSectionProps = {
@@ -6,9 +7,10 @@ type HeroSectionProps = {
   heading?: string;
   description?: string;
   buttons?: Link[];
+  honeycombNodes?: HeroHoneycombNode[];
 };
 
-export function HeroSection({ heading }: HeroSectionProps) {
+export function HeroSection({ heading, honeycombNodes }: HeroSectionProps) {
   if (!heading) return null;
 
   return (
@@ -22,7 +24,7 @@ export function HeroSection({ heading }: HeroSectionProps) {
       </h1>
 
       <div className="relative min-h-[min(640px,85vh)] sm:min-h-[min(760px,88vh)] lg:min-h-[min(860px,90vh)]">
-        <HeroHoneycomb />
+        <HeroHoneycomb nodes={honeycombNodes} />
       </div>
     </section>
   );

@@ -290,6 +290,11 @@ async function main() {
   const { collectionDocuments, siteSettings, homepage } = buildAllSeedDocuments({
     teamPhoto: imageAssetIds.teamPhoto,
     partnerLogo: imageAssetIds.partnerLogo,
+    heroHexFabrication: imageAssetIds.heroHexFabrication,
+    heroHexDevicePhysics: imageAssetIds.heroHexDevicePhysics,
+    heroHexModelingSimulation: imageAssetIds.heroHexModelingSimulation,
+    heroHex3dIc: imageAssetIds.heroHex3dIc,
+    heroHexCircuits: imageAssetIds.heroHexCircuits,
   });
 
   const seedPlan = [...collectionDocuments, siteSettings, homepage];

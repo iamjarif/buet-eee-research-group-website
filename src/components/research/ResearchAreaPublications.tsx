@@ -1,6 +1,10 @@
 import { TextLink } from "@/components/ui/TextLink";
 import { hoverEaseClass } from "@/lib/motion/transitions";
-import { getPublicationExternalUrl, getPublicationsPath } from "@/lib/publications";
+import {
+  getPublicationExternalUrl,
+  getPublicationHighlightTitle,
+  getPublicationsPath,
+} from "@/lib/publications";
 import { cn } from "@/lib/utils";
 import type { PublicationSummary } from "../../../sanity/types";
 
@@ -29,6 +33,8 @@ export function ResearchAreaPublications({
       <div>
         {publications.map((publication) => {
           const externalUrl = getPublicationExternalUrl(publication);
+          const highlightTitle = getPublicationHighlightTitle(publication);
+          const showPublicationTitle = publication.title.trim() !== highlightTitle;
 
           return (
             <article
@@ -43,12 +49,15 @@ export function ResearchAreaPublications({
                     rel="noopener noreferrer"
                     className={linkClassName}
                   >
-                    {publication.title}
+                    {highlightTitle}
                   </a>
                 ) : (
-                  publication.title
+                  highlightTitle
                 )}
               </h3>
+              {showPublicationTitle ? (
+                <p className="mt-1 text-body-sm text-text-secondary">{publication.title}</p>
+              ) : null}
               <p className="mt-1.5 text-caption uppercase text-text-tertiary">
                 {publication.journalOrConference} · {publication.year}
               </p>

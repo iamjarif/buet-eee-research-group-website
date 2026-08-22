@@ -64,6 +64,36 @@ export const SEED_IMAGE_ASSETS = [
     filename: "s-dream-partner-logo.png",
     alt: "Bangladesh University of Engineering and Technology logo",
   },
+  {
+    key: "heroHexFabrication",
+    relativePath: "assets/hex-fabrication.png",
+    filename: "hero-hex-fabrication.png",
+    alt: "Semiconductor fabrication layers diagram",
+  },
+  {
+    key: "heroHexDevicePhysics",
+    relativePath: "assets/hex-device-physics.png",
+    filename: "hero-hex-device-physics.png",
+    alt: "Device physics transistor cross-section",
+  },
+  {
+    key: "heroHexModelingSimulation",
+    relativePath: "assets/hex-modeling-simulation.png",
+    filename: "hero-hex-modeling-simulation.png",
+    alt: "Modeling and simulation charts",
+  },
+  {
+    key: "heroHex3dIc",
+    relativePath: "assets/hex-3d-ic.png",
+    filename: "hero-hex-3d-ic.png",
+    alt: "3D integrated circuit stack illustration",
+  },
+  {
+    key: "heroHexCircuits",
+    relativePath: "assets/hex-circuits.png",
+    filename: "hero-hex-circuits.png",
+    alt: "Circuit layout diagrams",
+  },
 ];
 
 function block(text, key) {
@@ -467,12 +497,24 @@ export const SITE_SETTINGS_SEED_FIELDS = [
   "defaultSeo",
 ];
 
+function heroHoneycombNode(position, label, slug, imageAssetId, imageAlt) {
+  return {
+    _key: arrayKey(`hero-hex-${position}`),
+    _type: "heroHoneycombNode",
+    position,
+    label,
+    slug,
+    ...(imageAssetId ? { image: imageField(imageAssetId, imageAlt) } : {}),
+  };
+}
+
 export function buildHomepage({
   researchAreas,
   publications,
   contributions,
   activities,
   teamPhotoAssetId,
+  heroHexAssetIds = {},
 }) {
   return {
     _id: "homepage",
@@ -484,6 +526,44 @@ export function buildHomepage({
     heroButtons: [
       link("Meet the Team", "/people"),
       link("Explore Research →", "/research"),
+    ],
+    heroHoneycombNodes: [
+      heroHoneycombNode(
+        "fabrication",
+        "Fabrication",
+        "fabrication",
+        heroHexAssetIds.fabrication,
+        SEED_IMAGE_ASSETS[2].alt,
+      ),
+      heroHoneycombNode(
+        "device-physics",
+        "Device Physics",
+        "device-physics",
+        heroHexAssetIds.devicePhysics,
+        SEED_IMAGE_ASSETS[3].alt,
+      ),
+      heroHoneycombNode("ai-hardware", "AI Hardware", "ai-hardware-design"),
+      heroHoneycombNode(
+        "modeling-simulation",
+        "Modeling &\nSimulation",
+        "device-physics-modeling",
+        heroHexAssetIds.modelingSimulation,
+        SEED_IMAGE_ASSETS[4].alt,
+      ),
+      heroHoneycombNode(
+        "3d-ic",
+        "3D-IC",
+        "3d-ic",
+        heroHexAssetIds.threeDIc,
+        SEED_IMAGE_ASSETS[5].alt,
+      ),
+      heroHoneycombNode(
+        "circuits",
+        "Circuits",
+        "circuits",
+        heroHexAssetIds.circuits,
+        SEED_IMAGE_ASSETS[6].alt,
+      ),
     ],
     featuredPublications: publications.map((doc) => ref(doc._id)),
     researchSectionHeading: "The physics of wide-bandgap devices, examined closely.",
@@ -539,6 +619,13 @@ export function buildAllSeedDocuments(imageAssetIds = {}) {
     contributions,
     activities,
     teamPhotoAssetId: imageAssetIds.teamPhoto,
+    heroHexAssetIds: {
+      fabrication: imageAssetIds.heroHexFabrication,
+      devicePhysics: imageAssetIds.heroHexDevicePhysics,
+      modelingSimulation: imageAssetIds.heroHexModelingSimulation,
+      threeDIc: imageAssetIds.heroHex3dIc,
+      circuits: imageAssetIds.heroHexCircuits,
+    },
   });
 
   return {

@@ -6,9 +6,22 @@ export const publication = defineType({
   type: "document",
   fields: [
     defineField({
-      name: "title",
-      title: "Title",
+      name: "highlightTitle",
+      title: "Highlighting Title",
       type: "string",
+      description:
+        "Main large title shown on the website. Required to publish — publications without this stay in draft and are hidden from the site.",
+      validation: (rule) =>
+        rule.custom((value) => {
+          if (value?.trim()) return true;
+          return "Add a highlighting title before publishing. Without it the publication stays off the website.";
+        }),
+    }),
+    defineField({
+      name: "title",
+      title: "Publication Title",
+      type: "string",
+      description: "Secondary title — the full paper name.",
       validation: (rule) => rule.required().error("Publication title is required."),
     }),
     defineField({
@@ -158,14 +171,22 @@ export const publication = defineType({
   ],
   preview: {
     select: {
+      highlightTitle: "highlightTitle",
       title: "title",
       categoryLabel: "categoryLabel",
       year: "year",
       journal: "journalOrConference",
     },
-    prepare: ({ title, categoryLabel, year, journal }) => ({
-      title,
-      subtitle: [categoryLabel, journal, year].filter(Boolean).join(" · "),
+    prepare: ({ highlightTitle, title, categoryLabel, year, journal }) => ({
+      title: highlightTitle || title,
+      subtitle: [
+        highlightTitle && title !== highlightTitle ? title : null,
+        categoryLabel,
+        journal,
+        year,
+      ]
+        .filter(Boolean)
+        .join(" · "),
     }),
   },
 });

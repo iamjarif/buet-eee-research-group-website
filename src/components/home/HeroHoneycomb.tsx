@@ -2,12 +2,19 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+import { SanityImage } from "@/components/ui/SanityImage";
+import {
+  heroHoneycombNodesByGrid,
+  resolveHeroHoneycombNodes,
+  type HeroHoneycombNode,
+} from "@/lib/hero-honeycomb";
 import { getPublicationsPath } from "@/lib/publications";
 import { cn } from "@/lib/utils";
 
 /** Pointy-top hex geometry from Figma node 104:2. */
 const HEX_WIDTH = 208;
 const HEX_HEIGHT = 239;
+const HEX_SVG_HEIGHT = 231.642;
 const COL_STEP = 218;
 const ROW_STEP = 188;
 const ODD_ROW_OFFSET = 109;
@@ -28,24 +35,30 @@ const HEX_SRC = {
 
 const N_MARK_SRC = "/images/hero/n-mark.svg";
 
+/** Clip photo backgrounds to the exact hex-node.svg silhouette. */
+const HEX_NODE_MASK_STYLE = {
+  maskImage: `url(${HEX_SRC.node})`,
+  WebkitMaskImage: `url(${HEX_SRC.node})`,
+  maskSize: "100% 100%",
+  WebkitMaskSize: "100% 100%",
+  maskRepeat: "no-repeat",
+  WebkitMaskRepeat: "no-repeat",
+  maskPosition: "center",
+  WebkitMaskPosition: "center",
+} as const satisfies CSSProperties;
+
 type ClusterCell = {
   kind: "center" | "node";
-  label?: string;
-  slug?: string;
 };
 
 const CLUSTER: Record<string, ClusterCell> = {
-  "2,1": { kind: "node", label: "Fabrication", slug: "fabrication" },
-  "3,1": { kind: "node", label: "Device Physics", slug: "device-physics" },
-  "2,2": { kind: "node", label: "AI Hardware", slug: "ai-hardware-design" },
+  "2,1": { kind: "node" },
+  "3,1": { kind: "node" },
+  "2,2": { kind: "node" },
   "3,2": { kind: "center" },
-  "4,2": {
-    kind: "node",
-    label: "Modeling &\nSimulation",
-    slug: "device-physics-modeling",
-  },
-  "2,3": { kind: "node", label: "3D-IC", slug: "3d-ic" },
-  "3,3": { kind: "node", label: "Circuits", slug: "circuits" },
+  "4,2": { kind: "node" },
+  "2,3": { kind: "node" },
+  "3,3": { kind: "node" },
 };
 
 function cellKey(col: number, row: number) {
@@ -140,9 +153,19 @@ const FLOWER_CENTER_Y = FLOWER_ORIGIN.y + HEX_HEIGHT / 2;
 
 type HeroHoneycombProps = {
   className?: string;
+  nodes?: HeroHoneycombNode[];
 };
 
-export function HeroHoneycomb({ className }: HeroHoneycombProps) {
+type ResolvedNode = ReturnType<typeof resolveHeroHoneycombNodes>[number];
+
+function nodeHasBackground(node?: ResolvedNode) {
+  return Boolean(node?.image?.asset?.url || node?.fallbackImage);
+}
+
+export function HeroHoneycomb({ className, nodes }: HeroHoneycombProps) {
+  const resolvedNodes = resolveHeroHoneycombNodes(nodes);
+  const nodeByGrid = heroHoneycombNodesByGrid(resolvedNodes);
+
   return (
     <div
       className={cn("hero-honeycomb pointer-events-none absolute inset-0 overflow-hidden", className)}
@@ -153,9 +176,10 @@ export function HeroHoneycomb({ className }: HeroHoneycombProps) {
           style={{ left: -FLOWER_CENTER_X, top: -FLOWER_CENTER_Y }}
         >
           {CELLS.map((cell) => {
-            const isInteractive =
-              cell.cluster?.kind === "node" && Boolean(cell.cluster.label);
+            const node = nodeByGrid.get(cell.key);
+            const isInteractive = cell.cluster?.kind === "node" && Boolean(node?.label);
             const isBackground = !cell.cluster;
+            const hasBackground = nodeHasBackground(node);
             const visual = (
               <div
                 className={cn(
@@ -176,15 +200,60 @@ export function HeroHoneycomb({ className }: HeroHoneycombProps) {
                     : undefined
                 }
               >
-                <div className="absolute inset-0 overflow-clip">
-                  <Image
-                    src={cell.src}
-                    alt=""
-                    width={HEX_WIDTH}
-                    height={HEX_HEIGHT}
-                    unoptimized
-                    className="size-full object-contain"
-                  />
+                <div className="absolute inset-0 flex items-center justify-center overflow-clip">
+                  <div
+                    className="relative"
+                    style={{ width: HEX_WIDTH, height: HEX_SVG_HEIGHT }}
+                  >
+                    <Image
+                      src={cell.src}
+                      alt=""
+                      width={HEX_WIDTH}
+                      height={HEX_SVG_HEIGHT}
+                      unoptimized
+                      className="size-full object-contain"
+                    />
+                    {cell.cluster?.kind === "node" && hasBackground ? (
+                      <>
+                        <div
+                          className="hero-hex-node-media absolute inset-0 bg-black"
+                          style={HEX_NODE_MASK_STYLE}
+                        >
+                          {node?.image?.asset?.url ? (
+                            <SanityImage
+                              image={node.image}
+                              decorative
+                              fill
+                              sizes="208px"
+                              className="object-cover"
+                              width={HEX_WIDTH}
+                            />
+                          ) : node?.fallbackImage ? (
+                            <Image
+                              src={node.fallbackImage}
+                              alt=""
+                              fill
+                              unoptimized
+                              sizes="208px"
+                              className="object-cover"
+                            />
+                          ) : null}
+                        </div>
+                        <div
+                          className="hero-hex-node-overlay absolute inset-0 bg-black/[0.66]"
+                          style={HEX_NODE_MASK_STYLE}
+                          aria-hidden
+                        />
+                      </>
+                    ) : null}
+                    {isInteractive ? (
+                      <span
+                        className="hero-hex-node-shine"
+                        style={HEX_NODE_MASK_STYLE}
+                        aria-hidden
+                      />
+                    ) : null}
+                  </div>
                 </div>
                 {cell.cluster?.kind === "center" ? (
                   <div className="hero-hex-center-mark absolute top-1/2 left-1/2 h-[148px] w-[126px] overflow-clip">
@@ -199,9 +268,14 @@ export function HeroHoneycomb({ className }: HeroHoneycombProps) {
                     />
                   </div>
                 ) : null}
-                {cell.cluster?.label ? (
-                  <p className="hero-hex-node-label text-heading-sm absolute inset-0 z-10 flex items-center justify-center px-6 text-center font-medium whitespace-pre-line text-text-primary">
-                    {cell.cluster.label}
+                {node?.label ? (
+                  <p
+                    className={cn(
+                      "hero-hex-node-label absolute inset-0 z-10 flex items-center justify-center px-6 text-center font-medium whitespace-pre-line",
+                      hasBackground ? "text-text-inverse" : "text-text-primary",
+                    )}
+                  >
+                    {node.label}
                   </p>
                 ) : null}
               </div>
@@ -215,14 +289,14 @@ export function HeroHoneycomb({ className }: HeroHoneycombProps) {
               "--hex-enter-delay": `${cell.enterDelay}s`,
             } as CSSProperties;
 
-            if (isInteractive && cell.cluster?.slug) {
+            if (isInteractive && node?.slug) {
               return (
                 <Link
                   key={cell.key}
-                  href={getPublicationsPath(cell.cluster.slug)}
+                  href={getPublicationsPath(node.slug)}
                   className="hero-hex-node hero-hex-enter absolute"
                   style={cellStyle}
-                  aria-label={`${cell.cluster.label?.replace("\n", " ")} publications`}
+                  aria-label={`${node.label.replace("\n", " ")} publications`}
                 >
                   {visual}
                   <span className="hero-hex-node-hit" aria-hidden />
