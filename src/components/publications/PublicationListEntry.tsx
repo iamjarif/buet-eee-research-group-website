@@ -1,6 +1,10 @@
 import { PortableTextContent } from "@/components/ui/PortableTextContent";
 import { MediaFrame } from "@/components/ui/MediaFrame";
-import { getPublicationExternalUrl, getPublicationHighlightTitle } from "@/lib/publications";
+import {
+  getPublicationExternalUrl,
+  getPublicationHighlightTitle,
+  inferPublicationType,
+} from "@/lib/publications";
 import { hoverEaseClass } from "@/lib/motion/transitions";
 import { cn, formatPublicationAuthors, getDoiUrl } from "@/lib/utils";
 import type { PublicationSummary } from "../../../sanity/types";
@@ -23,6 +27,9 @@ export function PublicationListEntry({
   const externalUrl = getPublicationExternalUrl(publication);
   const highlightTitle = getPublicationHighlightTitle(publication);
   const showPublicationTitle = publication.title.trim() !== highlightTitle;
+  const publicationType = inferPublicationType(publication);
+  const publicationTypeLabel =
+    publicationType === "conference" ? "Conference" : "Journal";
   const authors = formatPublicationAuthors(publication);
   const hasImage = Boolean(publication.image?.asset);
   const imageUrl = publication.image?.asset?.url;
@@ -63,20 +70,20 @@ export function PublicationListEntry({
   ) : null;
 
   return (
-    <article className="border-b border-border-default py-8 sm:py-9 lg:py-12">
-      <p className="text-label-xs tracking-[0.04em] text-text-tertiary">
-        {publication.categoryLabel}
-      </p>
-
+    <article className="border-b border-border-default py-8 sm:py-9 lg:py-10">
       <div
         className={cn(
-          "mt-5 flex flex-col gap-6",
+          "flex flex-col gap-6",
           hasImage && "lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-x-14",
         )}
       >
         <div className="flex items-start gap-4">
           <div className="flex min-w-0 flex-1 flex-col gap-4">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2.5">
+              <p className="text-label-xs tracking-[0.06em] text-text-tertiary uppercase">
+                {publicationTypeLabel}
+              </p>
+
               <h3 className="text-heading-lg max-w-[42rem] text-text-primary [overflow-wrap:break-word]">
                 {highlightTitle}
               </h3>
@@ -112,7 +119,7 @@ export function PublicationListEntry({
                 {publication.journalOrConference ? (
                   <>
                     {" · "}
-                    {publication.journalOrConference}
+                    <span className="normal-case">{publication.journalOrConference}</span>
                   </>
                 ) : null}
                 {doiUrl && doiLabel ? (

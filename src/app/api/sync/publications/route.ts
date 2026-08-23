@@ -20,12 +20,11 @@ const MIN_PUBLICATION_YEAR = 2010;
 
 const VALID_TYPES = new Set(["article", "conference-paper"]);
 const JUNK_RAW_TYPES = new Set(["Collection", "Figure", "Image"]);
-const CATEGORY_LABEL_PATTERN = /^([JC])(\d+)$/;
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const OPENALEX_CURSOR_OVERLAP_DAYS = 5;
 const PUBLICATION_SYNC_STATE_ID = "sync-state-publications";
 const EXISTING_PUBLICATIONS_QUERY = /* groq */ `
-  *[_type == "publication"]{ doi, title, year, categoryLabel }
+  *[_type == "publication"]{ doi, title, year }
 `;
 const RESEARCH_AREAS_QUERY = /* groq */ `
   *[_type == "researchArea"]{ _id, title }
@@ -67,12 +66,6 @@ type ExistingPublication = {
   doi?: string | null;
   title?: string | null;
   year?: number | null;
-  categoryLabel?: string | null;
-};
-
-type CategoryCounters = {
-  journal: number;
-  conference: number;
 };
 
 type PublicationDraft = {
@@ -86,7 +79,6 @@ type PublicationDraft = {
   externalUrl?: string;
   authorLine?: string;
   publicationType: "journal" | "conference";
-  categoryLabel?: string;
   researchAreas: [];
   openAlexTopics?: string[];
   suggestedResearchAreas?: Array<{
@@ -290,48 +282,6 @@ function isAlreadyInSanity(work: OpenAlexWork, existing: ExistingPublication[]) 
   });
 }
 
-function highestCategoryNumbers(existing: ExistingPublication[]): CategoryCounters {
-  const counters: CategoryCounters = { journal: 0, conference: 0 };
-
-  for (const doc of existing) {
-    const match = doc.categoryLabel?.trim().match(CATEGORY_LABEL_PATTERN);
-    if (!match) continue;
-
-    const prefix = match[1];
-    const value = Number(match[2]);
-    if (!Number.isInteger(value)) continue;
-
-    if (prefix === "J") counters.journal = Math.max(counters.journal, value);
-    if (prefix === "C") counters.conference = Math.max(counters.conference, value);
-  }
-
-  return counters;
-}
-
-/** Only label when OpenAlex type/source is explicit — do not treat generic "article" as a journal. */
-function confidentPublicationType(work: OpenAlexWork): "journal" | "conference" | null {
-  if (work.type === "conference-paper") return "conference";
-
-  const sourceType = work.primary_location?.source?.type;
-  if (sourceType === "conference") return "conference";
-  if (sourceType === "journal") return "journal";
-
-  return null;
-}
-
-function assignCategoryLabel(work: OpenAlexWork, next: CategoryCounters) {
-  const type = confidentPublicationType(work);
-  if (type === "journal") {
-    next.journal += 1;
-    return `J${next.journal}`;
-  }
-  if (type === "conference") {
-    next.conference += 1;
-    return `C${next.conference}`;
-  }
-  return undefined;
-}
-
 function toExternalUrl(work: OpenAlexWork) {
   if (work.doi) {
     return work.doi.startsWith("http") ? work.doi : `https://doi.org/${work.doi}`;
@@ -343,15 +293,24 @@ function toExternalUrl(work: OpenAlexWork) {
   return undefined;
 }
 
+function inferPublicationType(work: OpenAlexWork): "journal" | "conference" {
+  if (work.type === "conference-paper") return "conference";
+
+  const sourceType = work.primary_location?.source?.type;
+  if (sourceType === "conference") return "conference";
+  if (sourceType === "journal") return "journal";
+
+  return "journal";
+}
+
 function mapToSanityDraft(
   work: OpenAlexWork,
-  next: CategoryCounters,
   researchAreaCatalog: ResearchAreaRecord[],
 ): PublicationDraft {
   const openAlexId = work.id.replace("https://openalex.org/", "");
   const doi = normalizeDoi(work.doi) ?? undefined;
   const externalUrl = toExternalUrl(work);
-  const categoryLabel = assignCategoryLabel(work, next);
+  const publicationType = inferPublicationType(work);
   const title = cleanOpenAlexText(work.title);
   const journalOrConference =
     cleanOpenAlexText(work.primary_location?.source?.display_name) || "Unknown venue";
@@ -377,8 +336,7 @@ function mapToSanityDraft(
     journalOrConference,
     ...(externalUrl ? { externalUrl } : {}),
     ...(authorLine ? { authorLine } : {}),
-    publicationType: work.type === "conference-paper" ? "conference" : "journal",
-    ...(categoryLabel ? { categoryLabel } : {}),
+    publicationType,
     researchAreas: [],
     ...(openAlexTopics.length ? { openAlexTopics } : {}),
     ...(suggestedIds.length ? { suggestedResearchAreas: toSuggestedResearchAreaRefs(suggestedIds) } : {}),
@@ -400,7 +358,7 @@ async function sendNotification(drafts: PublicationDraft[]) {
   }
 
   const titles = drafts
-    .map((draft) => `- ${draft.categoryLabel ? `${draft.categoryLabel} ` : ""}${draft.title}`)
+    .map((draft) => `- ${draft.title}`)
     .join("\n");
 
   const response = await fetch("https://api.resend.com/emails", {
@@ -442,10 +400,9 @@ async function syncPublications(sanityClient: WriteClient, lastSyncDate: string 
   const researchAreaCatalog =
     await sanityClient.fetch<ResearchAreaRecord[]>(RESEARCH_AREAS_QUERY);
 
-  const nextCategory = highestCategoryNumbers(existing);
   const newDrafts = deduped
     .filter((work) => !isAlreadyInSanity(work, existing))
-    .map((work) => mapToSanityDraft(work, nextCategory, researchAreaCatalog));
+    .map((work) => mapToSanityDraft(work, researchAreaCatalog));
 
   for (const draft of newDrafts) {
     await sanityClient.createIfNotExists(draft);
@@ -469,7 +426,6 @@ async function syncPublications(sanityClient: WriteClient, lastSyncDate: string 
     drafts: newDrafts.map((draft) => ({
       _id: draft._id,
       title: draft.title,
-      categoryLabel: draft.categoryLabel ?? null,
     })),
   };
 }

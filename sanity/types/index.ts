@@ -118,7 +118,6 @@ export type PublicationSummary = {
   slug: string;
   journalOrConference: string;
   publicationType?: "journal" | "conference";
-  categoryLabel: string;
   year: number;
   doi?: string;
   externalUrl?: string;

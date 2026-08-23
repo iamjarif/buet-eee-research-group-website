@@ -131,7 +131,6 @@ export function filterPublications(
     const haystack = [
       publication.highlightTitle ?? "",
       publication.title,
-      publication.categoryLabel,
       publication.journalOrConference,
       publication.authorLine ?? "",
       String(publication.year),

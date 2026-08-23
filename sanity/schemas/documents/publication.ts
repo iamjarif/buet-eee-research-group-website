@@ -62,21 +62,6 @@ export const publication = defineType({
       description: "Used for filtering on the publications index page.",
     }),
     defineField({
-      name: "categoryLabel",
-      title: "Category Label",
-      type: "string",
-      description:
-        "Serial label shown on the publications index (e.g. J1, J2 for journals; C1, C2 for conferences).",
-      validation: (rule) =>
-        rule
-          .required()
-          .regex(/^[JC]\d+$/, {
-            name: "categoryLabel",
-            invert: false,
-          })
-          .error("Use a label like J1, J2, C1, or C2."),
-    }),
-    defineField({
       name: "year",
       title: "Year",
       type: "number",
@@ -178,15 +163,19 @@ export const publication = defineType({
     select: {
       highlightTitle: "highlightTitle",
       title: "title",
-      categoryLabel: "categoryLabel",
+      publicationType: "publicationType",
       year: "year",
       journal: "journalOrConference",
     },
-    prepare: ({ highlightTitle, title, categoryLabel, year, journal }) => ({
+    prepare: ({ highlightTitle, title, publicationType, year, journal }) => ({
       title: highlightTitle || title,
       subtitle: [
         highlightTitle && title !== highlightTitle ? title : null,
-        categoryLabel,
+        publicationType === "conference"
+          ? "Conference"
+          : publicationType === "journal"
+            ? "Journal"
+            : null,
         journal,
         year,
       ]
