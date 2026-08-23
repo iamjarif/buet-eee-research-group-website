@@ -5,7 +5,7 @@
 
 import { RESEARCH_AREA_DESCRIPTIONS } from "./research-area-descriptions.mjs";
 
-/** @typedef {{ _id: string; title: string; slug: string; displayOrder: number }} CanonicalResearchArea */
+/** @typedef {{ _id: string; title: string; slug: string; displayOrder: number; heroPosition: string }} CanonicalResearchArea */
 
 /** @type {CanonicalResearchArea[]} */
 export const CANONICAL_RESEARCH_AREAS = [
@@ -14,36 +14,42 @@ export const CANONICAL_RESEARCH_AREAS = [
     title: "Fabrication",
     slug: "fabrication",
     displayOrder: 0,
+    heroPosition: "fabrication",
   },
   {
     _id: "researchArea-device-physics",
     title: "Device Physics",
     slug: "device-physics",
     displayOrder: 1,
+    heroPosition: "device-physics",
   },
   {
     _id: "researchArea-ai-hardware-design",
     title: "AI Hardware",
     slug: "ai-hardware-design",
     displayOrder: 2,
+    heroPosition: "ai-hardware",
   },
   {
     _id: "researchArea-modeling-simulation",
     title: "Modeling & Simulation",
     slug: "device-physics-modeling",
     displayOrder: 3,
+    heroPosition: "modeling-simulation",
   },
   {
     _id: "researchArea-3d-ic",
     title: "3D-IC",
     slug: "3d-ic",
     displayOrder: 4,
+    heroPosition: "3d-ic",
   },
   {
     _id: "researchArea-circuits",
     title: "Circuits",
     slug: "circuits",
     displayOrder: 5,
+    heroPosition: "circuits",
   },
 ];
 

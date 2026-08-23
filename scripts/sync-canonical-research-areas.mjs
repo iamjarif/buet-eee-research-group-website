@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
  * Upsert the six canonical research areas, remap legacy references, delete extras,
- * and remove featuredResearchAreas from the homepage singleton.
+ * migrate hero hex images from homepage → research areas, and remove deprecated
+ * homepage fields (featuredResearchAreas, heroHoneycombNodes).
  *
  * Usage:
  *   node --env-file=.env.local scripts/sync-canonical-research-areas.mjs
@@ -112,11 +113,20 @@ async function main() {
   const canonicalIds = new Set(CANONICAL_RESEARCH_AREAS.map((area) => area._id));
   const slugToCanonicalId = buildSlugToCanonicalId();
 
-  const existingAreas = await client.fetch(
-    `*[_type == "researchArea"]{ _id, title, "slug": slug.current }`,
-  );
+  const [existingAreas, homepage] = await Promise.all([
+    client.fetch(`*[_type == "researchArea"]{ _id, title, "slug": slug.current, image }`),
+    client.fetch(`*[_id == "homepage"][0]{ heroHoneycombNodes }`),
+  ]);
+
   const slugById = new Map(existingAreas.map((area) => [area._id, area.slug]));
   const context = { canonicalIds, slugById, slugToCanonicalId };
+
+  const heroImagesByPosition = new Map();
+  for (const node of homepage?.heroHoneycombNodes ?? []) {
+    if (node?.position && node?.image) {
+      heroImagesByPosition.set(node.position, node.image);
+    }
+  }
 
   const extraAreaIds = existingAreas
     .map((area) => area._id)
@@ -149,13 +159,25 @@ async function main() {
     .map((document) => {
       const patch = patchDocumentFields(document, context);
       if (!patch) return null;
-      return { id: document._id, type: document._type, title: document.title ?? document.name ?? document._id, patch };
+      return {
+        id: document._id,
+        type: document._type,
+        title: document.title ?? document.name ?? document._id,
+        patch,
+      };
     })
     .filter(Boolean);
 
   console.log("Canonical research areas to upsert:");
   for (const area of CANONICAL_RESEARCH_AREAS) {
-    console.log(`  • ${area.title} (${area.slug})`);
+    console.log(`  • ${area.title} (${area.slug}, hero: ${area.heroPosition})`);
+  }
+
+  if (heroImagesByPosition.size > 0) {
+    console.log(`\nHero images to migrate from homepage (${heroImagesByPosition.size}):`);
+    for (const [position] of heroImagesByPosition) {
+      console.log(`  • ${position}`);
+    }
   }
 
   if (extraAreaIds.length > 0) {
@@ -175,7 +197,9 @@ async function main() {
     }
   }
 
-  console.log("\nHomepage: unset featuredResearchAreas (section uses all published areas in code).");
+  console.log(
+    "\nHomepage: unset featuredResearchAreas and heroHoneycombNodes (hero uses Research Area documents).",
+  );
 
   if (!apply) {
     console.log("\nDry run only. Re-run with --apply to write to Sanity.");
@@ -186,14 +210,25 @@ async function main() {
 
   for (const area of CANONICAL_RESEARCH_AREAS) {
     const description = toPortableText(descriptionParagraphsForSlug(area.slug));
-    tx = tx.createOrReplace({
-      _id: area._id,
-      _type: "researchArea",
-      title: area.title,
-      slug: { _type: "slug", current: area.slug },
-      description,
-      displayOrder: area.displayOrder,
-      isPublished: true,
+    const existing = existingAreas.find((entry) => entry._id === area._id);
+    const migratedImage = heroImagesByPosition.get(area.heroPosition);
+
+    tx = tx.patch(area._id, (patch) => {
+      let next = patch.set({
+        _type: "researchArea",
+        title: area.title,
+        slug: { _type: "slug", current: area.slug },
+        description,
+        displayOrder: area.displayOrder,
+        heroPosition: area.heroPosition,
+        isPublished: true,
+      });
+
+      if (migratedImage && !existing?.image) {
+        next = next.set({ image: migratedImage });
+      }
+
+      return next;
     });
   }
 
@@ -202,7 +237,9 @@ async function main() {
   }
 
   for (const homepageId of ["homepage", "drafts.homepage"]) {
-    tx = tx.patch(homepageId, (patch) => patch.unset(["featuredResearchAreas"]));
+    tx = tx.patch(homepageId, (patch) =>
+      patch.unset(["featuredResearchAreas", "heroHoneycombNodes"]),
+    );
   }
 
   await tx.commit();

@@ -66,6 +66,7 @@ export const researchAreaSummaryFields = /* groq */ `
   image {
     ${imageFields}
   },
+  heroPosition,
   externalLink,
   displayOrder,
   isPublished

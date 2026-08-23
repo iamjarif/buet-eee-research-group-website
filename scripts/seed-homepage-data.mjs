@@ -153,9 +153,34 @@ function imageField(assetId, alt) {
   };
 }
 
-export function buildResearchAreas() {
+export function buildResearchAreas(imageAssetIds = {}) {
+  const HERO_IMAGES_BY_SLUG = {
+    fabrication: {
+      assetId: imageAssetIds.heroHexFabrication,
+      alt: SEED_IMAGE_ASSETS[2].alt,
+    },
+    "device-physics": {
+      assetId: imageAssetIds.heroHexDevicePhysics,
+      alt: SEED_IMAGE_ASSETS[3].alt,
+    },
+    "device-physics-modeling": {
+      assetId: imageAssetIds.heroHexModelingSimulation,
+      alt: SEED_IMAGE_ASSETS[4].alt,
+    },
+    "3d-ic": {
+      assetId: imageAssetIds.heroHex3dIc,
+      alt: SEED_IMAGE_ASSETS[5].alt,
+    },
+    circuits: {
+      assetId: imageAssetIds.heroHexCircuits,
+      alt: SEED_IMAGE_ASSETS[6].alt,
+    },
+  };
+
   return CANONICAL_RESEARCH_AREAS.map((area) => {
     const paragraphs = descriptionParagraphsForSlug(area.slug);
+    const heroImage = HERO_IMAGES_BY_SLUG[area.slug];
+
     return {
       _id: area._id,
       _type: "researchArea",
@@ -163,7 +188,11 @@ export function buildResearchAreas() {
       slug: { _type: "slug", current: area.slug },
       description: paragraphs.map((text, index) => block(text, `desc-${index}`)),
       displayOrder: area.displayOrder,
+      heroPosition: area.heroPosition,
       isPublished: true,
+      ...(heroImage?.assetId
+        ? { image: imageField(heroImage.assetId, heroImage.alt) }
+        : {}),
     };
   });
 }
@@ -451,24 +480,11 @@ export const SITE_SETTINGS_SEED_FIELDS = [
   "defaultSeo",
 ];
 
-function heroHoneycombNode(position, label, slug, imageAssetId, imageAlt) {
-  return {
-    _key: arrayKey(`hero-hex-${position}`),
-    _type: "heroHoneycombNode",
-    position,
-    label,
-    slug,
-    ...(imageAssetId ? { image: imageField(imageAssetId, imageAlt) } : {}),
-  };
-}
-
 export function buildHomepage({
-  researchAreas,
   publications,
   contributions,
   activities,
   teamPhotoAssetId,
-  heroHexAssetIds = {},
 }) {
   return {
     _id: "homepage",
@@ -480,44 +496,6 @@ export function buildHomepage({
     heroButtons: [
       link("Meet the Team", "/people"),
       link("Explore Research →", "/research"),
-    ],
-    heroHoneycombNodes: [
-      heroHoneycombNode(
-        "fabrication",
-        "Fabrication",
-        "fabrication",
-        heroHexAssetIds.fabrication,
-        SEED_IMAGE_ASSETS[2].alt,
-      ),
-      heroHoneycombNode(
-        "device-physics",
-        "Device Physics",
-        "device-physics",
-        heroHexAssetIds.devicePhysics,
-        SEED_IMAGE_ASSETS[3].alt,
-      ),
-      heroHoneycombNode("ai-hardware", "AI Hardware", "ai-hardware-design"),
-      heroHoneycombNode(
-        "modeling-simulation",
-        "Modeling &\nSimulation",
-        "device-physics-modeling",
-        heroHexAssetIds.modelingSimulation,
-        SEED_IMAGE_ASSETS[4].alt,
-      ),
-      heroHoneycombNode(
-        "3d-ic",
-        "3D-IC",
-        "3d-ic",
-        heroHexAssetIds.threeDIc,
-        SEED_IMAGE_ASSETS[5].alt,
-      ),
-      heroHoneycombNode(
-        "circuits",
-        "Circuits",
-        "circuits",
-        heroHexAssetIds.circuits,
-        SEED_IMAGE_ASSETS[6].alt,
-      ),
     ],
     featuredPublications: publications.map((doc) => ref(doc._id)),
     researchSectionHeading: "The physics of wide-bandgap devices, examined closely.",
@@ -551,7 +529,7 @@ export function buildHomepage({
 }
 
 export function buildAllSeedDocuments(imageAssetIds = {}) {
-  const researchAreas = buildResearchAreas();
+  const researchAreas = buildResearchAreas(imageAssetIds);
   const publications = buildPublications();
   const patents = buildPatents();
   const contributions = buildContributions();
@@ -567,18 +545,10 @@ export function buildAllSeedDocuments(imageAssetIds = {}) {
 
   const siteSettings = buildSiteSettings(imageAssetIds.partnerLogo);
   const homepage = buildHomepage({
-    researchAreas,
     publications,
     contributions,
     activities,
     teamPhotoAssetId: imageAssetIds.teamPhoto,
-    heroHexAssetIds: {
-      fabrication: imageAssetIds.heroHexFabrication,
-      devicePhysics: imageAssetIds.heroHexDevicePhysics,
-      modelingSimulation: imageAssetIds.heroHexModelingSimulation,
-      threeDIc: imageAssetIds.heroHex3dIc,
-      circuits: imageAssetIds.heroHexCircuits,
-    },
   });
 
   return {

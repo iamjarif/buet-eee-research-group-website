@@ -101,7 +101,7 @@ export default async function HomePage() {
         heading={homepage.heroHeading}
         description={homepage.heroDescription}
         buttons={homepage.heroButtons}
-        honeycombNodes={homepage.heroHoneycombNodes}
+        researchAreas={researchAreas}
       />
 
       <PublicationTrack publications={featuredPublications} />

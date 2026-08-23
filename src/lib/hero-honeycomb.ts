@@ -1,4 +1,4 @@
-import type { SanityImage } from "../../sanity/types";
+import type { ResearchAreaSummary, SanityImage } from "../../sanity/types";
 
 export const HERO_HONEYCOMB_POSITIONS = [
   "fabrication",
@@ -21,18 +21,32 @@ export const HERO_HONEYCOMB_GRID: Record<HeroHoneycombPosition, string> = {
   circuits: "3,3",
 };
 
-export type HeroHoneycombNode = {
+/** Fallback slug when heroPosition is missing on a research area document. */
+export const RESEARCH_AREA_SLUG_TO_HERO_POSITION: Record<string, HeroHoneycombPosition> = {
+  fabrication: "fabrication",
+  "device-physics": "device-physics",
+  "ai-hardware-design": "ai-hardware",
+  "device-physics-modeling": "modeling-simulation",
+  "3d-ic": "3d-ic",
+  circuits: "circuits",
+};
+
+export type HeroHoneycombResearchArea = Pick<
+  ResearchAreaSummary,
+  "title" | "slug" | "image"
+> & {
+  heroPosition?: HeroHoneycombPosition;
+};
+
+type ResolvedHeroHoneycombNode = {
   position: HeroHoneycombPosition;
   label: string;
   slug: string;
   image?: SanityImage;
-};
-
-type DefaultHeroHoneycombNode = HeroHoneycombNode & {
   fallbackImage?: string;
 };
 
-export const DEFAULT_HERO_HONEYCOMB_NODES: DefaultHeroHoneycombNode[] = [
+export const DEFAULT_HERO_HONEYCOMB_NODES: ResolvedHeroHoneycombNode[] = [
   {
     position: "fabrication",
     label: "Fabrication",
@@ -70,32 +84,47 @@ export const DEFAULT_HERO_HONEYCOMB_NODES: DefaultHeroHoneycombNode[] = [
   },
 ];
 
-export function resolveHeroHoneycombNodes(
-  cmsNodes?: HeroHoneycombNode[],
-): DefaultHeroHoneycombNode[] {
-  const cmsByPosition = new Map(
-    (cmsNodes ?? [])
-      .filter((node) => HERO_HONEYCOMB_POSITIONS.includes(node.position))
-      .map((node) => [node.position, node]),
-  );
+/** Split long titles across two lines in hero hex labels (e.g. "Modeling & Simulation"). */
+export function formatHeroHoneycombLabel(title: string): string {
+  if (title.includes(" & ")) {
+    return title.replace(" & ", " &\n");
+  }
+  return title;
+}
+
+function heroPositionForArea(area: HeroHoneycombResearchArea): HeroHoneycombPosition | undefined {
+  if (area.heroPosition && HERO_HONEYCOMB_POSITIONS.includes(area.heroPosition)) {
+    return area.heroPosition;
+  }
+  return RESEARCH_AREA_SLUG_TO_HERO_POSITION[area.slug];
+}
+
+/** Build hero hex nodes from research area documents (title, slug, image). */
+export function resolveHeroHoneycombNodesFromResearchAreas(
+  researchAreas?: HeroHoneycombResearchArea[],
+): ResolvedHeroHoneycombNode[] {
+  const byPosition = new Map<HeroHoneycombPosition, HeroHoneycombResearchArea>();
+
+  for (const area of researchAreas ?? []) {
+    const position = heroPositionForArea(area);
+    if (position) byPosition.set(position, area);
+  }
 
   return DEFAULT_HERO_HONEYCOMB_NODES.map((defaults) => {
-    const cmsNode = cmsByPosition.get(defaults.position);
-    if (!cmsNode) return defaults;
+    const area = byPosition.get(defaults.position);
+    if (!area) return defaults;
 
     return {
       ...defaults,
-      label: cmsNode.label || defaults.label,
-      slug: cmsNode.slug || defaults.slug,
-      image: cmsNode.image,
+      label: formatHeroHoneycombLabel(area.title),
+      slug: area.slug,
+      image: area.image,
     };
   });
 }
 
 export function heroHoneycombNodesByGrid(
-  nodes: DefaultHeroHoneycombNode[],
-): Map<string, DefaultHeroHoneycombNode> {
-  return new Map(
-    nodes.map((node) => [HERO_HONEYCOMB_GRID[node.position], node]),
-  );
+  nodes: ResolvedHeroHoneycombNode[],
+): Map<string, ResolvedHeroHoneycombNode> {
+  return new Map(nodes.map((node) => [HERO_HONEYCOMB_GRID[node.position], node]));
 }

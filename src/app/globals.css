@@ -574,7 +574,14 @@
 }
 
 .hero-hex-node-label {
+  opacity: 0;
+  transition: opacity 0.45s cubic-bezier(0.33, 1, 0.68, 1);
   overflow-wrap: anywhere;
+}
+
+.hero-hex-node:hover .hero-hex-node-label,
+.hero-hex-node:focus-visible .hero-hex-node-label {
+  opacity: 1;
 }
 
 @media (min-width: 1024px) {
@@ -585,7 +592,13 @@
 }
 
 .hero-hex-node-overlay {
-  transition: background-color 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+  opacity: 0;
+  transition: opacity 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.hero-hex-node:hover .hero-hex-node-overlay,
+.hero-hex-node:focus-visible .hero-hex-node-overlay {
+  opacity: 1;
 }
 
 .hero-hex-node-shine {

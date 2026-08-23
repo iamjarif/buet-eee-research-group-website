@@ -5,8 +5,8 @@ import Link from "next/link";
 import { SanityImage } from "@/components/ui/SanityImage";
 import {
   heroHoneycombNodesByGrid,
-  resolveHeroHoneycombNodes,
-  type HeroHoneycombNode,
+  resolveHeroHoneycombNodesFromResearchAreas,
+  type HeroHoneycombResearchArea,
 } from "@/lib/hero-honeycomb";
 import { getPublicationsPath } from "@/lib/publications";
 import { cn } from "@/lib/utils";
@@ -153,17 +153,17 @@ const FLOWER_CENTER_Y = FLOWER_ORIGIN.y + HEX_HEIGHT / 2;
 
 type HeroHoneycombProps = {
   className?: string;
-  nodes?: HeroHoneycombNode[];
+  researchAreas?: HeroHoneycombResearchArea[];
 };
 
-type ResolvedNode = ReturnType<typeof resolveHeroHoneycombNodes>[number];
+type ResolvedNode = ReturnType<typeof resolveHeroHoneycombNodesFromResearchAreas>[number];
 
 function nodeHasBackground(node?: ResolvedNode) {
   return Boolean(node?.image?.asset?.url || node?.fallbackImage);
 }
 
-export function HeroHoneycomb({ className, nodes }: HeroHoneycombProps) {
-  const resolvedNodes = resolveHeroHoneycombNodes(nodes);
+export function HeroHoneycomb({ className, researchAreas }: HeroHoneycombProps) {
+  const resolvedNodes = resolveHeroHoneycombNodesFromResearchAreas(researchAreas);
   const nodeByGrid = heroHoneycombNodesByGrid(resolvedNodes);
 
   return (

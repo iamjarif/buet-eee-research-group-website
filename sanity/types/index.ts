@@ -95,6 +95,13 @@ export type ResearchAreaSummary = {
   slug: string;
   description?: PortableTextBlock[];
   image?: SanityImage;
+  heroPosition?:
+    | "fabrication"
+    | "device-physics"
+    | "ai-hardware"
+    | "modeling-simulation"
+    | "3d-ic"
+    | "circuits";
   externalLink?: string;
   displayOrder?: number;
   isPublished?: boolean;
@@ -182,25 +189,11 @@ export type Activity = ActivitySummary & {
   seo?: SeoFields;
 };
 
-export type HeroHoneycombNode = {
-  position:
-    | "fabrication"
-    | "device-physics"
-    | "ai-hardware"
-    | "modeling-simulation"
-    | "3d-ic"
-    | "circuits";
-  label: string;
-  slug: string;
-  image?: SanityImage;
-};
-
 export type Homepage = {
   heroEyebrow?: string;
   heroHeading?: string;
   heroDescription?: string;
   heroButtons?: Link[];
-  heroHoneycombNodes?: HeroHoneycombNode[];
   publicationsSectionHeading?: string;
   publicationsSectionDescription?: string;
   featuredPublications?: PublicationSummary[];

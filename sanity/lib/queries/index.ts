@@ -78,21 +78,6 @@ export const homepageQuery = /* groq */ `
       href,
       openInNewTab
     },
-    heroHoneycombNodes[] {
-      position,
-      label,
-      slug,
-      image {
-        asset->{
-          _id,
-          url,
-          metadata { dimensions, lqip }
-        },
-        alt,
-        hotspot,
-        crop
-      }
-    },
     publicationsSectionHeading,
     publicationsSectionDescription,
     featuredPublications[defined(@->highlightTitle) && @->highlightTitle != ""]->{
