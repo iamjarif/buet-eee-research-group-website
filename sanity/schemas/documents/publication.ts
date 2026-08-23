@@ -134,6 +134,12 @@ export const publication = defineType({
       description: "Optional thumbnail or figure associated with the publication.",
     }),
     defineField({
+      name: "figureCaption",
+      title: "Figure Caption",
+      type: "string",
+      description: "Optional small caption shown under the publication figure. Leave empty to hide.",
+    }),
+    defineField({
       name: "displayOrder",
       title: "Display Order",
       type: "number",

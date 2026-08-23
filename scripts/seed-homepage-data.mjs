@@ -214,6 +214,7 @@ export function buildPublications() {
       year: 2023,
       isFeatured: true,
       displayOrder: 0,
+      figureCaption: "Fig. 1. Cross-sectional schematic of the device structure.",
       researchAreas: [ref("researchArea-device-physics")],
     },
     {
@@ -228,6 +229,7 @@ export function buildPublications() {
       year: 2023,
       isFeatured: true,
       displayOrder: 1,
+      figureCaption: "Fig. 1. Measured I–V characteristics at room temperature.",
       researchAreas: [ref("researchArea-device-physics")],
     },
     {
@@ -245,6 +247,7 @@ export function buildPublications() {
       year: 2022,
       isFeatured: true,
       displayOrder: 2,
+      figureCaption: "Fig. 1. Fabrication process flow for the AlGaN/GaN heterostructure.",
       researchAreas: [ref("researchArea-modeling-simulation")],
     },
     {
@@ -262,6 +265,7 @@ export function buildPublications() {
       year: 2024,
       isFeatured: true,
       displayOrder: 3,
+      figureCaption: "Fig. 1. TCAD simulation mesh and boundary conditions.",
       researchAreas: [ref("researchArea-device-physics")],
     },
     {
@@ -279,6 +283,7 @@ export function buildPublications() {
       year: 2023,
       isFeatured: true,
       displayOrder: 4,
+      figureCaption: "Fig. 1. Comparison of experimental and modeled results.",
       researchAreas: [ref("researchArea-device-physics")],
     },
     {
@@ -296,6 +301,7 @@ export function buildPublications() {
       year: 2022,
       isFeatured: true,
       displayOrder: 5,
+      figureCaption: "Fig. 1. Optical micrograph of the fabricated device.",
       researchAreas: [ref("researchArea-modeling-simulation")],
     },
   ];

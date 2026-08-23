@@ -38,18 +38,28 @@ export function PublicationListEntry({
   const doiLabel = publication.doi?.replace(/^https?:\/\/(dx\.)?doi\.org\//i, "");
 
   const figure = hasImage ? (
-    imageUrl ? (
-      <a
-        href={imageUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`View image for ${highlightTitle}`}
-        className={cn(
-          "block w-full max-w-[22rem] transition-opacity duration-300",
-          hoverEaseClass,
-          "hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
-        )}
-      >
+    <div className="flex w-full max-w-[22rem] flex-col gap-2">
+      {imageUrl ? (
+        <a
+          href={imageUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`View image for ${highlightTitle}`}
+          className={cn(
+            "block w-full transition-opacity duration-300",
+            hoverEaseClass,
+            "hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary",
+          )}
+        >
+          <MediaFrame
+            image={publication.image}
+            width={800}
+            sizes="(max-width: 640px) 92vw, 22rem"
+            priority={priority}
+            className="w-full border-0"
+          />
+        </a>
+      ) : (
         <MediaFrame
           image={publication.image}
           width={800}
@@ -57,16 +67,11 @@ export function PublicationListEntry({
           priority={priority}
           className="w-full border-0"
         />
-      </a>
-    ) : (
-      <MediaFrame
-        image={publication.image}
-        width={800}
-        sizes="(max-width: 640px) 92vw, 22rem"
-        priority={priority}
-        className="w-full max-w-[22rem] border-0"
-      />
-    )
+      )}
+      {publication.figureCaption ? (
+        <p className="text-caption text-text-tertiary">{publication.figureCaption}</p>
+      ) : null}
+    </div>
   ) : null;
 
   return (

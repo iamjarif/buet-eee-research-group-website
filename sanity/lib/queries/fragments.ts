@@ -109,6 +109,7 @@ export const publicationSummaryFields = /* groq */ `
   image {
     ${imageFields}
   },
+  figureCaption,
   authorLine,
   researchAreas[]->{
     _id,

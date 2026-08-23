@@ -132,6 +132,7 @@ export type PublicationSummary = {
   displayOrder?: number;
   description?: PortableTextBlock[];
   image?: SanityImage;
+  figureCaption?: string;
   authorLine?: string;
   researchAreas?: Array<{ _id: string; title: string; slug: string }>;
   /** Sync suggestions — used for filtering until editors confirm into researchAreas. */
