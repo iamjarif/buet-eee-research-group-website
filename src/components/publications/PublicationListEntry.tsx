@@ -38,7 +38,7 @@ export function PublicationListEntry({
   const doiLabel = publication.doi?.replace(/^https?:\/\/(dx\.)?doi\.org\//i, "");
 
   const figure = hasImage ? (
-    <div className="flex w-full max-w-[22rem] flex-col gap-2 border border-border-default p-3">
+    <div className="flex w-full max-w-[22rem] flex-col gap-2 border border-border-default p-3 lg:justify-self-center">
       {imageUrl ? (
         <a
           href={imageUrl}
@@ -79,7 +79,7 @@ export function PublicationListEntry({
       <div
         className={cn(
           "flex flex-col gap-6",
-          hasImage && "lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-x-14",
+          hasImage && "lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-center lg:gap-x-14",
         )}
       >
         <div className="flex items-start gap-4">
