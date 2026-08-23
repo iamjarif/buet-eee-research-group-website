@@ -108,13 +108,8 @@ export const homepage = defineType({
       type: "text",
       rows: 3,
       group: "research",
-    }),
-    defineField({
-      name: "featuredResearchAreas",
-      title: "Featured Research Areas",
-      type: "array",
-      group: "research",
-      of: [{ type: "reference", to: [{ type: "researchArea" }] }],
+      description:
+        "The six hero research areas (Fabrication, Device Physics, AI Hardware, Modeling & Simulation, 3D-IC, Circuits) are shown automatically and cannot be edited here.",
     }),
 
     // Team

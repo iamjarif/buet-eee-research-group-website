@@ -3,24 +3,44 @@ export type ResearchAreaRecord = {
   title: string;
 };
 
-const RF_ID = "researchArea-gan-rf-devices";
-const POWER_ID = "researchArea-gan-power-devices";
-const PHYSICS_ID = "researchArea-device-physics-modeling";
-const TCAD_ID = "researchArea-tcad-advanced-simulation";
+const FABRICATION_ID = "researchArea-fabrication";
+const DEVICE_PHYSICS_ID = "researchArea-device-physics";
+const AI_HARDWARE_ID = "researchArea-ai-hardware-design";
+const MODELING_ID = "researchArea-modeling-simulation";
+const THREE_D_IC_ID = "researchArea-3d-ic";
+const CIRCUITS_ID = "researchArea-circuits";
 
-/** Keyword rules from OpenAlex topic strings → existing researchArea document IDs. */
+/** Keyword rules from OpenAlex topic strings → canonical researchArea document IDs. */
 const TOPIC_RULES: Array<{ pattern: RegExp; areaIds: string[] }> = [
-  { pattern: /radio frequency|\brf\b/i, areaIds: [RF_ID] },
-  { pattern: /\bpower\b|dc-dc|converter/i, areaIds: [POWER_ID] },
-  { pattern: /\bgan\b|gallium nitride/i, areaIds: [RF_ID, POWER_ID] },
-  { pattern: /physics|modeling|modelling|transport/i, areaIds: [PHYSICS_ID] },
-  { pattern: /tcad|simulation|\bcad\b|dtco/i, areaIds: [TCAD_ID] },
+  { pattern: /fabrication|process engineering|ohmic|regrowth|gate recess/i, areaIds: [FABRICATION_ID] },
+  {
+    pattern: /physics|transport|trap|barrier|fermi|reliability|\bgan\b|gallium nitride|\brf\b|radio frequency|\bpower\b/i,
+    areaIds: [DEVICE_PHYSICS_ID],
+  },
+  {
+    pattern: /machine learning|artificial intelligence|\bai\b|inverse design|dtco|design technology co/i,
+    areaIds: [AI_HARDWARE_ID],
+  },
+  {
+    pattern: /tcad|simulation|modeling|modelling|compact model|\bcad\b/i,
+    areaIds: [MODELING_ID],
+  },
+  {
+    pattern: /3d[- ]?ic|heterogeneous integration|interconnect|through[- ]silicon/i,
+    areaIds: [THREE_D_IC_ID],
+  },
+  {
+    pattern: /circuit|amplifier|logic|monolithic|mmic/i,
+    areaIds: [CIRCUITS_ID],
+  },
 ];
 
-const TITLE_RF = /\brf\b|radio frequency|linearity|microwave|mmwave|field plate/i;
-const TITLE_POWER = /\bpower\b|vertical|\bkv\b|diode|switching|finfet/i;
-const TITLE_PHYSICS = /physics|transport|trap|hole|barrier|fermi|compact model/i;
-const TITLE_TCAD = /tcad|simulation|\bcad\b|dtco|inverse design|self consistent/i;
+const TITLE_FABRICATION = /fabrication|ohmic|regrowth|gate recess|field plate|process/i;
+const TITLE_DEVICE_PHYSICS = /physics|transport|trap|barrier|fermi|reliability|\brf\b|power|hemts?|diode/i;
+const TITLE_AI_HARDWARE = /machine learning|\bai\b|inverse design|dtco|neural/i;
+const TITLE_MODELING = /tcad|simulation|modeling|modelling|compact model|\bcad\b|self consistent/i;
+const TITLE_3D_IC = /3d[- ]?ic|heterogeneous|interconnect|tsv/i;
+const TITLE_CIRCUITS = /circuit|amplifier|logic|monolithic|mmic/i;
 
 function uniqueIds(ids: string[]) {
   return [...new Set(ids)];
@@ -46,8 +66,8 @@ export function collectOpenAlexTopicNames(work: {
 }
 
 /**
- * Map OpenAlex topic names (plus title keywords to split GaN RF vs Power)
- * onto existing researchArea documents. Returns [] when nothing is close.
+ * Map OpenAlex topic names (plus title keywords) onto canonical researchArea documents.
+ * Returns [] when nothing is close.
  */
 export function suggestResearchAreaIds(
   topicNames: string[],
@@ -63,15 +83,12 @@ export function suggestResearchAreaIds(
 
   let ids = uniqueIds(fromTopics);
 
-  if (ids.includes(RF_ID) && ids.includes(POWER_ID)) {
-    const rf = TITLE_RF.test(title);
-    const power = TITLE_POWER.test(title);
-    if (rf && !power) ids = ids.filter((id) => id !== POWER_ID);
-    if (power && !rf) ids = ids.filter((id) => id !== RF_ID);
-  }
-
-  if (TITLE_PHYSICS.test(title)) ids.push(PHYSICS_ID);
-  if (TITLE_TCAD.test(title)) ids.push(TCAD_ID);
+  if (TITLE_FABRICATION.test(title)) ids.push(FABRICATION_ID);
+  if (TITLE_DEVICE_PHYSICS.test(title)) ids.push(DEVICE_PHYSICS_ID);
+  if (TITLE_AI_HARDWARE.test(title)) ids.push(AI_HARDWARE_ID);
+  if (TITLE_MODELING.test(title)) ids.push(MODELING_ID);
+  if (TITLE_3D_IC.test(title)) ids.push(THREE_D_IC_ID);
+  if (TITLE_CIRCUITS.test(title)) ids.push(CIRCUITS_ID);
 
   return idsInCatalog(uniqueIds(ids), catalog);
 }

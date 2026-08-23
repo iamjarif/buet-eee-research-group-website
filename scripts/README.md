@@ -51,12 +51,20 @@ The read token (`SANITY_API_READ_TOKEN`) is sufficient for dry-run preview only.
 - `siteSettings` — patched (seed fields only; contact/social fields preserved)
 - `homepage` — createOrReplace
 
-### Research areas (4)
+### Research areas (6)
 
-- `researchArea-gan-rf-devices`
-- `researchArea-gan-power-devices`
-- `researchArea-device-physics-modeling`
-- `researchArea-tcad-advanced-simulation`
+- `researchArea-fabrication`
+- `researchArea-device-physics`
+- `researchArea-ai-hardware-design`
+- `researchArea-modeling-simulation`
+- `researchArea-3d-ic`
+- `researchArea-circuits`
+
+To sync these in an existing Sanity dataset (remap legacy refs, delete extras):
+
+```bash
+node --env-file=.env.local scripts/sync-canonical-research-areas.mjs --apply
+```
 
 ### Publications (6)
 

@@ -4,15 +4,21 @@
  */
 
 import { buildCvPatents } from "./data/cv-patents.mjs";
+import {
+  CANONICAL_RESEARCH_AREAS,
+  descriptionParagraphsForSlug,
+} from "./data/canonical-research-areas.mjs";
 
 /** All deterministic document IDs owned by this seed. Nothing outside this list is touched. */
 export const SEED_DOCUMENT_IDS = [
   "siteSettings",
   "homepage",
-  "researchArea-gan-rf-devices",
-  "researchArea-gan-power-devices",
-  "researchArea-device-physics-modeling",
-  "researchArea-tcad-advanced-simulation",
+  "researchArea-fabrication",
+  "researchArea-device-physics",
+  "researchArea-ai-hardware-design",
+  "researchArea-modeling-simulation",
+  "researchArea-3d-ic",
+  "researchArea-circuits",
   "publication-physics-based-reliability-modeling-gan-rf",
   "publication-buffer-induced-trapping-algan-gan-hemts",
   "publication-compact-modeling-vertical-gan-power-diodes",
@@ -148,64 +154,18 @@ function imageField(assetId, alt) {
 }
 
 export function buildResearchAreas() {
-  return [
-    {
-      _id: "researchArea-gan-rf-devices",
+  return CANONICAL_RESEARCH_AREAS.map((area) => {
+    const paragraphs = descriptionParagraphsForSlug(area.slug);
+    return {
+      _id: area._id,
       _type: "researchArea",
-      title: "GaN RF Devices",
-      slug: { _type: "slug", current: "gan-rf-devices" },
-      description: [
-        block(
-          "High-frequency AlGaN/GaN devices for wireless, radar, and other RF applications.",
-          "desc",
-        ),
-      ],
-      displayOrder: 0,
+      title: area.title,
+      slug: { _type: "slug", current: area.slug },
+      description: paragraphs.map((text, index) => block(text, `desc-${index}`)),
+      displayOrder: area.displayOrder,
       isPublished: true,
-    },
-    {
-      _id: "researchArea-gan-power-devices",
-      _type: "researchArea",
-      title: "GaN Power Devices",
-      slug: { _type: "slug", current: "gan-power-devices" },
-      description: [
-        block(
-          "Wide-bandgap transistor architectures for efficient power conversion and high-performance power electronics.",
-          "desc",
-        ),
-      ],
-      displayOrder: 1,
-      isPublished: true,
-    },
-    {
-      _id: "researchArea-device-physics-modeling",
-      _type: "researchArea",
-      title: "Device Physics & Modeling",
-      slug: { _type: "slug", current: "device-physics-modeling" },
-      description: [
-        block(
-          "Physics-based and compact modeling that connects semiconductor behavior with circuit-level design.",
-          "desc",
-        ),
-      ],
-      displayOrder: 2,
-      isPublished: true,
-    },
-    {
-      _id: "researchArea-tcad-advanced-simulation",
-      _type: "researchArea",
-      title: "TCAD & Advanced Simulation",
-      slug: { _type: "slug", current: "tcad-advanced-simulation" },
-      description: [
-        block(
-          "Numerical simulation of carrier transport, device behavior, and reliability.",
-          "desc",
-        ),
-      ],
-      displayOrder: 3,
-      isPublished: true,
-    },
-  ];
+    };
+  });
 }
 
 export function buildPublications() {
@@ -226,7 +186,7 @@ export function buildPublications() {
       year: 2023,
       isFeatured: true,
       displayOrder: 0,
-      researchAreas: [ref("researchArea-gan-rf-devices")],
+      researchAreas: [ref("researchArea-device-physics")],
     },
     {
       _id: "publication-buffer-induced-trapping-algan-gan-hemts",
@@ -241,7 +201,7 @@ export function buildPublications() {
       year: 2023,
       isFeatured: true,
       displayOrder: 1,
-      researchAreas: [ref("researchArea-gan-rf-devices")],
+      researchAreas: [ref("researchArea-device-physics")],
     },
     {
       _id: "publication-compact-modeling-vertical-gan-power-diodes",
@@ -259,7 +219,7 @@ export function buildPublications() {
       year: 2022,
       isFeatured: true,
       displayOrder: 2,
-      researchAreas: [ref("researchArea-gan-power-devices")],
+      researchAreas: [ref("researchArea-modeling-simulation")],
     },
     {
       _id: "publication-thermal-transport-limits-lateral-gan-power",
@@ -277,7 +237,7 @@ export function buildPublications() {
       year: 2024,
       isFeatured: true,
       displayOrder: 3,
-      researchAreas: [ref("researchArea-gan-power-devices")],
+      researchAreas: [ref("researchArea-device-physics")],
     },
     {
       _id: "publication-field-plate-optimization-high-voltage-gan-hemts",
@@ -295,7 +255,7 @@ export function buildPublications() {
       year: 2023,
       isFeatured: true,
       displayOrder: 4,
-      researchAreas: [ref("researchArea-gan-rf-devices")],
+      researchAreas: [ref("researchArea-device-physics")],
     },
     {
       _id: "publication-tcad-study-dynamic-on-resistance-gan-diodes",
@@ -313,7 +273,7 @@ export function buildPublications() {
       year: 2022,
       isFeatured: true,
       displayOrder: 5,
-      researchAreas: [ref("researchArea-tcad-advanced-simulation")],
+      researchAreas: [ref("researchArea-modeling-simulation")],
     },
   ];
 }
@@ -569,7 +529,6 @@ export function buildHomepage({
     researchSectionHeading: "The physics of wide-bandgap devices, examined closely.",
     researchSectionDescription:
       "NC Group brings together device physics, modeling, simulation, and engineering to understand and advance next-generation semiconductor devices.",
-    featuredResearchAreas: researchAreas.map((doc) => ref(doc._id)),
     teamSectionHeading: "The people behind the research.",
     teamSectionDescription:
       "Our group is dedicated to advancing the field of Wide Bandgap (WBG) semiconductor technology, with a specific focus on Gallium Nitride (GaN) devices. We specialize in the development of GaN RF and power devices, leveraging the unique properties of GaN to create high-performance solutions.",

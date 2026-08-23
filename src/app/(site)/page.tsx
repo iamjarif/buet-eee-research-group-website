@@ -9,7 +9,7 @@ import { ResearchSection } from "@/components/home/ResearchSection";
 import { TeamSection } from "@/components/home/TeamSection";
 import { Reveal } from "@/components/motion/Reveal";
 import { Container } from "@/components/ui/Container";
-import { getActivities, getContributionCounts, getHomepage, getRecentPublications, getSiteSettings } from "@/lib/cms";
+import { getActivities, getContributionCounts, getHomepage, getRecentPublications, getResearchAreas, getSiteSettings } from "@/lib/cms";
 import { enrichContributionsWithLiveCounts } from "@/lib/contributions";
 import { siteConfig } from "@/config/site";
 import { buildMetadata } from "@/lib/metadata";
@@ -78,7 +78,7 @@ export default async function HomePage() {
     );
   }
 
-  const [activities, featuredPublications, contributionCounts] = await Promise.all([
+  const [activities, featuredPublications, contributionCounts, researchAreas] = await Promise.all([
     homepage.featuredActivities?.length && homepage.featuredActivities.length > 0
       ? Promise.resolve(homepage.featuredActivities)
       : getActivities().then((items) => items.slice(0, 4)),
@@ -86,6 +86,7 @@ export default async function HomePage() {
       ? Promise.resolve(homepage.featuredPublications)
       : getRecentPublications().then((items) => items.slice(0, 6)),
     getContributionCounts(),
+    getResearchAreas(),
   ]);
 
   const contributions = enrichContributionsWithLiveCounts(
@@ -108,7 +109,7 @@ export default async function HomePage() {
       <ResearchSection
         heading={homepage.researchSectionHeading}
         description={homepage.researchSectionDescription}
-        areas={homepage.featuredResearchAreas}
+        areas={researchAreas}
       />
 
       <TeamSection

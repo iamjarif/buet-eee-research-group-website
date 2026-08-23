@@ -207,7 +207,6 @@ export type Homepage = {
   featuredPublications?: PublicationSummary[];
   researchSectionHeading?: string;
   researchSectionDescription?: string;
-  featuredResearchAreas?: ResearchAreaSummary[];
   teamSectionHeading?: string;
   teamSectionDescription?: string;
   teamImage?: SanityImage;

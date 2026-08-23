@@ -100,9 +100,6 @@ export const homepageQuery = /* groq */ `
     },
     researchSectionHeading,
     researchSectionDescription,
-    featuredResearchAreas[]->{
-      ${researchAreaSummaryFields}
-    },
     teamSectionHeading,
     teamSectionDescription,
     teamImage {
