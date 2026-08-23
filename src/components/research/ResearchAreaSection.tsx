@@ -1,5 +1,4 @@
 import { ResearchAreaPublications } from "@/components/research/ResearchAreaPublications";
-import { MediaFrame } from "@/components/ui/MediaFrame";
 import { PortableTextContent } from "@/components/ui/PortableTextContent";
 import { TextLink } from "@/components/ui/TextLink";
 import { formatSectionIndex } from "@/lib/format";
@@ -9,18 +8,13 @@ import type { ResearchAreaEntry } from "../../../sanity/types";
 type ResearchAreaSectionProps = {
   area: ResearchAreaEntry;
   index: number;
-  priority?: boolean;
 };
 
 /**
  * Each area reads as a chapter: a numbered rule carrying its published output,
  * then the title paired with its own account of the work.
  */
-export function ResearchAreaSection({
-  area,
-  index,
-  priority = false,
-}: ResearchAreaSectionProps) {
+export function ResearchAreaSection({ area, index }: ResearchAreaSectionProps) {
   const headingId = `research-area-${area.slug}`;
   const output = formatResearchOutput(area);
 
@@ -51,21 +45,11 @@ export function ResearchAreaSection({
           ) : null}
         </div>
 
-        <div className="flex flex-col gap-8">
-          <MediaFrame
-            image={area.image}
-            width={1000}
-            sizes="(max-width: 640px) 92vw, (max-width: 1024px) 88vw, 34rem"
-            priority={priority}
-            className="w-full max-w-[34rem] lg:max-w-none"
-          />
-
-          <ResearchAreaPublications
-            publications={area.selectedPublications ?? []}
-            totalCount={area.publicationCount ?? 0}
-            researchAreaSlug={area.slug}
-          />
-        </div>
+        <ResearchAreaPublications
+          publications={area.selectedPublications ?? []}
+          totalCount={area.publicationCount ?? 0}
+          researchAreaSlug={area.slug}
+        />
       </div>
     </section>
   );

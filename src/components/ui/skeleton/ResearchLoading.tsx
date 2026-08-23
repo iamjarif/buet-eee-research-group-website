@@ -22,19 +22,16 @@ function ResearchAreaSkeleton() {
           <SkeletonBlock className="h-4 w-[6rem]" />
         </div>
 
-        <div className="flex flex-col gap-8">
-          <SkeletonBlock className="aspect-[4/3] max-w-[34rem] w-full" />
-          <div className="max-w-[34rem] border-t border-border-default">
-            {[0, 1, 2].map((index) => (
-              <div
-                key={index}
-                className="space-y-2 border-b border-border-default py-4"
-              >
-                <SkeletonBlock className="h-4 max-w-[24rem] w-full" />
-                <SkeletonBlock className="h-3 w-[10rem]" />
-              </div>
-            ))}
-          </div>
+        <div className="max-w-[34rem] border-t border-border-default">
+          {[0, 1, 2].map((index) => (
+            <div
+              key={index}
+              className="space-y-2 border-b border-border-default py-4"
+            >
+              <SkeletonBlock className="h-4 max-w-[24rem] w-full" />
+              <SkeletonBlock className="h-3 w-[10rem]" />
+            </div>
+          ))}
         </div>
       </div>
     </div>

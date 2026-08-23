@@ -14,11 +14,7 @@ export function ResearchAreas({ areas }: ResearchAreasProps) {
         {areas.length > 0 ? (
           areas.map((area, index) => (
             <Reveal key={area._id} variant="fadeUpSubtle" viewport={{ once: true, amount: 0 }}>
-              <ResearchAreaSection
-                area={area}
-                index={index + 1}
-                priority={index === 0}
-              />
+              <ResearchAreaSection area={area} index={index + 1} />
             </Reveal>
           ))
         ) : (
