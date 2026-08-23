@@ -601,6 +601,10 @@
   opacity: 1;
 }
 
+.hero-hex-node-border {
+  z-index: 6;
+}
+
 .hero-hex-node-shine {
   position: absolute;
   inset: 0;

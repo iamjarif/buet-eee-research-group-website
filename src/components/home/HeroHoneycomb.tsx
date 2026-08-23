@@ -30,10 +30,25 @@ const CENTER_ROW = 2;
 const HEX_SRC = {
   center: "/images/hero/hex-center.svg",
   node: "/images/hero/hex-node.svg",
+  nodeBorder: "/images/hero/hex-node-border.svg",
   bg: "/images/hero/hex-bg.svg",
 } as const;
 
 const N_MARK_SRC = "/images/hero/n-mark.svg";
+
+function HeroHexNodeBorder() {
+  return (
+    <Image
+      src={HEX_SRC.nodeBorder}
+      alt=""
+      width={HEX_WIDTH}
+      height={HEX_SVG_HEIGHT}
+      unoptimized
+      className="hero-hex-node-border pointer-events-none absolute inset-0 size-full"
+      aria-hidden
+    />
+  );
+}
 
 /** Clip photo backgrounds to the exact hex-node.svg silhouette. */
 const HEX_NODE_MASK_STYLE = {
@@ -253,6 +268,7 @@ export function HeroHoneycomb({ className, researchAreas }: HeroHoneycombProps) 
                         aria-hidden
                       />
                     ) : null}
+                    {isInteractive ? <HeroHexNodeBorder /> : null}
                   </div>
                 </div>
                 {cell.cluster?.kind === "center" ? (
