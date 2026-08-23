@@ -38,7 +38,7 @@ export function PublicationListEntry({
   const doiLabel = publication.doi?.replace(/^https?:\/\/(dx\.)?doi\.org\//i, "");
 
   const figure = hasImage ? (
-    <div className="flex w-full max-w-[22rem] flex-col gap-2">
+    <div className="flex w-full max-w-[22rem] flex-col gap-2 border border-border-default p-3">
       {imageUrl ? (
         <a
           href={imageUrl}
@@ -69,7 +69,7 @@ export function PublicationListEntry({
         />
       )}
       {publication.figureCaption ? (
-        <p className="text-caption text-text-tertiary">{publication.figureCaption}</p>
+        <p className="text-center text-body-sm text-text-tertiary">{publication.figureCaption}</p>
       ) : null}
     </div>
   ) : null;

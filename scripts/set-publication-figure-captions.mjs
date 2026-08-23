@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Set placeholder figure captions on all publication documents.
+ * Set figure captions on publication documents from scripts/data/publication-figure-captions.mjs
  *
  * Usage:
  *   node --env-file=.env.local scripts/set-publication-figure-captions.mjs
@@ -9,20 +9,9 @@
 
 import { createClient } from "@sanity/client";
 
+import { PUBLICATION_FIGURE_CAPTIONS } from "./data/publication-figure-captions.mjs";
+
 const apply = process.argv.includes("--apply");
-
-const DUMMY_FIGURE_CAPTIONS = [
-  "Fig. 1. Cross-sectional schematic of the device structure.",
-  "Fig. 1. Measured I–V characteristics at room temperature.",
-  "Fig. 1. Fabrication process flow for the AlGaN/GaN heterostructure.",
-  "Fig. 1. TCAD simulation mesh and boundary conditions.",
-  "Fig. 1. Comparison of experimental and modeled results.",
-  "Fig. 1. Optical micrograph of the fabricated device.",
-];
-
-function dummyFigureCaption(index) {
-  return DUMMY_FIGURE_CAPTIONS[index % DUMMY_FIGURE_CAPTIONS.length];
-}
 
 async function main() {
   const client = createClient({
@@ -34,29 +23,39 @@ async function main() {
     perspective: "raw",
   });
 
+  const ids = Object.keys(PUBLICATION_FIGURE_CAPTIONS);
   const publications = await client.fetch(
-    `*[_type == "publication"] | order(year desc, title asc) {
-      _id,
-      title,
-      figureCaption
-    }`,
+    `*[_type == "publication" && _id in $ids]{ _id, highlightTitle, title, figureCaption }`,
+    { ids },
   );
 
-  if (publications.length === 0) {
-    console.log("No publications found.");
+  const byId = new Map(publications.map((publication) => [publication._id, publication]));
+  const updates = [];
+
+  for (const [id, entry] of Object.entries(PUBLICATION_FIGURE_CAPTIONS)) {
+    const publication = byId.get(id);
+    if (!publication) {
+      console.warn(`Publication not found: ${id} (${entry.highlightTitle})`);
+      continue;
+    }
+
+    updates.push({
+      id,
+      title: publication.title,
+      highlightTitle: publication.highlightTitle,
+      nextCaption: entry.figureCaption,
+      currentCaption: publication.figureCaption?.trim() ?? "",
+    });
+  }
+
+  if (updates.length === 0) {
+    console.log("No matching publications to update.");
     return;
   }
 
-  const updates = publications.map((publication, index) => ({
-    id: publication._id,
-    title: publication.title,
-    nextCaption: dummyFigureCaption(index),
-    currentCaption: publication.figureCaption?.trim() ?? "",
-  }));
-
   console.log(`Publications to update (${updates.length}):\n`);
   for (const update of updates) {
-    console.log(`• ${update.title}`);
+    console.log(`• ${update.highlightTitle ?? update.title}`);
     console.log(`  → ${update.nextCaption}\n`);
   }
 
