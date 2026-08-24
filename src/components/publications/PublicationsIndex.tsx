@@ -11,7 +11,6 @@ import { Container } from "@/components/ui/Container";
 import {
   filterPublications,
   getPublicationsPath,
-  groupPublicationsByYear,
   parseResearchAreaFilter,
   shouldShowResearchAreaFilters,
   type PublicationTypeFilter,
@@ -66,11 +65,6 @@ export function PublicationsIndex({
         researchArea: activeResearchArea,
       }),
     [publications, query, typeFilter, activeResearchArea],
-  );
-
-  const yearGroups = useMemo(
-    () => groupPublicationsByYear(visiblePublications),
-    [visiblePublications],
   );
 
   const firstEntryId = visiblePublications[0]?._id;
@@ -144,34 +138,25 @@ export function PublicationsIndex({
         aria-label="Publication results"
         className="bg-surface-base page-content-padding"
       >
-        <Container as="div" className="flex flex-col gap-14">
-          {yearGroups.length > 0 ? (
-            yearGroups.map(({ year, publications: groupedPublications }) => (
-              <Stagger
-                key={`${year}-${typeFilter}-${activeResearchArea}-${query}`}
-                immediate
-                className="flex flex-col gap-6"
-                stagger={0.06}
-              >
-                <StaggerItem>
-                  <h2 className="text-display-sm text-text-primary">
-                    {year}
-                  </h2>
+        <Container as="div" className="flex flex-col">
+          {visiblePublications.length > 0 ? (
+            <Stagger
+              key={`${typeFilter}-${activeResearchArea}-${query}`}
+              immediate
+              stagger={0.06}
+            >
+              {visiblePublications.map((publication, index) => (
+                <StaggerItem
+                  key={publication._id}
+                  className={index === 0 ? "border-t border-border-default" : undefined}
+                >
+                  <PublicationListEntry
+                    publication={publication}
+                    priority={publication._id === firstEntryId}
+                  />
                 </StaggerItem>
-
-                {groupedPublications.map((publication, index) => (
-                  <StaggerItem
-                    key={publication._id}
-                    className={index === 0 ? "border-t border-border-default" : undefined}
-                  >
-                    <PublicationListEntry
-                      publication={publication}
-                      priority={publication._id === firstEntryId}
-                    />
-                  </StaggerItem>
-                ))}
-              </Stagger>
-            ))
+              ))}
+            </Stagger>
           ) : (
             <Reveal variant="fadeUpSubtle">
               <p className="text-body-sm text-text-secondary">

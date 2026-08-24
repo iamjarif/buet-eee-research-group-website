@@ -104,7 +104,6 @@ export function buildPublicationsJsonLd(publications: PublicationSummary[]) {
                 name,
               })) }
             : {}),
-          datePublished: String(publication.year),
           isPartOf: {
             "@type": "Periodical",
             name: publication.journalOrConference,

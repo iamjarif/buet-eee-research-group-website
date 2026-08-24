@@ -133,7 +133,7 @@ export const allResearchAreasQuery = /* groq */ `
     ${researchAreaSummaryFields},
     "publicationCount": count(*[_type == "publication" && ${publishedPublicationFilter} && references(^._id)]),
     "selectedPublications": *[_type == "publication" && ${publishedPublicationFilter} && references(^._id)]
-      | order(year desc, displayOrder asc)[0...3] {
+      | order(displayOrder asc, title asc)[0...3] {
       ${publicationSummaryFields}
     },
     seo { ${seoFields} }
@@ -144,7 +144,7 @@ export const researchAreaBySlugQuery = /* groq */ `
   *[_type == "researchArea" && slug.current == $slug && isPublished == true][0] {
     ${researchAreaSummaryFields},
     seo { ${seoFields} },
-    "relatedPublications": *[_type == "publication" && ${publishedPublicationFilter} && references(^._id)] | order(year desc) {
+    "relatedPublications": *[_type == "publication" && ${publishedPublicationFilter} && references(^._id)] | order(displayOrder asc, title asc) {
       ${publicationSummaryFields}
     },
     "relatedPeople": *[_type == "person" && references(^._id) && isActive == true] | order(displayOrder asc) {
@@ -154,13 +154,13 @@ export const researchAreaBySlugQuery = /* groq */ `
 `;
 
 export const allPublicationsQuery = /* groq */ `
-  *[_type == "publication" && ${publishedPublicationFilter}] | order(year desc, displayOrder asc) {
+  *[_type == "publication" && ${publishedPublicationFilter}] | order(displayOrder asc, title asc) {
     ${publicationSummaryFields}
   }
 `;
 
 export const recentPublicationsQuery = /* groq */ `
-  *[_type == "publication" && ${publishedPublicationFilter}] | order(year desc, displayOrder asc)[0...6] {
+  *[_type == "publication" && ${publishedPublicationFilter}] | order(displayOrder asc, title asc)[0...6] {
     ${publicationCardFields}
   }
 `;

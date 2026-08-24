@@ -125,7 +125,6 @@ export type PublicationSummary = {
   slug: string;
   journalOrConference: string;
   publicationType?: "journal" | "conference";
-  year: number;
   doi?: string;
   externalUrl?: string;
   isFeatured?: boolean;

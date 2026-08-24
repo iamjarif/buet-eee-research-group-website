@@ -120,16 +120,12 @@ export function PublicationListEntry({
               ) : null}
 
               <p className="text-caption tracking-[0.04em] text-text-tertiary uppercase">
-                <time dateTime={String(publication.year)}>{publication.year}</time>
                 {publication.journalOrConference ? (
-                  <>
-                    {" · "}
-                    <span className="normal-case">{publication.journalOrConference}</span>
-                  </>
+                  <span className="normal-case">{publication.journalOrConference}</span>
                 ) : null}
                 {doiUrl && doiLabel ? (
                   <>
-                    {" · "}
+                    {publication.journalOrConference ? " · " : null}
                     <a
                       href={doiUrl}
                       target="_blank"

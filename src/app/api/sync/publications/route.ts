@@ -24,7 +24,7 @@ const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 const OPENALEX_CURSOR_OVERLAP_DAYS = 5;
 const PUBLICATION_SYNC_STATE_ID = "sync-state-publications";
 const EXISTING_PUBLICATIONS_QUERY = /* groq */ `
-  *[_type == "publication"]{ doi, title, year }
+  *[_type == "publication"]{ doi, title }
 `;
 const RESEARCH_AREAS_QUERY = /* groq */ `
   *[_type == "researchArea"]{ _id, title }
@@ -65,7 +65,6 @@ type OpenAlexWorksResponse = {
 type ExistingPublication = {
   doi?: string | null;
   title?: string | null;
-  year?: number | null;
 };
 
 type PublicationDraft = {
@@ -73,7 +72,6 @@ type PublicationDraft = {
   _type: "publication";
   title: string;
   slug: { _type: "slug"; current: string };
-  year: number;
   doi?: string;
   journalOrConference: string;
   externalUrl?: string;
@@ -263,18 +261,12 @@ async function fetchWorks(sinceDate: string | null) {
 function isAlreadyInSanity(work: OpenAlexWork, existing: ExistingPublication[]) {
   const doi = normalizeDoi(work.doi);
   const title = normalizeTitle(work.title);
-  const year = work.publication_year;
 
   return existing.some((doc) => {
     const existingDoi = normalizeDoi(doc.doi);
     if (doi && existingDoi && doi === existingDoi) return true;
 
-    if (
-      title &&
-      year != null &&
-      doc.year === year &&
-      normalizeTitle(doc.title) === title
-    ) {
+    if (title && normalizeTitle(doc.title) === title) {
       return true;
     }
 
@@ -331,7 +323,6 @@ function mapToSanityDraft(
       _type: "slug",
       current: slugify(title) || slugify(openAlexId),
     },
-    year: work.publication_year!,
     ...(doi ? { doi } : {}),
     journalOrConference,
     ...(externalUrl ? { externalUrl } : {}),

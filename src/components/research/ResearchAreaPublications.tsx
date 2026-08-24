@@ -59,7 +59,7 @@ export function ResearchAreaPublications({
                 <p className="mt-1 text-body-sm text-text-secondary">{publication.title}</p>
               ) : null}
               <p className="mt-1.5 text-caption uppercase text-text-tertiary">
-                {publication.journalOrConference} · {publication.year}
+                {publication.journalOrConference}
               </p>
             </article>
           );

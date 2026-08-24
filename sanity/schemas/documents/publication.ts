@@ -62,17 +62,6 @@ export const publication = defineType({
       description: "Used for filtering on the publications index page.",
     }),
     defineField({
-      name: "year",
-      title: "Year",
-      type: "number",
-      validation: (rule) =>
-        rule
-          .required()
-          .integer()
-          .min(1900)
-          .max(new Date().getFullYear() + 1),
-    }),
-    defineField({
       name: "doi",
       title: "DOI",
       type: "string",
@@ -155,11 +144,6 @@ export const publication = defineType({
   ],
   orderings: [
     {
-      title: "Year (Newest First)",
-      name: "yearDesc",
-      by: [{ field: "year", direction: "desc" }],
-    },
-    {
       title: "Display Order",
       name: "displayOrderAsc",
       by: [{ field: "displayOrder", direction: "asc" }],
@@ -170,10 +154,9 @@ export const publication = defineType({
       highlightTitle: "highlightTitle",
       title: "title",
       publicationType: "publicationType",
-      year: "year",
       journal: "journalOrConference",
     },
-    prepare: ({ highlightTitle, title, publicationType, year, journal }) => ({
+    prepare: ({ highlightTitle, title, publicationType, journal }) => ({
       title: highlightTitle || title,
       subtitle: [
         highlightTitle && title !== highlightTitle ? title : null,
@@ -183,7 +166,6 @@ export const publication = defineType({
             ? "Journal"
             : null,
         journal,
-        year,
       ]
         .filter(Boolean)
         .join(" · "),

@@ -133,7 +133,6 @@ export function filterPublications(
       publication.title,
       publication.journalOrConference,
       publication.authorLine ?? "",
-      String(publication.year),
       ...getPublicationResearchAreas(publication).map((area) => area.title),
     ]
       .join(" ")
@@ -141,25 +140,4 @@ export function filterPublications(
 
     return haystack.includes(normalizedQuery);
   });
-}
-
-export function groupPublicationsByYear(
-  publications: PublicationSummary[],
-): Array<{ year: number; publications: PublicationSummary[] }> {
-  const groups = new Map<number, PublicationSummary[]>();
-  const orderedYears: number[] = [];
-
-  for (const publication of publications) {
-    if (!groups.has(publication.year)) {
-      orderedYears.push(publication.year);
-      groups.set(publication.year, []);
-    }
-
-    groups.get(publication.year)?.push(publication);
-  }
-
-  return orderedYears.map((year) => ({
-    year,
-    publications: groups.get(year) ?? [],
-  }));
 }

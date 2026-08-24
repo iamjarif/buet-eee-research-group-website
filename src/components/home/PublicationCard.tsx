@@ -37,7 +37,6 @@ export function PublicationCard({ publication }: PublicationCardProps) {
 
         <p className="text-caption text-text-tertiary">
           <span className="text-text-secondary">{publication.journalOrConference}</span>
-          {publication.year ? ` · ${publication.year}` : null}
         </p>
       </div>
     </>
