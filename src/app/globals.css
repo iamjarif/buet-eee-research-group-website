@@ -562,15 +562,15 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+  transform: translateZ(0) scale(1);
   transform-origin: center;
-  transition:
-    transform 0.45s cubic-bezier(0.33, 1, 0.68, 1),
-    filter 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+  backface-visibility: hidden;
+  transition: transform 0.45s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 .hero-hex-node:hover .hero-hex-node-visual,
 .hero-hex-node:focus-visible .hero-hex-node-visual {
-  transform: scale(1.04);
+  transform: translateZ(0) scale(1.04);
 }
 
 .hero-hex-node-label {
@@ -605,12 +605,16 @@
   z-index: 6;
 }
 
+.hero-hex-node-photo {
+  clip-path: url(#hero-hex-photo-clip);
+  -webkit-clip-path: url(#hero-hex-photo-clip);
+}
+
 .hero-hex-node-shine {
   position: absolute;
   inset: 0;
   z-index: 5;
   pointer-events: none;
-  overflow: hidden;
 }
 
 .hero-hex-node-shine::after {

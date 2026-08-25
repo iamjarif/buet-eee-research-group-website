@@ -2,7 +2,6 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { SanityImage } from "@/components/ui/SanityImage";
 import {
   heroHoneycombNodesByGrid,
   resolveHeroHoneycombNodesFromResearchAreas,
@@ -10,6 +9,8 @@ import {
 } from "@/lib/hero-honeycomb";
 import { getPublicationsPath } from "@/lib/publications";
 import { cn } from "@/lib/utils";
+import { urlFor } from "../../../sanity/lib/image";
+import type { SanityImage } from "../../../sanity/types";
 
 /** Pointy-top hex geometry from Figma node 104:2. */
 const HEX_WIDTH = 208;
@@ -36,31 +37,46 @@ const HEX_SRC = {
 
 const N_MARK_SRC = "/images/hero/n-mark.svg";
 
-function HeroHexNodeBorder() {
+/** Direct CDN width — skip Next.js Image so the file is not downsampled again. */
+const HEX_PHOTO_WIDTH = 960;
+
+const HEX_PATH =
+  "M0 69.9634C0 61.3708 4.5937 53.4337 12.0443 49.1533L92.0478 3.1899C99.4512 -1.06345 108.557 -1.06329 115.96 3.19031L195.956 49.1531C203.407 53.4337 208 61.3705 208 69.9628V161.679C208 170.271 203.407 178.208 195.956 182.489L115.96 228.451C108.557 232.705 99.4512 232.705 92.0478 228.452L12.0442 182.488C4.59368 178.208 0 170.271 0 161.678V69.9634Z";
+
+/** objectBoundingBox units of HEX_PATH (÷ 208 × 231.642). */
+const HEX_CLIP_PATH =
+  "M0 0.302032C0 0.264938 0.022085 0.230674 0.057905 0.212195L0.442537 0.013771C0.478131 -0.004591 0.521909 -0.00459 0.5575 0.013773L0.942096 0.212194C0.977918 0.230674 1 0.264937 1 0.30203V0.697969C1 0.735061 0.977918 0.769325 0.942096 0.787806L0.5575 0.986224C0.521909 1.004589 0.478131 1.004589 0.442537 0.986229L0.057905 0.787802C0.022085 0.769325 0 0.735061 0 0.697965V0.302032Z";
+
+function HeroHexClipDefs() {
   return (
-    <Image
-      src={HEX_SRC.nodeBorder}
-      alt=""
-      width={HEX_WIDTH}
-      height={HEX_SVG_HEIGHT}
-      unoptimized
-      className="hero-hex-node-border pointer-events-none absolute inset-0 size-full"
-      aria-hidden
-    />
+    <svg aria-hidden className="absolute h-0 w-0">
+      <defs>
+        <clipPath id="hero-hex-photo-clip" clipPathUnits="objectBoundingBox">
+          <path d={HEX_CLIP_PATH} />
+        </clipPath>
+      </defs>
+    </svg>
   );
 }
 
-/** Clip photo backgrounds to the exact hex-node.svg silhouette. */
-const HEX_NODE_MASK_STYLE = {
-  maskImage: `url(${HEX_SRC.node})`,
-  WebkitMaskImage: `url(${HEX_SRC.node})`,
-  maskSize: "100% 100%",
-  WebkitMaskSize: "100% 100%",
-  maskRepeat: "no-repeat",
-  WebkitMaskRepeat: "no-repeat",
-  maskPosition: "center",
-  WebkitMaskPosition: "center",
-} as const satisfies CSSProperties;
+function HeroHexNodeBorder() {
+  return (
+    <svg
+      aria-hidden
+      viewBox={`0 0 ${HEX_WIDTH} ${HEX_SVG_HEIGHT}`}
+      className="hero-hex-node-border pointer-events-none absolute inset-0 size-full overflow-visible"
+      fill="none"
+    >
+      <path
+        d={HEX_PATH}
+        stroke="#d2d5d8"
+        strokeWidth={1}
+        strokeLinejoin="round"
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
+  );
+}
 
 type ClusterCell = {
   kind: "center" | "node";
@@ -177,6 +193,13 @@ function nodeHasBackground(node?: ResolvedNode) {
   return Boolean(node?.image?.asset?.url || node?.fallbackImage);
 }
 
+function heroHexPhotoSrc(image?: SanityImage, fallbackImage?: string) {
+  if (image?.asset) {
+    return urlFor(image, { width: HEX_PHOTO_WIDTH, quality: 90, fit: "max" });
+  }
+  return fallbackImage;
+}
+
 export function HeroHoneycomb({ className, researchAreas }: HeroHoneycombProps) {
   const resolvedNodes = resolveHeroHoneycombNodesFromResearchAreas(researchAreas);
   const nodeByGrid = heroHoneycombNodesByGrid(resolvedNodes);
@@ -186,6 +209,7 @@ export function HeroHoneycomb({ className, researchAreas }: HeroHoneycombProps) 
       className={cn("hero-honeycomb pointer-events-none absolute inset-0 overflow-hidden", className)}
     >
       <div className="absolute top-1/2 left-1/2 h-px w-px [transform:translate(-50%,-50%)_scale(var(--hero-hex-scale))]">
+        <HeroHexClipDefs />
         <div
           className="absolute"
           style={{ left: -FLOWER_CENTER_X, top: -FLOWER_CENTER_Y }}
@@ -195,6 +219,10 @@ export function HeroHoneycomb({ className, researchAreas }: HeroHoneycombProps) 
             const isInteractive = cell.cluster?.kind === "node" && Boolean(node?.label);
             const isBackground = !cell.cluster;
             const hasBackground = nodeHasBackground(node);
+            const photoSrc =
+              cell.cluster?.kind === "node"
+                ? heroHexPhotoSrc(node?.image, node?.fallbackImage)
+                : undefined;
             const visual = (
               <div
                 className={cn(
@@ -215,58 +243,43 @@ export function HeroHoneycomb({ className, researchAreas }: HeroHoneycombProps) 
                     : undefined
                 }
               >
-                <div className="absolute inset-0 flex items-center justify-center overflow-clip">
+                <div className="absolute inset-0 flex items-center justify-center">
                   <div
                     className="relative"
                     style={{ width: HEX_WIDTH, height: HEX_SVG_HEIGHT }}
                   >
-                    <Image
-                      src={cell.src}
-                      alt=""
-                      width={HEX_WIDTH}
-                      height={HEX_SVG_HEIGHT}
-                      unoptimized
-                      className="size-full object-contain"
-                    />
+                    {!(cell.cluster?.kind === "node" && hasBackground) ? (
+                      <Image
+                        src={cell.src}
+                        alt=""
+                        width={HEX_WIDTH}
+                        height={HEX_SVG_HEIGHT}
+                        unoptimized
+                        className="size-full object-contain"
+                      />
+                    ) : null}
                     {cell.cluster?.kind === "node" && hasBackground ? (
                       <>
-                        <div
-                          className="hero-hex-node-media absolute inset-0 bg-black"
-                          style={HEX_NODE_MASK_STYLE}
-                        >
-                          {node?.image?.asset?.url ? (
-                            <SanityImage
-                              image={node.image}
-                              decorative
-                              fill
-                              sizes="208px"
-                              className="object-cover"
-                              width={HEX_WIDTH}
-                            />
-                          ) : node?.fallbackImage ? (
+                        <div className="hero-hex-node-photo hero-hex-node-media absolute inset-0">
+                          {photoSrc ? (
                             <Image
-                              src={node.fallbackImage}
+                              src={photoSrc}
                               alt=""
                               fill
                               unoptimized
-                              sizes="208px"
-                              className="object-cover"
+                              sizes="960px"
+                              className="scale-[1.04] object-cover"
                             />
                           ) : null}
                         </div>
                         <div
-                          className="hero-hex-node-overlay absolute inset-0 bg-black/[0.66]"
-                          style={HEX_NODE_MASK_STYLE}
+                          className="hero-hex-node-photo hero-hex-node-overlay absolute inset-0 bg-black/[0.66]"
                           aria-hidden
                         />
                       </>
                     ) : null}
                     {isInteractive ? (
-                      <span
-                        className="hero-hex-node-shine"
-                        style={HEX_NODE_MASK_STYLE}
-                        aria-hidden
-                      />
+                      <span className="hero-hex-node-photo hero-hex-node-shine" aria-hidden />
                     ) : null}
                     {isInteractive ? <HeroHexNodeBorder /> : null}
                   </div>
